@@ -18,8 +18,8 @@ namespace FftaEtract
         private CompetitionCategory[] categories = new[]
                                        {
                                            //3393, // SH CL 2009
-                                          new CompetitionCategory(CompetitionType.Salle,  6802), // CompetitionType SH CL 2014
-                                          new CompetitionCategory(CompetitionType.Fita,  7361), // FITA SH CL 2014
+                                          new CompetitionCategory(CompetitionType.Salle, BowType.Classique, 6802), // CompetitionType SH CL 2014
+                                          new CompetitionCategory(CompetitionType.Fita, BowType.Classique, 7361), // FITA SH CL 2014
                                            //3394, // SF CL 2009
                                        };
 
@@ -28,9 +28,9 @@ namespace FftaEtract
             this.repository = repository;
         }
 
-        public async Task<IList<Archer>> GetArchers()
+        public async Task<IList<ArcherDataProvider>> GetArchers()
         {
-            var archers = new List<Archer>();
+            var archers = new List<ArcherDataProvider>();
 
             foreach (var archer in this.repository.GetAllArchers())
             {
@@ -47,7 +47,7 @@ namespace FftaEtract
             return archers;
         }
 
-        private async Task ScrapUrl(string url, CompetitionCategory category, Archer archer)
+        private async Task ScrapUrl(string url, CompetitionCategory category, ArcherDataProvider archerDataProvider)
         {
 
             var client = new HttpClient();
@@ -56,19 +56,19 @@ namespace FftaEtract
             HtmlDocument doc = new HtmlDocument();
             doc.Load(await result.Content.ReadAsStreamAsync());
 
-            ScrapArcher(archer, doc);
+            ScrapArcher(archerDataProvider, doc);
 
             var competitions = ScrapCompetition(doc, category);
 
             foreach (var competition in competitions)
             {
-                archer.AddCompetition(competition);
+                archerDataProvider.AddCompetition(competition);
             }
         }
 
-        private static List<Competition> ScrapCompetition(HtmlDocument doc, CompetitionCategory category)
+        private static List<CompetitionDataProvider> ScrapCompetition(HtmlDocument doc, CompetitionCategory category)
         {
-            var competitions = new List<Competition>();
+            var competitions = new List<CompetitionDataProvider>();
             var grostitre = doc.DocumentNode.SelectNodes("//td[@class='grostitre']");
             int year = 0;
 
@@ -99,13 +99,9 @@ namespace FftaEtract
                             var score = td[4].InnerText;
 
                             competitions.Add(
-                                new Competition()
-                            {
-                                Year = year,
-                                CompetitionType = category.CompetitionType,
-                                Name = td[2].InnerText.Trim(),
-                                Score = Convert.ToInt32(td[4].InnerText.Trim()),
-                            });
+                                new CompetitionDataProvider(year,
+                                    td[2].InnerText.Trim(),
+                                    category.CompetitionType, category.BowType, Convert.ToInt32(td[4].InnerText.Trim())));
                         }
                     }
                 }
@@ -114,9 +110,9 @@ namespace FftaEtract
             return competitions;
         }
 
-        private static void ScrapArcher(Archer archer, HtmlDocument doc)
+        private static void ScrapArcher(ArcherDataProvider archerDataProvider, HtmlDocument doc)
         {
-            if (string.IsNullOrEmpty(archer.LastName) && string.IsNullOrEmpty(archer.FirstName))
+            if (string.IsNullOrEmpty(archerDataProvider.LastName) && string.IsNullOrEmpty(archerDataProvider.FirstName))
             {
                 var tdName = doc.DocumentNode.SelectNodes("//td[@class='titreactu']");
 
@@ -126,8 +122,8 @@ namespace FftaEtract
                     {
                         var name = HttpUtility.HtmlDecode(td.InnerText).Trim();
 
-                        archer.LastName = name.Split(' ')[0];
-                        archer.FirstName = name.Split(' ')[1];
+                        archerDataProvider.LastName = name.Split(' ')[0];
+                        archerDataProvider.FirstName = name.Split(' ')[1];
                     }
                 }
             }

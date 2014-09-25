@@ -5,6 +5,6 @@
 
     public interface IStatsProvider
     {
-        Task<IList<Archer>> GetArchers();
+        Task<IList<ArcherDataProvider>> GetArchers();
     }
 }

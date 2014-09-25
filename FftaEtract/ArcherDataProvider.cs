@@ -2,12 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
-    public class Archer
+    public class ArcherDataProvider
     {
-        public Archer()
+        public ArcherDataProvider()
         {
-            this.Competitions = new List<Competition>();
+            this.Competitions = new List<CompetitionDataProvider>();
         }
 
         public string LastName { get; set; }
@@ -23,11 +24,11 @@
 
         public string Code { get; set; }
 
-        public void AddCompetition(Competition competition)
+        public void AddCompetition(CompetitionDataProvider competitionDataProvider)
         {
-            this.Competitions.Add(competition);
+            this.Competitions.Add(competitionDataProvider);
         }
 
-        public IList<Competition> Competitions { get; private set; } 
+        public IList<CompetitionDataProvider> Competitions { get; private set; } 
     }
 }

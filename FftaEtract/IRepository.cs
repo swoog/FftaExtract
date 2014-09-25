@@ -5,8 +5,8 @@ namespace FftaEtract
 
     public interface IRepository
     {
-        void SaveArcher(Archer archer);
+        void SaveArcher(ArcherDataProvider archerDataProvider);
 
-        IEnumerable<Archer> GetAllArchers();
+        IEnumerable<ArcherDataProvider> GetAllArchers();
     }
 }

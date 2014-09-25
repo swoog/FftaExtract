@@ -17,7 +17,8 @@ namespace FftaEtract
         {
             var kernel = new StandardKernel();
 
-            kernel.Bind<IRepository>().To<ConsoleRepository>();
+            //kernel.Bind<IRepository>().To<ConsoleRepository>();
+            kernel.Bind<IRepository>().To<DataBaseRepository>();
 
             kernel.Bind<IStatsProvider>().To<PalmaresProvider>();
 
