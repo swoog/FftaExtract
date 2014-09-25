@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Archer.cs" />
+    <Compile Include="CompetitionCategory.cs" />
     <Compile Include="ConsoleRepository.cs" />
     <Compile Include="Extractor.cs" />
     <Compile Include="IRepository.cs" />

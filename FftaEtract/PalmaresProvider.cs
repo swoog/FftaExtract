@@ -1,6 +1,7 @@
 namespace FftaEtract
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http;
@@ -13,10 +14,11 @@ namespace FftaEtract
     {
         private IRepository repository;
 
-        private int[] categories = new[]
+        private CompetitionCategory[] categories = new[]
                                        {
                                            //3393, // SH CL 2009
-                                           6802, // SH CL 2014
+                                          new CompetitionCategory(CompetitionType.Salle,  6802), // CompetitionType SH CL 2014
+                                          new CompetitionCategory(CompetitionType.Fita,  7361), // FITA SH CL 2014
                                            //3394, // SF CL 2009
                                        };
 
@@ -33,9 +35,9 @@ namespace FftaEtract
             {
                 foreach (var category in this.categories)
                 {
-                    var url = string.Format("http://ffta-public.cvf.fr/servlet/ResPalmares?NUM_ADH={0}&CLASS_SELECT={1}", archer.Num, category);
+                    var url = string.Format("http://ffta-public.cvf.fr/servlet/ResPalmares?NUM_ADH={0}&CLASS_SELECT={1}", archer.Num, category.IdFfta);
 
-                    await this.ScrapUrl(url, archer);
+                    await this.ScrapUrl(url, category, archer);
                 }
 
                 archers.Add(archer);
@@ -44,7 +46,7 @@ namespace FftaEtract
             return archers;
         }
 
-        private async Task ScrapUrl(string url, Archer archer)
+        private async Task ScrapUrl(string url, CompetitionCategory category, Archer archer)
         {
 
             var client = new HttpClient();
@@ -55,7 +57,7 @@ namespace FftaEtract
 
             ScrapArcher(archer, doc);
 
-            var competitions = ScrapCompetition(doc);
+            var competitions = ScrapCompetition(doc, category);
 
             foreach (var competition in competitions)
             {
@@ -63,7 +65,7 @@ namespace FftaEtract
             }
         }
 
-        private static List<Competition> ScrapCompetition(HtmlDocument doc)
+        private static List<Competition> ScrapCompetition(HtmlDocument doc, CompetitionCategory category)
         {
             var competitions = new List<Competition>();
             var tables = doc.DocumentNode.SelectNodes("//table[@class='texteMoteur']");
@@ -86,6 +88,7 @@ namespace FftaEtract
                             competitions.Add(
                                 new Competition()
                             {
+                                CompetitionType = category.CompetitionType,
                                 Name = td[2].InnerText.Trim(),
                                 Score = Convert.ToInt32(td[4].InnerText.Trim()),
                             });
@@ -99,16 +102,19 @@ namespace FftaEtract
 
         private static void ScrapArcher(Archer archer, HtmlDocument doc)
         {
-            var tdName = doc.DocumentNode.SelectNodes("//td[@class='titreactu']");
-
-            if (tdName != null)
+            if (string.IsNullOrEmpty(archer.LastName) && string.IsNullOrEmpty(archer.FirstName))
             {
-                foreach (var td in tdName)
-                {
-                    var name = HttpUtility.HtmlDecode(td.InnerText).Trim();
+                var tdName = doc.DocumentNode.SelectNodes("//td[@class='titreactu']");
 
-                    archer.LastName = name.Split(' ')[0];
-                    archer.FirstName = name.Split(' ')[1];
+                if (tdName != null)
+                {
+                    foreach (var td in tdName)
+                    {
+                        var name = HttpUtility.HtmlDecode(td.InnerText).Trim();
+
+                        archer.LastName = name.Split(' ')[0];
+                        archer.FirstName = name.Split(' ')[1];
+                    }
                 }
             }
         }

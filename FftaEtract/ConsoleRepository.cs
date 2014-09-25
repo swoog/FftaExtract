@@ -12,7 +12,7 @@
 
             foreach (var competition in archer.Competitions)
             {
-                Console.WriteLine("\t {0} : {1}", competition.Name, competition.Score);
+                Console.WriteLine("\t {0} {1} : {2}", competition.CompetitionType, competition.Name, competition.Score);
             }
         }
 
