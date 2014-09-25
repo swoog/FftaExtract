@@ -5,6 +5,7 @@ namespace FftaEtract
     using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http;
+    using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using System.Web;
 
@@ -68,6 +69,18 @@ namespace FftaEtract
         private static List<Competition> ScrapCompetition(HtmlDocument doc, CompetitionCategory category)
         {
             var competitions = new List<Competition>();
+            var grostitre = doc.DocumentNode.SelectNodes("//td[@class='grostitre']");
+            int year = 0;
+
+            if (grostitre != null)
+            {
+                foreach (var titre in grostitre)
+                {
+                    year = Convert.ToInt32(Regex.Match(titre.InnerText.Trim(), "[0-9]+$").Groups[0].Value);
+                }
+            }
+
+
             var tables = doc.DocumentNode.SelectNodes("//table[@class='texteMoteur']");
 
             if (tables != null)
@@ -88,6 +101,7 @@ namespace FftaEtract
                             competitions.Add(
                                 new Competition()
                             {
+                                Year = year,
                                 CompetitionType = category.CompetitionType,
                                 Name = td[2].InnerText.Trim(),
                                 Score = Convert.ToInt32(td[4].InnerText.Trim()),

@@ -7,12 +7,7 @@
         public int Score { get; set; }
 
         public CompetitionType CompetitionType { get; set; }
-    }
 
-    public enum CompetitionType
-    {
-        Salle,
-        Fita,
-        Federal,
+        public int Year { get; set; }
     }
 }
