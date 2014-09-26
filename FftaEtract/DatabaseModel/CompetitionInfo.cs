@@ -1,4 +1,4 @@
-﻿namespace FftaEtract.DatabaseModel
+﻿namespace FftaExtract.DatabaseModel
 {
     public class CompetitionInfo
     {

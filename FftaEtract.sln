@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FftaEtract", "FftaEtract\FftaEtract.csproj", "{08B443F3-B192-413D-A027-73ABE3EB844C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FftaExtract", "FftaEtract\FftaExtract.csproj", "{08B443F3-B192-413D-A027-73ABE3EB844C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FftaExtract.Web", "FftaExtract.Web\FftaExtract.Web.csproj", "{8BCA3A03-C397-46CE-A7FE-3A94B41D64CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FftaExtract.Console", "FftaExtract.Console\FftaExtract.Console.csproj", "{5684DE4B-C5F8-4E92-A98E-B76E2CBA79D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{8BCA3A03-C397-46CE-A7FE-3A94B41D64CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BCA3A03-C397-46CE-A7FE-3A94B41D64CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BCA3A03-C397-46CE-A7FE-3A94B41D64CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5684DE4B-C5F8-4E92-A98E-B76E2CBA79D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5684DE4B-C5F8-4E92-A98E-B76E2CBA79D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5684DE4B-C5F8-4E92-A98E-B76E2CBA79D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5684DE4B-C5F8-4E92-A98E-B76E2CBA79D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

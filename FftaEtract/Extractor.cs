@@ -1,18 +1,18 @@
-﻿namespace FftaEtract
+﻿namespace FftaExtract
 {
-    using System;
-    using System.Collections;
+    using FftaExtract.DatabaseModel;
+    using FftaExtract.Providers;
 
     public class Extractor
     {
         private IStatsProvider[] providers;
 
-        private IRepository repository;
+        private IRepositoryImporter repositoryImporter;
 
-        public Extractor(IStatsProvider[] providers, IRepository repository)
+        public Extractor(IStatsProvider[] providers, IRepositoryImporter repositoryImporter)
         {
             this.providers = providers;
-            this.repository = repository;
+            this.repositoryImporter = repositoryImporter;
         }
 
         public async void Run()
@@ -21,7 +21,7 @@
             {
                 foreach (var archer in await provider.GetArchers())
                 {
-                    this.repository.SaveArcher(archer);
+                    this.repositoryImporter.SaveArcher(archer);
                 }
             }
         }

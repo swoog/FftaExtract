@@ -1,4 +1,4 @@
-﻿namespace FftaEtract.DatabaseModel
+﻿namespace FftaExtract.DatabaseModel
 {
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
