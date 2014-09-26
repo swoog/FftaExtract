@@ -12,3 +12,16 @@ Arcs :
 {
     <span>@bow</span>
 }
+
+<br />
+<br />
+
+Meilleur scores :<br />
+@foreach (var score in Model.BestScores)
+{
+    <span>@score.CompetitionType</span>  <span>@score.BowType</span>  @score.Score <br />
+}
+
+@{
+    Html.RenderPartial("Competitions", Model.Competitions);
+}

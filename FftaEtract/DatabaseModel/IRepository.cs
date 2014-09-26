@@ -7,6 +7,10 @@ namespace FftaExtract.DatabaseModel
 
         Archer GetArcher(string code);
 
-        List<string> GetBows(string archerCode);
+        List<BowType> GetBows(string archerCode);
+
+        List<BestScore> GetBestScores(string code);
+
+        List<CompetitionScore> GetCompetitions(string code);
     }
 }

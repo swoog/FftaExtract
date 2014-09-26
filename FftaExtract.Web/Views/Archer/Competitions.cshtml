@@ -1,0 +1,23 @@
+﻿@model System.Collections.Generic.List<FftaExtract.Web.Models.YearCompetitionModel>
+
+@foreach (var year in Model)
+{
+    <span>@year.Year</span>
+
+    <div>
+        @foreach (var type in year.Types)
+        {
+            <span>@type.Type</span>
+
+            <div>
+                @foreach (var competition in type.Competitions)
+                {
+                    <span>
+                        @competition.Competition.CompetitionInfo.Name
+                        @competition.Score
+                    </span>
+                }
+            </div>
+        }
+    </div>
+}

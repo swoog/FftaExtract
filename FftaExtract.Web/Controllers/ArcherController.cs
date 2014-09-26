@@ -26,8 +26,35 @@ namespace FftaExtract.Web.Controllers
 
             var bows = this.repository.GetBows(code);
 
+            var bestScores = this.repository.GetBestScores(code);
 
-            return View(new ArcherModel { Archer = archer, Bows = bows });
+            var competitions = this.repository.GetCompetitions(code);
+
+            var qCompetttions = from s in competitions
+                                group s by s.Competition.Year
+                                into s2
+                                select new YearCompetitionModel()
+                                           {
+                                               Year = s2.Key,
+                                               Types = (from t in s2
+                                                        group t by t.Competition.Type
+                                                        into t2
+                                                        select
+                                                            new TyepCompetitionModel
+                                                                {
+                                                                    Type = t2.Key,
+                                                                    Competitions =
+                                                                        t2.ToList(),
+                                                                }).ToList(),
+                                           };
+
+            return View(new ArcherModel
+                            {
+                                Archer = archer,
+                                Bows = bows,
+                                BestScores = bestScores,
+                                Competitions = qCompetttions.ToList(),
+                            });
         }
     }
 }

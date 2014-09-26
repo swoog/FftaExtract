@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="ConsoleRepositoryImporter.cs" />
     <Compile Include="DatabaseModel\Archer.cs" />
+    <Compile Include="DatabaseModel\BestScore.cs" />
     <Compile Include="DatabaseModel\BowType.cs" />
     <Compile Include="DatabaseModel\CompetitionInfo.cs" />
     <Compile Include="DatabaseModel\Competition.cs" />

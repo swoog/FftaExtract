@@ -127,11 +127,14 @@ namespace FftaExtract.DatabaseModel
             db.SaveChanges();
         }
 
+        private string[] archerCodes = new[] { "359095W", "661811K", "819573R", "828240L" };
+
         public IEnumerable<ArcherDataProvider> GetAllArchers()
         {
-            yield return new ArcherDataProvider() { Code = "661811K", };
-            yield return new ArcherDataProvider() { Code = "359095W", };
-            yield return new ArcherDataProvider() { Code = "819573R" };
+            foreach (var archerCode in this.archerCodes)
+            {
+                yield return new ArcherDataProvider() { Code = archerCode };
+            }
         }
     }
 }
