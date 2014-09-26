@@ -1,8 +1,14 @@
-﻿@model FftaExtract.DatabaseModel.Archer
+﻿@model FftaExtract.Web.Models.ArcherModel
 
 @{
-    ViewBag.Title = Model.FullName;
+    ViewBag.Title = Model.Archer.FullName;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>@Model.FullName</h2>
+<h1>@Model.Archer.FullName</h1>
+
+Arcs : 
+@foreach (var bow in Model.Bows)
+{
+    <span>@bow</span>
+}

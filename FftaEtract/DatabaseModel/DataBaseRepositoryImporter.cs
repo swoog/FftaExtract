@@ -26,17 +26,40 @@ namespace FftaExtract.DatabaseModel
         {
             var competitionInfoId = this.SaveClubInfo(db, competitionDataProvider);
 
-            SaveCompetition(db, competitionDataProvider, competitionInfoId);
+            var competitionId = SaveCompetition(db, competitionDataProvider, competitionInfoId);
 
-            this.SaveScore(db, competitionDataProvider);
+            this.SaveScore(db, code, competitionId, competitionDataProvider);
         }
 
-        private void SaveScore(FftaDatabase db, CompetitionDataProvider competitionDataProvider)
+        private void SaveScore(
+            FftaDatabase db,
+            string code,
+            int competitionId,
+            CompetitionDataProvider competitionDataProvider)
         {
-            // TODO : AG : Save score
+            var q = from s in db.CompetitionsScores
+                    where
+                        s.ArcherCode == code && s.Competition.Year == competitionDataProvider.Year
+                        && s.CompetitionId == competitionId
+                        && s.Competition.Type == competitionDataProvider.CompetitionType
+                    select s;
+
+            var score = q.FirstOrDefault();
+
+            if (score == null)
+            {
+                db.CompetitionsScores.Add(new CompetitionScore()
+                {
+                    ArcherCode = code,
+                    CompetitionId = competitionId,
+                    BowType = competitionDataProvider.BowType,
+                    Score = competitionDataProvider.Score
+                });
+                db.SaveChanges();
+            }
         }
 
-        private static void SaveCompetition(
+        private static int SaveCompetition(
             FftaDatabase db,
             CompetitionDataProvider competitionDataProvider,
             int competitionInfoId)
@@ -51,15 +74,17 @@ namespace FftaExtract.DatabaseModel
 
             if (competition == null)
             {
-                db.Competitions.Add(
+                competition = db.Competitions.Add(
                     new Competition()
-                        {
-                            CompetitionInfoId = competitionInfoId,
-                            Type = competitionDataProvider.CompetitionType,
-                            Year = competitionDataProvider.Year,
-                        });
+                {
+                    CompetitionInfoId = competitionInfoId,
+                    Type = competitionDataProvider.CompetitionType,
+                    Year = competitionDataProvider.Year,
+                });
                 db.SaveChanges();
             }
+
+            return competition.Id;
         }
 
         private int SaveClubInfo(FftaDatabase db, CompetitionDataProvider competitionDataProvider)
@@ -87,11 +112,11 @@ namespace FftaExtract.DatabaseModel
             {
                 db.Archers.Add(
                     new Archer()
-                        {
-                            Code = archerDataProvider.Code,
-                            FirstName = archerDataProvider.FirstName,
-                            LastName = archerDataProvider.LastName,
-                        });
+                {
+                    Code = archerDataProvider.Code,
+                    FirstName = archerDataProvider.FirstName,
+                    LastName = archerDataProvider.LastName,
+                });
             }
             else
             {

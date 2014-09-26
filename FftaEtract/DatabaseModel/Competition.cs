@@ -6,17 +6,14 @@
     public class Competition
     {
         [Key]
-        [Column(Order = 1)]
+        public int Id { get; set; }
+
         public int Year { get; set; }
 
         public CompetitionInfo CompetitionInfo { get; set; }
 
-        [Key]
-        [Column(Order = 2)]
         public int CompetitionInfoId { get; set; }
 
-        [Key]
-        [Column(Order = 3)]
         public CompetitionType Type { get; set; }
     }
 }

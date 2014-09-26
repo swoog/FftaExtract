@@ -8,6 +8,7 @@ namespace FftaExtract.Web.Controllers
 {
     using FftaExtract;
     using FftaExtract.DatabaseModel;
+    using FftaExtract.Web.Models;
 
     public class ArcherController : Controller
     {
@@ -23,8 +24,10 @@ namespace FftaExtract.Web.Controllers
         {
             var archer = this.repository.GetArcher(code);
 
+            var bows = this.repository.GetBows(code);
 
-            return View(archer);
+
+            return View(new ArcherModel { Archer = archer, Bows = bows });
         }
     }
 }
