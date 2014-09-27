@@ -1,23 +1,54 @@
 ﻿@model System.Collections.Generic.List<FftaExtract.Web.Models.YearCompetitionModel>
 
-@foreach (var year in Model)
-{
-    <span>@year.Year</span>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        $('a[href^="#"].year').click(function () {
+            location.href = $(this).attr("href");
+            return true;
+        });
 
-    <div>
-        @foreach (var type in year.Types)
-        {
-            <span>@type.Type</span>
+        var url = document.location.href, idx = url.indexOf("#");
+        var the_id = idx != -1 ? url.substring(idx) : $('a[href^="#"].year').attr("href");
 
-            <div>
-                @foreach (var competition in type.Competitions)
+        $('a[href^="' + the_id + '"].year').tab('show');
+        $(the_id).addClass("fade").addClass("in");
+    });
+</script>
+
+<ul class="nav nav-tabs" role="tablist">
+    @foreach (var year in Model)
+    {
+        <li>
+            <a role="tab" data-toggle="tab" class="year" href="#year@(year.Year)">@year.Year</a>
+        </li>
+    }
+</ul>
+<div class="tab-content">
+
+    @foreach (var year in Model)
+    {
+        <div class="tab-pane fade year" id="year@(year.Year)">
+            @foreach (var type in year.Types)
                 {
-                    <span>
-                        @competition.Competition.CompetitionInfo.Name
-                        @competition.Score
-                    </span>
-                }
-            </div>
-        }
-    </div>
-}
+                <div class="panel panel-default">
+                    <div class="panel-heading">@type.Type</div>
+                    <div class="panel-body">
+                        <table>
+                            @foreach (var competition in type.Competitions)
+                            {
+                                <tr>
+                                    <td>
+                                        @competition.Competition.CompetitionInfo.Name
+                                    </td>
+                                    <td class="score">
+                                        @competition.Score
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

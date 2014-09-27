@@ -19,8 +19,11 @@ namespace FftaExtract.Providers
         private CompetitionCategory[] categories = new[]
                                        {
                                            //3393, // SH CL 2009
-                                          new CompetitionCategory(CompetitionType.Salle, BowType.Classique, 6802), // CompetitionType SH CL 2014
-                                          new CompetitionCategory(CompetitionType.Fita, BowType.Classique, 7361), // FITA SH CL 2014
+                                           new CompetitionCategory(CompetitionType.Salle, BowType.Classique, 5458), // Salle JH CL 2012 
+                                           new CompetitionCategory(CompetitionType.Salle, BowType.Classique, 5460), // Salle SH CL 2012 
+                                            new CompetitionCategory(CompetitionType.Salle, BowType.Classique, 6121), // Salle SH CL 2013
+                                            new CompetitionCategory(CompetitionType.Salle, BowType.Classique, 6802), // CompetitionType SH CL 2014
+                                            new CompetitionCategory(CompetitionType.Fita, BowType.Classique, 7361), // FITA SH CL 2014
                                            //3394, // SF CL 2009
                                        };
 

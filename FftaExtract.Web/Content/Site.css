@@ -22,3 +22,43 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.navbar-inverse {
+    background: #1b6bc1;
+}
+
+.navbar-inverse .navbar-brand {
+    color: #fff;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #ffffff;
+}
+
+table {
+    width: 100%;
+}
+
+table td {
+    padding: 5px 5px;
+}
+
+table td.score {
+    text-align: right;
+}
+
+.tab-content {
+    padding: 10px;
+    border: #DDD solid 1px;
+    border-top: none;
+}
+
+/*a.year {
+    display: block;
+    padding: 10px;
+    border: 1px solid silver;
+}*/
+
+a.selected {
+    font-weight: bold;
+}
