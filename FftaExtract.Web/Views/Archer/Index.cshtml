@@ -7,7 +7,7 @@
 
 <h1>@Model.Archer.FullName</h1>
 
-Arcs : 
+Arcs :
 @foreach (var bow in Model.Bows)
 {
     <span>@bow</span>
@@ -16,12 +16,20 @@ Arcs :
 <br />
 <br />
 
-Meilleur scores :<br />
-@foreach (var score in Model.BestScores)
-{
-    <span>@score.CompetitionType</span>  <span>@score.BowType</span>  @score.Score <br />
-}
+<h2>Meilleur scores</h2>
+<div class="hightScores clearfix">
+    @foreach (var score in Model.BestScores)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">@score.CompetitionType @score.BowType</div>
+            <div class="panel-body">
+                @score.Score
+            </div>
+        </div>
+    }
+</div>
 
+<h2>Competitions</h2>
 @{
     Html.RenderPartial("Competitions", Model.Competitions);
 }

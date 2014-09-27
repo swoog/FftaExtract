@@ -43,7 +43,7 @@ table td {
     padding: 5px 5px;
 }
 
-table td.score {
+table td.score, table th.score {
     text-align: right;
 }
 
@@ -53,12 +53,17 @@ table td.score {
     border-top: none;
 }
 
-/*a.year {
-    display: block;
-    padding: 10px;
-    border: 1px solid silver;
-}*/
-
 a.selected {
     font-weight: bold;
+}
+
+.hightScores .panel-default{
+    width: 290px;
+    float: left;
+    margin-right: 10px;
+}
+
+.hightScores .panel-body {
+    font-weight: bold;
+    font-size: 25px;
 }

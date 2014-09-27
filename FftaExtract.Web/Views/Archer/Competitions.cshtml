@@ -32,21 +32,23 @@
                 {
                 <div class="panel panel-default">
                     <div class="panel-heading">@type.Type</div>
-                    <div class="panel-body">
-                        <table>
-                            @foreach (var competition in type.Competitions)
-                            {
-                                <tr>
-                                    <td>
-                                        @competition.Competition.CompetitionInfo.Name
-                                    </td>
-                                    <td class="score">
-                                        @competition.Score
-                                    </td>
-                                </tr>
-                            }
-                        </table>
-                    </div>
+                    <table class="table">
+                        <tr>
+                            <th>Compétition</th>
+                            <th class="score">Score</th>
+                        </tr>
+                        @foreach (var competition in type.Competitions)
+                        {
+                            <tr>
+                                <td>
+                                    @competition.Competition.CompetitionInfo.Name
+                                </td>
+                                <td class="score">
+                                    @competition.Score
+                                </td>
+                            </tr>
+                        }
+                    </table>
                 </div>
             }
         </div>
