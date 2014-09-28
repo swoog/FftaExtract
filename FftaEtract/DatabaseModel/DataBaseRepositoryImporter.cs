@@ -120,8 +120,11 @@ namespace FftaExtract.DatabaseModel
             }
             else
             {
-                dataBaseArcher.LastName = archerDataProvider.LastName;
-                dataBaseArcher.FirstName = archerDataProvider.FirstName;
+                if (dataBaseArcher.LastName == null || dataBaseArcher.FirstName == null)
+                {
+                    dataBaseArcher.LastName = archerDataProvider.LastName;
+                    dataBaseArcher.FirstName = archerDataProvider.FirstName;
+                }
             }
 
             db.SaveChanges();

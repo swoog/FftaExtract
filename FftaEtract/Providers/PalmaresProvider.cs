@@ -16,20 +16,12 @@ namespace FftaExtract.Providers
     {
         private IRepositoryImporter repositoryImporter;
 
-        private CompetitionCategory[] categories = new[]
-                                       {
-                                           //3393, // SH CL 2009
-                                           new CompetitionCategory(CompetitionType.Salle, BowType.Classique, 5458), // Salle JH CL 2012 
-                                           new CompetitionCategory(CompetitionType.Salle, BowType.Classique, 5460), // Salle SH CL 2012 
-                                            new CompetitionCategory(CompetitionType.Salle, BowType.Classique, 6121), // Salle SH CL 2013
-                                            new CompetitionCategory(CompetitionType.Salle, BowType.Classique, 6802), // CompetitionType SH CL 2014
-                                            new CompetitionCategory(CompetitionType.Fita, BowType.Classique, 7361), // FITA SH CL 2014
-                                           //3394, // SF CL 2009
-                                       };
+        private readonly CompationCategorieRepository compationCategorieRepository;
 
-        public PalmaresProvider(IRepositoryImporter repositoryImporter)
+        public PalmaresProvider(IRepositoryImporter repositoryImporter, CompationCategorieRepository compationCategorieRepository)
         {
             this.repositoryImporter = repositoryImporter;
+            this.compationCategorieRepository = compationCategorieRepository;
         }
 
         public async Task<IList<ArcherDataProvider>> GetArchers()
@@ -38,7 +30,7 @@ namespace FftaExtract.Providers
 
             foreach (var archer in this.repositoryImporter.GetAllArchers())
             {
-                foreach (var category in this.categories)
+                foreach (var category in this.compationCategorieRepository.GetCategories())
                 {
                     var url = string.Format("http://ffta-public.cvf.fr/servlet/ResPalmares?NUM_ADH={0}&CLASS_SELECT={1}", archer.Num, category.IdFfta);
 
@@ -60,7 +52,7 @@ namespace FftaExtract.Providers
             HtmlDocument doc = new HtmlDocument();
             doc.Load(await result.Content.ReadAsStreamAsync());
 
-            ScrapArcher(archerDataProvider, doc);
+            //ScrapArcher(archerDataProvider, doc);
 
             var competitions = ScrapCompetition(doc, category);
 
@@ -114,23 +106,23 @@ namespace FftaExtract.Providers
             return competitions;
         }
 
-        private static void ScrapArcher(ArcherDataProvider archerDataProvider, HtmlDocument doc)
-        {
-            if (string.IsNullOrEmpty(archerDataProvider.LastName) && string.IsNullOrEmpty(archerDataProvider.FirstName))
-            {
-                var tdName = doc.DocumentNode.SelectNodes("//td[@class='titreactu']");
+        //private static void ScrapArcher(ArcherDataProvider archerDataProvider, HtmlDocument doc)
+        //{
+        //    if (string.IsNullOrEmpty(archerDataProvider.LastName) && string.IsNullOrEmpty(archerDataProvider.FirstName))
+        //    {
+        //        var tdName = doc.DocumentNode.SelectNodes("//td[@class='titreactu']");
 
-                if (tdName != null)
-                {
-                    foreach (var td in tdName)
-                    {
-                        var name = HttpUtility.HtmlDecode(td.InnerText).Trim();
+        //        if (tdName != null)
+        //        {
+        //            foreach (var td in tdName)
+        //            {
+        //                var name = HttpUtility.HtmlDecode(td.InnerText).Trim();
 
-                        archerDataProvider.LastName = name.Split(' ')[0];
-                        archerDataProvider.FirstName = name.Split(' ')[1];
-                    }
-                }
-            }
-        }
+        //                archerDataProvider.LastName = name.Split(' ')[0];
+        //                archerDataProvider.FirstName = name.Split(' ')[1];
+        //            }
+        //        }
+        //    }
+        //}
     }
 }
