@@ -4,7 +4,6 @@
 namespace FftaExtract.Web.App_Start
 {
     using System;
-    using System.Collections.Generic;
     using System.Web;
 
     using FftaExtract.DatabaseModel;
@@ -65,6 +64,6 @@ namespace FftaExtract.Web.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Bind<IRepository>().To<DatabaseRepository>();
-        }        
+        }
     }
 }
