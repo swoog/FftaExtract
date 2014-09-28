@@ -14,10 +14,11 @@ namespace FftaExtract.Providers
 
         public string FirstName { get; set; }
 
-        public int Num {
+        public int Num
+        {
             get
             {
-                return Convert.ToInt32(this.Code.Substring(0, this.Code.Length - 1));
+                return Convert.ToInt32(this.Code);
             }
         }
 
@@ -28,6 +29,6 @@ namespace FftaExtract.Providers
             this.Competitions.Add(competitionDataProvider);
         }
 
-        public IList<CompetitionDataProvider> Competitions { get; private set; } 
+        public IList<CompetitionDataProvider> Competitions { get; private set; }
     }
 }
