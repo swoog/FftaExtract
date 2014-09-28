@@ -1,44 +1,59 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FftaExtract.Providers
+﻿namespace FftaExtract.Providers
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Net.Http;
     using System.Text.RegularExpressions;
+    using System.Threading.Tasks;
     using System.Web;
 
     using HtmlAgilityPack;
 
+    using Ninject.Extensions.Logging;
+
     public class ClassmentProvider : IStatsProvider
     {
-        private CompationCategorieRepository compationCategorieRepository;
+        private readonly CompationCategorieRepository compationCategorieRepository;
 
-        public ClassmentProvider(CompationCategorieRepository compationCategorieRepository)
+        private readonly ILogger logger;
+
+        public ClassmentProvider(CompationCategorieRepository compationCategorieRepository, ILogger logger)
         {
             this.compationCategorieRepository = compationCategorieRepository;
+            this.logger = logger;
         }
 
-        public async Task<IList<ArcherDataProvider>> GetArchers()
+        public IEnumerable<ArcherDataProvider> GetArchers()
         {
-            var archers = new List<ArcherDataProvider>();
-
-            var urlFormat = "http://ffta-public.cvf.fr/servlet/ResAffichClassement?ANNEE={0}&DISCIP=S&TYPE=I&SELECTIF=0&NIVEAU=L&DEBUT=0&NUMCLASS={1}";
+            var urlFormat = "http://ffta-public.cvf.fr/servlet/ResAffichClassement?ANNEE={0}&DISCIP=S&TYPE=I&SELECTIF=0&NIVEAU=L&DEBUT={1}&NUMCLASS={2}";
 
             foreach (var category in this.compationCategorieRepository.GetCategories())
             {
-                var url = string.Format(urlFormat, category.Year, category.IdFfta);
+                int page = 0;
+                var hasArcher = false;
+                do
+                {
+                    this.logger.Info(
+                        "Scrap {0} {1} from {2} to {3} ",
+                        category.Year,
+                        category.CompetitionType,
+                        page,
+                        page + 50);
+                    hasArcher = false;
+                    var url = string.Format(urlFormat, category.Year, page, category.IdFfta);
 
-                var scrapeArchers = await this.ScrapUrl(url, category);
+                    var scrapUrl = this.ScrapUrl(url, category);
+                    foreach (var archerDataProvider in scrapUrl.Result)
+                    {
+                        hasArcher = true;
+                        yield return archerDataProvider;
+                    }
 
-                archers.AddRange(scrapeArchers);
+                    page += 50;
+                }
+                while (hasArcher);
             }
-
-            return archers;
         }
-
 
         private async Task<IList<ArcherDataProvider>> ScrapUrl(string url, CompetitionCategory category)
         {

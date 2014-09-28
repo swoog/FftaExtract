@@ -130,13 +130,19 @@ namespace FftaExtract.DatabaseModel
             db.SaveChanges();
         }
 
-        private string[] archerCodes = new[] { "359095", "661811", "819573", "828240" };
-
         public IEnumerable<ArcherDataProvider> GetAllArchers()
         {
-            foreach (var archerCode in this.archerCodes)
+            using (var db = new FftaDatabase())
             {
-                yield return new ArcherDataProvider() { Code = archerCode };
+                foreach (var archer in db.Archers)
+                {
+                    yield return new ArcherDataProvider()
+                    {
+                        Code = archer.Code,
+                        FirstName = archer.FirstName,
+                        LastName = archer.LastName,
+                    };
+                }
             }
         }
     }
