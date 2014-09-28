@@ -2,6 +2,7 @@ namespace FftaExtract.Providers
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Net.Http;
     using System.Text.RegularExpressions;
@@ -87,6 +88,28 @@ namespace FftaExtract.Providers
                         {
                             var td = tr.SelectNodes("td");
 
+                            var dateText = td[1].InnerText;
+
+                            var matchText = Regex.Match(
+                                dateText,
+                                "^([0-9]{1,2}/[0-9]{1,2}/[0-9]{4})[^0-9]*([0-9]{1,2}/[0-9]{1,2}/[0-9]{4})$");
+                            DateTime begin = DateTime.Now;
+                            DateTime end = DateTime.Now;
+
+                            if (matchText.Success)
+                            {
+                                begin = DateTime.ParseExact(
+                                    matchText.Groups[1].Value,
+                                    new string[] { "dd/MM/yyyy", "d/MM/yyyy" },
+                                    CultureInfo.InvariantCulture,
+                                    DateTimeStyles.None);
+                                end = DateTime.ParseExact(
+                                    matchText.Groups[2].Value,
+                                    new string[] { "dd/MM/yyyy", "d/MM/yyyy" },
+                                    CultureInfo.InvariantCulture,
+                                    DateTimeStyles.None);
+                            }
+
                             var name = td[2].InnerText;
                             var score = td[4].InnerText;
 
@@ -94,7 +117,7 @@ namespace FftaExtract.Providers
                             foreach (var score1 in scores)
                             {
                                 competitions.Add(
-                                    new CompetitionDataProvider(year,
+                                    new CompetitionDataProvider(year, begin, end,
                                         td[2].InnerText.Trim(),
                                         category.CompetitionType, category.BowType, score1));
                             }

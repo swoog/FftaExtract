@@ -84,6 +84,15 @@
     <Compile Include="DatabaseModel\IRepository.cs" />
     <Compile Include="DatabaseModel\IRepositoryImporter.cs" />
     <Compile Include="Extractor.cs" />
+    <Compile Include="Migrations\201409260730565_InitialCreate.cs" />
+    <Compile Include="Migrations\201409260730565_InitialCreate.Designer.cs">
+      <DependentUpon>201409260730565_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201409281951077_AddCompetitionDate.cs" />
+    <Compile Include="Migrations\201409281951077_AddCompetitionDate.Designer.cs">
+      <DependentUpon>201409281951077_AddCompetitionDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ArcherDataProvider.cs" />
     <Compile Include="Providers\ClassmentProvider.cs" />
@@ -96,6 +105,14 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201409260730565_InitialCreate.resx">
+      <DependentUpon>201409260730565_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201409281951077_AddCompetitionDate.resx">
+      <DependentUpon>201409281951077_AddCompetitionDate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

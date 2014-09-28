@@ -1,5 +1,6 @@
 ﻿namespace FftaExtract.DatabaseModel
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,5 +16,9 @@
         public int CompetitionInfoId { get; set; }
 
         public CompetitionType Type { get; set; }
+
+        public DateTime End { get; set; }
+
+        public DateTime Begin { get; set; }
     }
 }
