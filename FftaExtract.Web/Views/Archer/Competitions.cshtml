@@ -34,12 +34,14 @@
                     <div class="panel-heading">@type.Type</div>
                     <table class="table">
                         <tr>
+                            <th>Date</th>
                             <th>Compétition</th>
                             <th class="score">Score</th>
                         </tr>
                         @foreach (var competition in type.Competitions)
                         {
                             <tr>
+                                <td>@competition.Competition.Begin.ToShortDateString()</td>
                                 <td>
                                     @competition.Competition.CompetitionInfo.Name
                                 </td>

@@ -52,5 +52,15 @@ namespace FftaExtract.DatabaseModel
                 return q.ToList();
             }
         }
+
+        public List<Archer> Search(string query)
+        {
+            using (var db = new FftaDatabase())
+            {
+                var q = from a in db.Archers where a.FirstName.Contains(query) || a.LastName.Contains(query) select a;
+
+                return q.ToList();
+            }
+        }
     }
 }
