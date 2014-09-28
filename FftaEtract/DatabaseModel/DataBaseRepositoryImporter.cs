@@ -127,7 +127,7 @@ namespace FftaExtract.DatabaseModel
             db.SaveChanges();
         }
 
-        private string[] archerCodes = new[] { "359095W", "661811K", "819573R", "828240L" };
+        private string[] archerCodes = new[] { "359095", "661811", "819573", "828240" };
 
         public IEnumerable<ArcherDataProvider> GetAllArchers()
         {
