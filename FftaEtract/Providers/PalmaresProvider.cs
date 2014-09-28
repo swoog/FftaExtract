@@ -24,23 +24,19 @@ namespace FftaExtract.Providers
             this.compationCategorieRepository = compationCategorieRepository;
         }
 
-        public async Task<IList<ArcherDataProvider>> GetArchers()
+        public IEnumerable<ArcherDataProvider> GetArchers()
         {
-            var archers = new List<ArcherDataProvider>();
-
             foreach (var archer in this.repositoryImporter.GetAllArchers())
             {
                 foreach (var category in this.compationCategorieRepository.GetCategories())
                 {
                     var url = string.Format("http://ffta-public.cvf.fr/servlet/ResPalmares?NUM_ADH={0}&CLASS_SELECT={1}", archer.Num, category.IdFfta);
 
-                    await this.ScrapUrl(url, category, archer);
+                    Task.WaitAll(this.ScrapUrl(url, category, archer));
                 }
 
-                archers.Add(archer);
+                yield return archer;
             }
-
-            return archers;
         }
 
         private async Task ScrapUrl(string url, CompetitionCategory category, ArcherDataProvider archerDataProvider)
@@ -94,16 +90,33 @@ namespace FftaExtract.Providers
                             var name = td[2].InnerText;
                             var score = td[4].InnerText;
 
-                            competitions.Add(
-                                new CompetitionDataProvider(year,
-                                    td[2].InnerText.Trim(),
-                                    category.CompetitionType, category.BowType, Convert.ToInt32(td[4].InnerText.Trim())));
+                            var scores = ExtractScore(score);
+                            foreach (var score1 in scores)
+                            {
+                                competitions.Add(
+                                    new CompetitionDataProvider(year,
+                                        td[2].InnerText.Trim(),
+                                        category.CompetitionType, category.BowType, score1));
+                            }
                         }
                     }
                 }
             }
 
             return competitions;
+        }
+
+        private static IEnumerable<int> ExtractScore(string score)
+        {
+            var match = Regex.Match(score, @"^([0-9]+)\s*\(([0-9]+)\s*pts\s*\+\s*([0-9]+)\s*pts\)$", RegexOptions.IgnoreCase);
+            if (match.Success)
+            {
+                yield return Convert.ToInt32(match.Groups[2].Value);
+                yield return Convert.ToInt32(match.Groups[3].Value);
+                yield break;
+            }
+
+            yield return Convert.ToInt32(score.Trim());
         }
 
         //private static void ScrapArcher(ArcherDataProvider archerDataProvider, HtmlDocument doc)

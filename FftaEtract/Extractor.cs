@@ -22,12 +22,12 @@
             this.logger = logger;
         }
 
-        public async Task Run()
+        public void Run()
         {
             foreach (var provider in this.providers)
             {
                 this.logger.Info("Run provider {0}", provider.GetType().Name);
-                foreach (var archer in await provider.GetArchers())
+                foreach (var archer in provider.GetArchers())
                 {
                     this.logger.Info("Archer : {0} {1}", archer.FirstName, archer.LastName);
                     this.repositoryImporter.SaveArcher(archer);

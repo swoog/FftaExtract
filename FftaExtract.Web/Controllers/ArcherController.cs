@@ -6,6 +6,8 @@ using System.Web.Mvc;
 
 namespace FftaExtract.Web.Controllers
 {
+    using System.Security.Cryptography;
+
     using FftaExtract;
     using FftaExtract.DatabaseModel;
     using FftaExtract.Web.Models;
@@ -33,12 +35,14 @@ namespace FftaExtract.Web.Controllers
             var qCompetttions = from s in competitions
                                 group s by s.Competition.Year
                                 into s2
+                                orderby s2.Key descending 
                                 select new YearCompetitionModel()
                                            {
                                                Year = s2.Key,
                                                Types = (from t in s2
                                                         group t by t.Competition.Type
                                                         into t2
+                                                        orderby t2.Key
                                                         select
                                                             new TyepCompetitionModel
                                                                 {
