@@ -36,6 +36,7 @@ namespace FftaExtract.DatabaseModel
                                     BowType = s2.FirstOrDefault().BowType,
                                     CompetitionType = s2.FirstOrDefault().Competition.Type,
                                     Score = s2.Max(p => p.Score),
+                                    CompetitionName = s2.FirstOrDefault(s => s.Score == s2.Max(p => p.Score)).Competition.CompetitionInfo.Name,
                                 };
 
                 return q.ToList();

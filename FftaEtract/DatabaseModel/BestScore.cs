@@ -7,5 +7,7 @@ namespace FftaExtract.DatabaseModel
         public int Score { get; set; }
 
         public BowType BowType { get; set; }
+
+        public string CompetitionName { get; set; }
     }
 }
