@@ -6,8 +6,17 @@ using System.Web.Mvc;
 
 namespace FftaExtract.Web.Controllers
 {
+    using FftaExtract.DatabaseModel;
+
     public class HomeController : Controller
     {
+        private IRepository repository;
+
+        public HomeController(IRepository repository)
+        {
+            this.repository = repository;
+        }
+
         public ActionResult Index()
         {
             return View();
@@ -25,6 +34,13 @@ namespace FftaExtract.Web.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        public ActionResult Search(string query)
+        {
+            var archers = this.repository.Search(query);
+
+            return this.View(archers);
         }
     }
 }

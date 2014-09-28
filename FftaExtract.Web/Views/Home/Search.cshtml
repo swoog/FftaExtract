@@ -1,0 +1,16 @@
+﻿@model List<FftaExtract.DatabaseModel.Archer>
+@{
+    ViewBag.Title = "title";
+}
+
+<h2>Archers</h2>
+
+<div class="list-group">
+    @foreach (var archer in this.Model)
+    {
+        <a href="/archer/@archer.Code/" class="list-group-item">
+            @archer.FirstName @archer.LastName
+        </a>
+
+    }
+</div>

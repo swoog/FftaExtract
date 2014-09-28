@@ -12,5 +12,7 @@ namespace FftaExtract.DatabaseModel
         List<BestScore> GetBestScores(string code);
 
         List<CompetitionScore> GetCompetitions(string code);
+
+        List<Archer> Search(string query);
     }
 }
