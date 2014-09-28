@@ -67,6 +67,7 @@ namespace FftaExtract.DatabaseModel
             var q = from c in db.Competitions
                     where
                         c.Year == competitionDataProvider.Year && c.CompetitionInfoId == competitionInfoId
+                        && c.Begin == competitionDataProvider.Begin && c.End == competitionDataProvider.End
                         && c.Type == competitionDataProvider.CompetitionType
                     select c;
 
@@ -80,6 +81,8 @@ namespace FftaExtract.DatabaseModel
                     CompetitionInfoId = competitionInfoId,
                     Type = competitionDataProvider.CompetitionType,
                     Year = competitionDataProvider.Year,
+                    Begin = competitionDataProvider.Begin,
+                    End = competitionDataProvider.End,
                 });
                 db.SaveChanges();
             }
