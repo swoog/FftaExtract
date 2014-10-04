@@ -8,9 +8,6 @@
 <div class="list-group">
     @foreach (var archer in this.Model)
     {
-        <a href="/archer/@archer.Code/" class="list-group-item">
-            @archer.FirstName @archer.LastName
-        </a>
-
+        @Html.ActionLink(@archer.FullName, "Index", "Archer", new { Code = @archer.Code }, new { Class = "list-group-item" })
     }
 </div>
