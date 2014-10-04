@@ -52,12 +52,15 @@ namespace FftaExtract.Web.Controllers
                                                                 }).ToList(),
                                            };
 
+            var club = this.repository.GetCurrentClub(code);
+
             return View(new ArcherModel
                             {
                                 Archer = archer,
                                 Bows = bows,
                                 BestScores = bestScores,
                                 Competitions = qCompetttions.ToList(),
+                                Club = club,
                             });
         }
     }

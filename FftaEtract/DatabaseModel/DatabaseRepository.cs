@@ -32,12 +32,12 @@ namespace FftaExtract.DatabaseModel
                         into s2
                         select
                             new BestScore()
-                                {
-                                    BowType = s2.FirstOrDefault().BowType,
-                                    CompetitionType = s2.FirstOrDefault().Competition.Type,
-                                    Score = s2.Max(p => p.Score),
-                                    CompetitionName = s2.FirstOrDefault(s => s.Score == s2.Max(p => p.Score)).Competition.CompetitionInfo.Name,
-                                };
+                        {
+                            BowType = s2.FirstOrDefault().BowType,
+                            CompetitionType = s2.FirstOrDefault().Competition.Type,
+                            Score = s2.Max(p => p.Score),
+                            CompetitionName = s2.FirstOrDefault(s => s.Score == s2.Max(p => p.Score)).Competition.CompetitionInfo.Name,
+                        };
 
                 return q.ToList();
             }
@@ -60,6 +60,26 @@ namespace FftaExtract.DatabaseModel
                 var q = from a in db.Archers where a.FirstName.Contains(query) || a.LastName.Contains(query) select a;
 
                 return q.ToList();
+            }
+        }
+
+        public Club GetCurrentClub(string code)
+        {
+            using (var db = new FftaDatabase())
+            {
+                var q = from ac in db.ArchersClubs where ac.ArcherCode == code orderby ac.Year descending select ac.Club;
+
+                return q.FirstOrDefault();
+            }
+        }
+
+        public Club GetClub(int id)
+        {
+            using (var db = new FftaDatabase())
+            {
+                var q = from club in db.Clubs where club.Id == id select club;
+
+                return q.FirstOrDefault();
             }
         }
     }

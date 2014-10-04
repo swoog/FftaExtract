@@ -19,5 +19,7 @@ namespace FftaExtract.Web.Models
         public List<BestScore> BestScores { get; set; }
 
         public List<YearCompetitionModel> Competitions { get; set; }
+
+        public Club Club { get; set; }
     }
 }

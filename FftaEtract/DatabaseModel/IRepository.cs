@@ -14,5 +14,9 @@ namespace FftaExtract.DatabaseModel
         List<CompetitionScore> GetCompetitions(string code);
 
         List<Archer> Search(string query);
+
+        Club GetCurrentClub(string code);
+
+        Club GetClub(int id);
     }
 }
