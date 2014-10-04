@@ -6,8 +6,14 @@
 }
 
 <h1>@Model.Archer.FullName</h1>
-Club : @Html.ActionLink(@Model.Club.Name, "Index", "Club", new {Id = @Model.Club.Id}, null) 
-<br />
+@if (Model.Club != null)
+{
+    <span>
+        Club:
+        @Html.ActionLink(@Model.Club.Name, "Index", "Club", new { Id = @Model.Club.Id }, null)
+    </span>
+    <br />
+}
 Arcs :
 @foreach (var bow in Model.Bows)
 {
