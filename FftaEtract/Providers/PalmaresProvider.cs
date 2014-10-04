@@ -38,24 +38,39 @@ namespace FftaExtract.Providers
         {
             foreach (var archer in this.repositoryImporter.GetAllArchers())
             {
-                foreach (var category in this.competionCategorieRepository.GetCategories())
+                var sexes = new List<Sexe>();
+
+                if (archer.Sexe.HasValue)
                 {
-                    string url = string.Empty;
-                    try
-                    {
-                        url =
-                            string.Format(
-                                "http://ffta-public.cvf.fr/servlet/ResPalmares?NUM_ADH={0}&CLASS_SELECT={1}",
-                                archer.Num,
-                                category.IdFfta);
+                    sexes.Add(archer.Sexe.Value);
+                }
+                else
+                {
+                    sexes.Add(Sexe.Homme);
+                    sexes.Add(Sexe.Femme);
+                }
 
-                        Task.WaitAll(this.ScrapUrl(url, category, archer));
-
-                        Thread.Sleep(TimeSpan.FromMilliseconds(this.rand.Next(1, 3000)));
-                    }
-                    catch (Exception ex)
+                foreach (var sex in sexes)
+                {
+                    foreach (var category in this.competionCategorieRepository.GetCategories(sex))
                     {
-                        this.logger.Error(ex, "Error in scrap url : {0}", url);
+                        string url = string.Empty;
+                        try
+                        {
+                            url =
+                                string.Format(
+                                    "http://ffta-public.cvf.fr/servlet/ResPalmares?NUM_ADH={0}&CLASS_SELECT={1}",
+                                    archer.Num,
+                                    category.IdFfta);
+
+                            Task.WaitAll(this.ScrapUrl(url, category, archer));
+
+                            Thread.Sleep(TimeSpan.FromMilliseconds(this.rand.Next(1, 3000)));
+                        }
+                        catch (Exception ex)
+                        {
+                            this.logger.Error(ex, "Error in scrap url : {0}", url);
+                        }
                     }
                 }
 
@@ -77,6 +92,7 @@ namespace FftaExtract.Providers
 
             foreach (var competition in competitions)
             {
+                archerDataProvider.Sexe = category.Sexe;
                 archerDataProvider.AddCompetition(competition);
             }
         }

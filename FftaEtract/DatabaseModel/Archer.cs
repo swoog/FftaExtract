@@ -20,6 +20,8 @@
             }
         }
 
+        public Sexe? Sexe { get; set; }
+
         public DateTime LastUpdate { get; set; }
     }
 }

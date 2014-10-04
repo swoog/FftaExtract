@@ -3,6 +3,8 @@ namespace FftaExtract.Providers
     using System;
     using System.Collections.Generic;
 
+    using FftaExtract.DatabaseModel;
+
     public class ArcherDataProvider
     {
         public ArcherDataProvider()
@@ -32,5 +34,7 @@ namespace FftaExtract.Providers
         public IList<CompetitionDataProvider> Competitions { get; private set; }
 
         public string Club { get; set; }
+
+        public Sexe? Sexe { get; set; }
     }
 }

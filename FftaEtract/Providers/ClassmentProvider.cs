@@ -7,6 +7,8 @@
     using System.Threading.Tasks;
     using System.Web;
 
+    using FftaExtract.DatabaseModel;
+
     using HtmlAgilityPack;
 
     using Ninject.Extensions.Logging;
@@ -27,7 +29,7 @@
         {
             var urlFormat = "http://ffta-public.cvf.fr/servlet/ResAffichClassement?ANNEE={0}&DISCIP=S&TYPE=I&SELECTIF=0&NIVEAU=L&DEBUT={1}&NUMCLASS={2}";
 
-            foreach (var category in this.competionCategorieRepository.GetCategories())
+            foreach (var category in this.competionCategorieRepository.GetCategories(null))
             {
                 int page = 0;
                 var hasArcher = false;
@@ -90,6 +92,7 @@
                         FirstName = firstName,
                         Club = club,
                         Code = code,
+                        Sexe = category.Sexe,
                     });
                 }
             }
