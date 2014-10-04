@@ -86,11 +86,17 @@
 
                     var club = columns[4].InnerText.Trim();
 
+                    var clubYear = new ClubDataProvider { Club = club, Year = category.Year, };
+
                     archers.Add(new ArcherDataProvider()
                     {
                         LastName = lastName,
                         FirstName = firstName,
-                        Club = club,
+                        Club =
+                            new List<ClubDataProvider>()
+                                {
+                                    new ClubDataProvider() { Club = club, Year = category.Year }
+                                },
                         Code = code,
                         Sexe = category.Sexe,
                     });

@@ -9,8 +9,12 @@
 
         public DbSet<Competition> Competitions { get; set; }
 
-        public DbSet<CompetitionInfo> Clubs { get; set; }
+        public DbSet<CompetitionInfo> CompetitionInfos { get; set; }
 
         public DbSet<CompetitionScore> CompetitionsScores { get; set; }
+
+        public DbSet<Club> Clubs { get; set; }
+
+        public DbSet<ArcherClub> ArchersClubs { get; set; }
     }
 }

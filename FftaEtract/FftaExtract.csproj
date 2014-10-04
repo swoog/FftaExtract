@@ -72,8 +72,10 @@
   <ItemGroup>
     <Compile Include="ConsoleRepositoryImporter.cs" />
     <Compile Include="DatabaseModel\Archer.cs" />
+    <Compile Include="DatabaseModel\ArcherClub.cs" />
     <Compile Include="DatabaseModel\BestScore.cs" />
     <Compile Include="DatabaseModel\BowType.cs" />
+    <Compile Include="DatabaseModel\Club.cs" />
     <Compile Include="DatabaseModel\CompetitionInfo.cs" />
     <Compile Include="DatabaseModel\Competition.cs" />
     <Compile Include="DatabaseModel\CompetitionScore.cs" />
@@ -101,11 +103,16 @@
     <Compile Include="Migrations\201410041204405_Add sexe archer.Designer.cs">
       <DependentUpon>201410041204405_Add sexe archer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201410041843175_Add club info.cs" />
+    <Compile Include="Migrations\201410041843175_Add club info.Designer.cs">
+      <DependentUpon>201410041843175_Add club info.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ArcherDataProvider.cs" />
     <Compile Include="Providers\Category.cs" />
     <Compile Include="Providers\ClassmentProvider.cs" />
+    <Compile Include="Providers\ClubDataProvider.cs" />
     <Compile Include="Providers\CompetionCategorieRepository.cs" />
     <Compile Include="Providers\CompetitionCategory.cs" />
     <Compile Include="Providers\CompetitionDataProvider.cs" />
@@ -128,6 +135,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201410041204405_Add sexe archer.resx">
       <DependentUpon>201410041204405_Add sexe archer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201410041843175_Add club info.resx">
+      <DependentUpon>201410041843175_Add club info.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

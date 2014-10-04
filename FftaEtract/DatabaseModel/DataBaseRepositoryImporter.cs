@@ -25,7 +25,7 @@ namespace FftaExtract.DatabaseModel
 
         private void SaveCompetitionInfo(FftaDatabase db, string code, CompetitionDataProvider competitionDataProvider)
         {
-            var competitionInfoId = this.SaveClubInfo(db, competitionDataProvider);
+            var competitionInfoId = this.SaveCompetitionInfo(db, competitionDataProvider);
 
             var competitionId = SaveCompetition(db, competitionDataProvider, competitionInfoId);
 
@@ -91,15 +91,15 @@ namespace FftaExtract.DatabaseModel
             return competition.Id;
         }
 
-        private int SaveClubInfo(FftaDatabase db, CompetitionDataProvider competitionDataProvider)
+        private int SaveCompetitionInfo(FftaDatabase db, CompetitionDataProvider competitionDataProvider)
         {
-            var q = from c in db.Clubs where c.Name == competitionDataProvider.Name select c;
+            var q = from c in db.CompetitionInfos where c.Name == competitionDataProvider.Name select c;
 
             var club = q.FirstOrDefault();
 
             if (club == null)
             {
-                club = db.Clubs.Add(new CompetitionInfo() { Name = competitionDataProvider.Name });
+                club = db.CompetitionInfos.Add(new CompetitionInfo() { Name = competitionDataProvider.Name });
                 db.SaveChanges();
             }
 
@@ -108,14 +108,16 @@ namespace FftaExtract.DatabaseModel
 
         private void SaveArcherInfo(FftaDatabase db, ArcherDataProvider archerDataProvider)
         {
+
+
             var q = from a in db.Archers where a.Code == archerDataProvider.Code select a;
 
             var dataBaseArcher = q.FirstOrDefault();
 
             if (dataBaseArcher == null)
             {
-                db.Archers.Add(
-                    new Archer()
+                dataBaseArcher = db.Archers.Add(
+                    new Archer
                 {
                     Code = archerDataProvider.Code,
                     FirstName = archerDataProvider.FirstName,
@@ -137,6 +139,47 @@ namespace FftaExtract.DatabaseModel
             }
 
             db.SaveChanges();
+
+            foreach (var clubdata in archerDataProvider.Club)
+            {
+                var club = this.SaveClub(db, clubdata);
+
+                SaveArcherClub(db, clubdata.Year, dataBaseArcher, club);
+            }
+        }
+
+        private void SaveArcherClub(FftaDatabase db, int year, Archer dataBaseArcher, Club club)
+        {
+            var q = from ac in db.ArchersClubs
+                    where ac.ArcherCode == dataBaseArcher.Code && ac.ClubId == club.Id && ac.Year == year
+                    select ac;
+
+            var archerClub = q.FirstOrDefault();
+
+            if (archerClub == null)
+            {
+                db.ArchersClubs.Add(
+                    new ArcherClub() { ClubId = club.Id, ArcherCode = dataBaseArcher.Code, Year = year });
+
+                db.SaveChanges();
+            }
+        }
+
+        private Club SaveClub(FftaDatabase db, ClubDataProvider clubDataProvider)
+        {
+            var q = from c in db.Clubs where c.Name == clubDataProvider.Club select c;
+
+            var club = q.FirstOrDefault();
+
+            if (club == null)
+            {
+                club = new Club { Name = clubDataProvider.Club, };
+
+                db.Clubs.Add(club);
+                db.SaveChanges();
+            }
+
+            return club;
         }
 
         public IEnumerable<ArcherDataProvider> GetAllArchers()
