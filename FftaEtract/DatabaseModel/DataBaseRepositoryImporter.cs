@@ -145,7 +145,7 @@ namespace FftaExtract.DatabaseModel
                         orderby a.LastUpdate
                         select a;
 
-                foreach (var archer in db.Archers)
+                foreach (var archer in q)
                 {
                     yield return new ArcherDataProvider()
                     {

@@ -4,6 +4,6 @@ namespace FftaExtract.DatabaseModel
     {
         Salle,
         Fita,
-        Federal,
+        //Federal,
     }
 }

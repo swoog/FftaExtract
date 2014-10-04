@@ -29,7 +29,7 @@
                 this.logger.Info("Run provider {0}", provider.GetType().Name);
                 foreach (var archer in provider.GetArchers())
                 {
-                    this.logger.Info("Archer : {0} {1}", archer.FirstName, archer.LastName);
+                    this.logger.Info("Archer : {0} {1} ({2})", archer.FirstName, archer.LastName, archer.Code);
                     this.repositoryImporter.SaveArcher(archer);
                 }
 
