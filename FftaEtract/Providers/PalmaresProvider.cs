@@ -5,7 +5,9 @@ namespace FftaExtract.Providers
     using System.Globalization;
     using System.Linq;
     using System.Net.Http;
+    using System.Security.Policy;
     using System.Text.RegularExpressions;
+    using System.Threading;
     using System.Threading.Tasks;
     using System.Web;
 
@@ -13,17 +15,24 @@ namespace FftaExtract.Providers
 
     using HtmlAgilityPack;
 
+    using Ninject.Extensions.Logging;
+
     public class PalmaresProvider : IStatsProvider
     {
         private IRepositoryImporter repositoryImporter;
 
         private readonly CompationCategorieRepository compationCategorieRepository;
 
-        public PalmaresProvider(IRepositoryImporter repositoryImporter, CompationCategorieRepository compationCategorieRepository)
+        private ILogger logger;
+
+        public PalmaresProvider(IRepositoryImporter repositoryImporter, CompationCategorieRepository compationCategorieRepository, ILogger logger)
         {
             this.repositoryImporter = repositoryImporter;
             this.compationCategorieRepository = compationCategorieRepository;
+            this.logger = logger;
         }
+
+        private Random rand = new Random();
 
         public IEnumerable<ArcherDataProvider> GetArchers()
         {
@@ -31,9 +40,23 @@ namespace FftaExtract.Providers
             {
                 foreach (var category in this.compationCategorieRepository.GetCategories())
                 {
-                    var url = string.Format("http://ffta-public.cvf.fr/servlet/ResPalmares?NUM_ADH={0}&CLASS_SELECT={1}", archer.Num, category.IdFfta);
+                    string url = string.Empty;
+                    try
+                    {
+                        url =
+                            string.Format(
+                                "http://ffta-public.cvf.fr/servlet/ResPalmares?NUM_ADH={0}&CLASS_SELECT={1}",
+                                archer.Num,
+                                category.IdFfta);
 
-                    Task.WaitAll(this.ScrapUrl(url, category, archer));
+                        Task.WaitAll(this.ScrapUrl(url, category, archer));
+
+                        Thread.Sleep(TimeSpan.FromSeconds(this.rand.Next(1, 5)));
+                    }
+                    catch (Exception ex)
+                    {
+                        this.logger.Error(ex, "Error in scrap url : {0}", url);
+                    }
                 }
 
                 yield return archer;
@@ -42,7 +65,6 @@ namespace FftaExtract.Providers
 
         private async Task ScrapUrl(string url, CompetitionCategory category, ArcherDataProvider archerDataProvider)
         {
-
             var client = new HttpClient();
             var result = await client.GetAsync(url);
 

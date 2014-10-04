@@ -92,6 +92,10 @@
     <Compile Include="Migrations\201409281951077_AddCompetitionDate.Designer.cs">
       <DependentUpon>201409281951077_AddCompetitionDate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201410032311439_Archer Last Update.cs" />
+    <Compile Include="Migrations\201410032311439_Archer Last Update.Designer.cs">
+      <DependentUpon>201410032311439_Archer Last Update.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ArcherDataProvider.cs" />
@@ -112,6 +116,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201409281951077_AddCompetitionDate.resx">
       <DependentUpon>201409281951077_AddCompetitionDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201410032311439_Archer Last Update.resx">
+      <DependentUpon>201410032311439_Archer Last Update.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
