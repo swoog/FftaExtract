@@ -1,5 +1,6 @@
 namespace FftaExtract.DatabaseModel
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -119,6 +120,7 @@ namespace FftaExtract.DatabaseModel
                     Code = archerDataProvider.Code,
                     FirstName = archerDataProvider.FirstName,
                     LastName = archerDataProvider.LastName,
+                    LastUpdate = DateTime.Now
                 });
             }
             else
@@ -128,6 +130,8 @@ namespace FftaExtract.DatabaseModel
                     dataBaseArcher.LastName = archerDataProvider.LastName;
                     dataBaseArcher.FirstName = archerDataProvider.FirstName;
                 }
+
+                dataBaseArcher.LastUpdate = DateTime.Now;
             }
 
             db.SaveChanges();
@@ -137,6 +141,10 @@ namespace FftaExtract.DatabaseModel
         {
             using (var db = new FftaDatabase())
             {
+                var q = from a in db.Archers
+                        orderby a.LastUpdate
+                        select a;
+
                 foreach (var archer in db.Archers)
                 {
                     yield return new ArcherDataProvider()

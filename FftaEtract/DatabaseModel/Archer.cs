@@ -1,5 +1,6 @@
 ﻿namespace FftaExtract.DatabaseModel
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
 
     public class Archer
@@ -18,5 +19,7 @@
                 return string.Format("{0} {1}", this.FirstName, this.LastName);
             }
         }
+
+        public DateTime LastUpdate { get; set; }
     }
 }
