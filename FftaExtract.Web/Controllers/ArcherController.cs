@@ -39,8 +39,6 @@ namespace FftaExtract.Web.Controllers
                                 select new YearCompetitionModel()
                                 {
                                     Year = s2.Key,
-                                    HighScores = s2.OrderByDescending(s3 => s3.Score).Take(3).ToArray(),
-                                    Average = (int)Math.Ceiling((double)(s2.OrderByDescending(s3 => s3.Score).Take(3).Sum(s3 => s3.Score) / 3)),
                                     Types = (from t in s2
                                              group t by t.Competition.Type
                                                         into t2
@@ -49,7 +47,9 @@ namespace FftaExtract.Web.Controllers
                                                  new TyepCompetitionModel
                                              {
                                                  Type = t2.Key,
-                                                 Competitions =
+                                                  HighScores = t2.OrderByDescending(s3 => s3.Score).Take(3).ToArray(),
+                                                Average = (int)Math.Ceiling((double)(t2.OrderByDescending(s3 => s3.Score).Take(3).Sum(s3 => s3.Score) / 3)),
+                                               Competitions =
                                                              t2.ToList(),
                                              }).ToList(),
                                 };
