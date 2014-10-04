@@ -21,14 +21,14 @@ namespace FftaExtract.Providers
     {
         private IRepositoryImporter repositoryImporter;
 
-        private readonly CompationCategorieRepository compationCategorieRepository;
+        private readonly CompetionCategorieRepository competionCategorieRepository;
 
         private ILogger logger;
 
-        public PalmaresProvider(IRepositoryImporter repositoryImporter, CompationCategorieRepository compationCategorieRepository, ILogger logger)
+        public PalmaresProvider(IRepositoryImporter repositoryImporter, CompetionCategorieRepository competionCategorieRepository, ILogger logger)
         {
             this.repositoryImporter = repositoryImporter;
-            this.compationCategorieRepository = compationCategorieRepository;
+            this.competionCategorieRepository = competionCategorieRepository;
             this.logger = logger;
         }
 
@@ -38,7 +38,7 @@ namespace FftaExtract.Providers
         {
             foreach (var archer in this.repositoryImporter.GetAllArchers())
             {
-                foreach (var category in this.compationCategorieRepository.GetCategories())
+                foreach (var category in this.competionCategorieRepository.GetCategories())
                 {
                     string url = string.Empty;
                     try
@@ -51,7 +51,7 @@ namespace FftaExtract.Providers
 
                         Task.WaitAll(this.ScrapUrl(url, category, archer));
 
-                        Thread.Sleep(TimeSpan.FromSeconds(this.rand.Next(1, 5)));
+                        Thread.Sleep(TimeSpan.FromMilliseconds(this.rand.Next(1, 3000)));
                     }
                     catch (Exception ex)
                     {

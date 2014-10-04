@@ -13,13 +13,13 @@
 
     public class ClassmentProvider : IStatsProvider
     {
-        private readonly CompationCategorieRepository compationCategorieRepository;
+        private readonly CompetionCategorieRepository competionCategorieRepository;
 
         private readonly ILogger logger;
 
-        public ClassmentProvider(CompationCategorieRepository compationCategorieRepository, ILogger logger)
+        public ClassmentProvider(CompetionCategorieRepository competionCategorieRepository, ILogger logger)
         {
-            this.compationCategorieRepository = compationCategorieRepository;
+            this.competionCategorieRepository = competionCategorieRepository;
             this.logger = logger;
         }
 
@@ -27,7 +27,7 @@
         {
             var urlFormat = "http://ffta-public.cvf.fr/servlet/ResAffichClassement?ANNEE={0}&DISCIP=S&TYPE=I&SELECTIF=0&NIVEAU=L&DEBUT={1}&NUMCLASS={2}";
 
-            foreach (var category in this.compationCategorieRepository.GetCategories())
+            foreach (var category in this.competionCategorieRepository.GetCategories())
             {
                 int page = 0;
                 var hasArcher = false;
