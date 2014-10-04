@@ -18,5 +18,7 @@ namespace FftaExtract.DatabaseModel
         Club GetCurrentClub(string code);
 
         Club GetClub(int id);
+
+        List<YearArcher> GetArchersByYear(int id);
     }
 }

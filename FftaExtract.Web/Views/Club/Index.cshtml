@@ -1,8 +1,30 @@
-﻿@model FftaExtract.DatabaseModel.Club
+﻿@model FftaExtract.Web.Models.ClubModel
 
 @{
-    ViewBag.Title = Model.Name;
+    ViewBag.Title = Model.Club.Name;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>@Model.Name</h1>
+<h1>@Model.Club.Name</h1>
+
+<ul class="nav nav-tabs" role="tablist">
+    @foreach (var year in Model.YearsArchers)
+    {
+        <li>
+            <a role="tab" data-toggle="tab" class="year" href="#year@(year.Year)">@year.Year</a>
+        </li>
+    }
+</ul>
+<div class="tab-content">
+    @foreach (var year in Model.YearsArchers)
+    {
+        <div class="tab-pane fade year" id="year@(year.Year)">
+            <div class="list-group">
+                @foreach (var archer in year.Archers)
+                {
+                    @Html.ActionLink(@archer.FullName, "Index", "Archer", new { Code = @archer.Code }, new { Class = "list-group-item" })
+                }
+            </div>
+        </div>
+    }
+</div>

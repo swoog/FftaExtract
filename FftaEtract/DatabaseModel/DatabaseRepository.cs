@@ -82,5 +82,23 @@ namespace FftaExtract.DatabaseModel
                 return q.FirstOrDefault();
             }
         }
+
+        public List<YearArcher> GetArchersByYear(int id)
+        {
+            using (var db = new FftaDatabase())
+            {
+                var archers = (from ac in db.ArchersClubs.Include("Archer") where ac.ClubId == id select ac).ToList();
+
+                var q = from ac in archers
+                        group ac by ac.Year into year
+                        select new YearArcher()
+                        {
+                            Year = year.Key,
+                            Archers = year.OrderBy(a => a.Archer.FullName).Select(a => a.Archer).ToArray(),
+                        };
+
+                return q.ToList();
+            }
+        }
     }
 }
