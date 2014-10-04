@@ -9,10 +9,27 @@
     }
 </ul>
 <div class="tab-content">
-
     @foreach (var year in Model)
     {
         <div class="tab-pane fade year" id="year@(year.Year)">
+            <table class="table">
+                <tr>
+                    @for (int i = 0; i < year.HighScores.Length; i++)
+                {
+                        <td>Score @(i + 1)</td>
+                    }
+                    <td>Moy</td>
+                </tr>
+                <tr>
+                    @for (int i = 0; i < year.HighScores.Length; i++)
+                {
+                        <td>@year.HighScores[i].Score</td>
+                    }
+                    <td>@year.Average</td>
+                </tr>
+            </table>
+
+
             @foreach (var type in year.Types)
                 {
                 <div class="panel panel-default">
@@ -21,6 +38,7 @@
                         <tr>
                             <th>Date</th>
                             <th>Compétition</th>
+                            <th>Rang</th>
                             <th class="score">Score</th>
                         </tr>
                         @foreach (var competition in type.Competitions)
@@ -29,6 +47,9 @@
                                 <td>@competition.Competition.Begin.ToShortDateString()</td>
                                 <td>
                                     @competition.Competition.CompetitionInfo.Name
+                                </td>
+                                <td>
+                                    @competition.Rank
                                 </td>
                                 <td class="score">
                                     @competition.Score
