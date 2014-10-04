@@ -20,10 +20,18 @@ namespace FftaExtract.Providers
                                                             "2013_Fita_SF_CL",
                                                             "2013_Fita_SH_CO",
                                                             "2013_Fita_SF_CO",
+                                                            "2013_Salle_SCH_CL",
+                                                            "2013_Salle_SCF_CL",
+                                                            "2013_Salle_SCH_CO",
+                                                            "2013_Salle_SCF_CO",
                                                            "2014_Fita_SH_CL",
                                                             "2014_Fita_SF_CL",
                                                             "2014_Fita_SH_CO",
                                                             "2014_Fita_SF_CO",
+                                                            "2014_Salle_SCH_CL",
+                                                            "2014_Salle_SCF_CL",
+                                                            "2014_Salle_SCH_CO",
+                                                            "2014_Salle_SCF_CO",
                                                         };
 
 
@@ -151,8 +159,10 @@ namespace FftaExtract.Providers
                                                          {
                                                              { Category.JuniorHomme, "JH"},
                                                              { Category.SeniorHomme, "SH"},
+                                                             { Category.ScratchHomme, "SCH" },
                                                              { Category.JuniorFemme, "JF"},
                                                              { Category.SeniorFemme, "SF"},
+                                                             { Category.ScratchFemme, "SCF" },
                                                          };
 
         private static CompetitionCategory[] categories = null;

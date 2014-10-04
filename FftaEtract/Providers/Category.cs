@@ -6,5 +6,9 @@
         JuniorHomme,
         SeniorFemme,
         JuniorFemme,
+
+        ScratchHomme,
+
+        ScratchFemme
     }
 }
