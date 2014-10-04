@@ -3,6 +3,7 @@ namespace FftaExtract.DatabaseModel
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Sockets;
 
     using FftaExtract.Providers;
 
@@ -14,6 +15,9 @@ namespace FftaExtract.DatabaseModel
             {
                 this.SaveArcherInfo(db, archerDataProvider);
 
+                // Clean Competition score
+                CleanCompetitionScore(db, archerDataProvider.Competitions);
+
                 foreach (var competitionDataProvider in archerDataProvider.Competitions)
                 {
                     this.SaveCompetitionInfo(db, archerDataProvider.Code, competitionDataProvider);
@@ -21,6 +25,26 @@ namespace FftaExtract.DatabaseModel
 
                 db.SaveChanges();
             }
+        }
+
+        private void CleanCompetitionScore(FftaDatabase db, IList<CompetitionDataProvider> competitions)
+        {
+            var q = from c in competitions group c by new { c.Begin, c.Name } into c2 select c2;
+
+            foreach (var c in q)
+            {
+                this.CleanCompetitionScore(db, c.Key.Begin, c.Key.Name);
+            }
+        }
+
+        private void CleanCompetitionScore(FftaDatabase db, DateTime competitions, string name)
+        {
+            var q = from s in db.CompetitionsScores
+                    where s.Competition.CompetitionInfo.Name == name && s.Competition.Begin == competitions
+                    select s;
+
+            db.CompetitionsScores.RemoveRange(q.ToList());
+            db.SaveChanges();
         }
 
         private void SaveCompetitionInfo(FftaDatabase db, string code, CompetitionDataProvider competitionDataProvider)
@@ -38,26 +62,28 @@ namespace FftaExtract.DatabaseModel
             int competitionId,
             CompetitionDataProvider competitionDataProvider)
         {
-            var q = from s in db.CompetitionsScores
-                    where
-                        s.ArcherCode == code && s.Competition.Year == competitionDataProvider.Year
-                        && s.CompetitionId == competitionId
-                        && s.Competition.Type == competitionDataProvider.CompetitionType
-                    select s;
+            //var q = from s in db.CompetitionsScores
+            //        where
+            //            s.ArcherCode == code && s.Competition.Year == competitionDataProvider.Year
+            //            && s.CompetitionId == competitionId
+            //            && s.Competition.Type == competitionDataProvider.CompetitionType
+            //        select s;
 
-            var score = q.FirstOrDefault();
+            //var score = q.FirstOrDefault();
 
-            if (score == null)
-            {
+            //if (score == null)
+            //{
                 db.CompetitionsScores.Add(new CompetitionScore()
                 {
                     ArcherCode = code,
                     CompetitionId = competitionId,
                     BowType = competitionDataProvider.BowType,
-                    Score = competitionDataProvider.Score
+                    Score = competitionDataProvider.Score,
+                    Rank = competitionDataProvider.Rank
                 });
+
                 db.SaveChanges();
-            }
+            //}
         }
 
         private static int SaveCompetition(
@@ -140,11 +166,14 @@ namespace FftaExtract.DatabaseModel
 
             db.SaveChanges();
 
-            foreach (var clubdata in archerDataProvider.Club)
+            if (archerDataProvider.Club != null)
             {
-                var club = this.SaveClub(db, clubdata);
+                foreach (var clubdata in archerDataProvider.Club)
+                {
+                    var club = this.SaveClub(db, clubdata);
 
-                SaveArcherClub(db, clubdata.Year, dataBaseArcher, club);
+                    SaveArcherClub(db, clubdata.Year, dataBaseArcher, club);
+                }
             }
         }
 
@@ -187,6 +216,7 @@ namespace FftaExtract.DatabaseModel
             using (var db = new FftaDatabase())
             {
                 var q = from a in db.Archers
+                        where a.Code == "359095"
                         orderby a.LastUpdate
                         select a;
 

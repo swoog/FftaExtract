@@ -20,6 +20,8 @@ namespace FftaExtract.DatabaseModel
 
         public int Score { get; set; }
 
+        public int Rank { get; set; }
+
         public BowType BowType { get; set; }
     }
 }

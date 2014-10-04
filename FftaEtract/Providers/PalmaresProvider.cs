@@ -150,6 +150,7 @@ namespace FftaExtract.Providers
 
                             var name = td[2].InnerText;
                             var score = td[4].InnerText;
+                            var rank = Convert.ToInt32(td[3].InnerText);
 
                             var scores = ExtractScore(score);
                             foreach (var score1 in scores)
@@ -157,7 +158,7 @@ namespace FftaExtract.Providers
                                 competitions.Add(
                                     new CompetitionDataProvider(year, begin, end,
                                         td[2].InnerText.Trim(),
-                                        category.CompetitionType, category.BowType, score1));
+                                        category.CompetitionType, category.BowType, score1, rank));
                             }
                         }
                     }

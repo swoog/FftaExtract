@@ -6,10 +6,11 @@
 
     public class CompetitionDataProvider
     {
-        public CompetitionDataProvider(int year, DateTime begin, DateTime end, string name, CompetitionType competitionType, BowType bowType, int score)
+        public CompetitionDataProvider(int year, DateTime begin, DateTime end, string name, CompetitionType competitionType, BowType bowType, int score, int rank)
         {
             this.BowType = bowType;
             this.Score = score;
+            this.Rank = rank;
             this.Year = year;
             this.Begin = begin;
             this.End = end;
@@ -30,5 +31,7 @@
         public BowType BowType { get; private set; }
 
         public int Score { get; private set; }
+
+        public int Rank { get; set; }
     }
 }
