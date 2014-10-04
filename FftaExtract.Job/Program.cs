@@ -24,8 +24,8 @@ namespace FftaExtract.Job
 
             kernel.Bind<IRepositoryImporter>().To<DataBaseRepositoryImporter>();
 
-            kernel.Bind<IStatsProvider>().To<PalmaresProvider>();
             kernel.Bind<IStatsProvider>().To<ClassmentProvider>();
+            kernel.Bind<IStatsProvider>().To<PalmaresProvider>();
 
             var extractor = kernel.Get<Extractor>();
 

@@ -120,6 +120,7 @@ namespace FftaExtract.DatabaseModel
                     Code = archerDataProvider.Code,
                     FirstName = archerDataProvider.FirstName,
                     LastName = archerDataProvider.LastName,
+                    Sexe = archerDataProvider.Sexe,
                     LastUpdate = DateTime.Now
                 });
             }
@@ -131,6 +132,7 @@ namespace FftaExtract.DatabaseModel
                     dataBaseArcher.FirstName = archerDataProvider.FirstName;
                 }
 
+                dataBaseArcher.Sexe = archerDataProvider.Sexe;
                 dataBaseArcher.LastUpdate = DateTime.Now;
             }
 
@@ -152,6 +154,7 @@ namespace FftaExtract.DatabaseModel
                         Code = archer.Code,
                         FirstName = archer.FirstName,
                         LastName = archer.LastName,
+                        Sexe = archer.Sexe,
                     };
                 }
             }
