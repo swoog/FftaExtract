@@ -14,6 +14,11 @@ namespace FftaExtract.Web
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "Club",
+                url: "club/{id}",
+                defaults: new { controller = "Club", action = "Index" });
+
+            routes.MapRoute(
                 name: "Archer",
                 url: "archer/{code}",
                 defaults: new { controller = "Archer", action = "Index" });
