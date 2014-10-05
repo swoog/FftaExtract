@@ -9,5 +9,7 @@ namespace FftaExtract.DatabaseModel
         void SaveArcher(ArcherDataProvider archerDataProvider);
 
         IEnumerable<ArcherDataProvider> GetAllArchers();
+
+        ArcherDataProvider GetArcher(string code);
     }
 }

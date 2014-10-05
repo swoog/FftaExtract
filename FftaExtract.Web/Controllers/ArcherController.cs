@@ -16,13 +16,22 @@ namespace FftaExtract.Web.Controllers
     {
         private IRepository repository;
 
-        public ArcherController(IRepository repository)
+        private Extractor extractor;
+
+        public ArcherController(IRepository repository, Extractor extractor)
         {
             this.repository = repository;
+            this.extractor = extractor;
         }
 
         // GET: Archer
         public ActionResult Index(string code)
+        {
+            var archerModel = this.GetArcherModel(code);
+            return View(archerModel);
+        }
+
+        private ArcherModel GetArcherModel(string code)
         {
             var archer = this.repository.GetArcher(code);
 
@@ -37,33 +46,70 @@ namespace FftaExtract.Web.Controllers
                                 into s2
                                 orderby s2.Key descending
                                 select new YearCompetitionModel()
-                                {
-                                    Year = s2.Key,
-                                    Types = (from t in s2
-                                             group t by t.Competition.Type
+                                           {
+                                               Year = s2.Key,
+                                               Types = (from t in s2
+                                                        group t by t.Competition.Type
                                                         into t2
-                                             orderby t2.Key
-                                             select
-                                                 new TyepCompetitionModel
-                                             {
-                                                 Type = t2.Key,
-                                                  HighScores = t2.OrderByDescending(s3 => s3.Score).Take(3).ToArray(),
-                                                Average = (int)Math.Ceiling((double)(t2.OrderByDescending(s3 => s3.Score).Take(3).Sum(s3 => s3.Score) / 3)),
-                                               Competitions =
-                                                             t2.ToList(),
-                                             }).ToList(),
-                                };
+                                                        orderby t2.Key
+                                                        select
+                                                            new TyepCompetitionModel
+                                                                {
+                                                                    Type = t2.Key,
+                                                                    HighScores =
+                                                                        t2
+                                                                        .OrderByDescending
+                                                                        (s3 => s3.Score)
+                                                                        .Take(3)
+                                                                        .ToArray(),
+                                                                    Average =
+                                                                        (int)
+                                                                        Math.Ceiling(
+                                                                            (double)
+                                                                            (t2
+                                                                                 .OrderByDescending
+                                                                                 (
+                                                                                     s3
+                                                                                     =>
+                                                                                     s3
+                                                                                         .Score)
+                                                                                 .Take(
+                                                                                     3)
+                                                                                 .Sum(
+                                                                                     s3
+                                                                                     =>
+                                                                                     s3
+                                                                                         .Score)
+                                                                             / 3)),
+                                                                    Competitions =
+                                                                        t2.ToList(),
+                                                                }).ToList(),
+                                           };
 
             var club = this.repository.GetCurrentClub(code);
 
-            return View(new ArcherModel
+            var archerModel = new ArcherModel
+                                  {
+                                      Archer = archer,
+                                      Bows = bows,
+                                      BestScores = bestScores,
+                                      Competitions = qCompetttions.ToList(),
+                                      Club = club,
+                                  };
+            return archerModel;
+        }
+
+        public ActionResult Update(string code)
+        {
+            var archer = this.repository.GetArcher(code);
+
+            if (archer.LastUpdate < DateTime.Now.AddDays(-7))
             {
-                Archer = archer,
-                Bows = bows,
-                BestScores = bestScores,
-                Competitions = qCompetttions.ToList(),
-                Club = club,
-            });
+                this.extractor.UpdateArcher(code);
+            }
+
+            var archerModel = this.GetArcherModel(code);
+            return this.Json(archerModel);
         }
     }
 }

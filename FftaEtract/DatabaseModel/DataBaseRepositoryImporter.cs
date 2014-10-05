@@ -73,16 +73,16 @@ namespace FftaExtract.DatabaseModel
 
             //if (score == null)
             //{
-                db.CompetitionsScores.Add(new CompetitionScore()
-                {
-                    ArcherCode = code,
-                    CompetitionId = competitionId,
-                    BowType = competitionDataProvider.BowType,
-                    Score = competitionDataProvider.Score,
-                    Rank = competitionDataProvider.Rank
-                });
+            db.CompetitionsScores.Add(new CompetitionScore()
+            {
+                ArcherCode = code,
+                CompetitionId = competitionId,
+                BowType = competitionDataProvider.BowType,
+                Score = competitionDataProvider.Score,
+                Rank = competitionDataProvider.Rank
+            });
 
-                db.SaveChanges();
+            db.SaveChanges();
             //}
         }
 
@@ -216,7 +216,7 @@ namespace FftaExtract.DatabaseModel
             using (var db = new FftaDatabase())
             {
                 var q = from a in db.Archers
-                        //where a.Code == "359095"
+                            //where a.Code == "359095"
                         orderby a.LastUpdate
                         select a;
 
@@ -230,6 +230,26 @@ namespace FftaExtract.DatabaseModel
                         Sexe = archer.Sexe,
                     };
                 }
+            }
+        }
+
+        public ArcherDataProvider GetArcher(string code)
+        {
+            using (var db = new FftaDatabase())
+            {
+                var q = from a in db.Archers
+                        where a.Code == code
+                        select a;
+
+                var archer = q.First();
+
+                return new ArcherDataProvider()
+                {
+                    Code = archer.Code,
+                    FirstName = archer.FirstName,
+                    LastName = archer.LastName,
+                    Sexe = archer.Sexe,
+                };
             }
         }
     }
