@@ -43,7 +43,7 @@ namespace FftaExtract.DatabaseModel
                     where s.Competition.CompetitionInfo.Name == name && s.Competition.Begin == competitions
                     select s;
 
-            db.CompetitionsScores.RemoveRange(q.ToList());
+            db.CompetitionsScores.RemoveRange(q);
             db.SaveChanges();
         }
 
