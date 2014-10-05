@@ -216,7 +216,7 @@ namespace FftaExtract.DatabaseModel
             using (var db = new FftaDatabase())
             {
                 var q = from a in db.Archers
-                        where a.Code == "819573"
+                        where a.Code == "359095"
                         orderby a.LastUpdate
                         select a;
 
