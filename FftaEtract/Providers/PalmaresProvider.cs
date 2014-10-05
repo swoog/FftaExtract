@@ -65,7 +65,7 @@ namespace FftaExtract.Providers
 
                             Task.WaitAll(this.ScrapUrl(url, category, archer));
 
-                            Thread.Sleep(TimeSpan.FromMilliseconds(this.rand.Next(1, 3000)));
+                            Thread.Sleep(TimeSpan.FromMilliseconds(this.rand.Next(1, 1000)));
                         }
                         catch (Exception ex)
                         {
