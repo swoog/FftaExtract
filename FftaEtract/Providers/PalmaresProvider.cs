@@ -38,44 +38,57 @@ namespace FftaExtract.Providers
         {
             foreach (var archer in this.repositoryImporter.GetAllArchers())
             {
-                var sexes = new List<Sexe>();
-
-                if (archer.Sexe.HasValue)
-                {
-                    sexes.Add(archer.Sexe.Value);
-                }
-                else
-                {
-                    sexes.Add(Sexe.Homme);
-                    sexes.Add(Sexe.Femme);
-                }
-
-                foreach (var sex in sexes)
-                {
-                    foreach (var category in this.competionCategorieRepository.GetCategories(sex))
-                    {
-                        string url = string.Empty;
-                        try
-                        {
-                            url =
-                                string.Format(
-                                    "http://ffta-public.cvf.fr/servlet/ResPalmares?NUM_ADH={0}&CLASS_SELECT={1}",
-                                    archer.Num,
-                                    category.IdFfta);
-
-                            Task.WaitAll(this.ScrapUrl(url, category, archer));
-
-                            Thread.Sleep(TimeSpan.FromMilliseconds(this.rand.Next(1, 1000)));
-                        }
-                        catch (Exception ex)
-                        {
-                            this.logger.Error(ex, "Error in scrap url : {0}", url);
-                        }
-                    }
-                }
+                this.UpdateArcher(archer);
 
                 yield return archer;
             }
+        }
+
+        private void UpdateArcher(ArcherDataProvider archer)
+        {
+            var sexes = new List<Sexe>();
+
+            if (archer.Sexe.HasValue)
+            {
+                sexes.Add(archer.Sexe.Value);
+            }
+            else
+            {
+                sexes.Add(Sexe.Homme);
+                sexes.Add(Sexe.Femme);
+            }
+
+            foreach (var sex in sexes)
+            {
+                foreach (var category in this.competionCategorieRepository.GetCategories(sex))
+                {
+                    string url = string.Empty;
+                    try
+                    {
+                        url = string.Format(
+                            "http://ffta-public.cvf.fr/servlet/ResPalmares?NUM_ADH={0}&CLASS_SELECT={1}",
+                            archer.Num,
+                            category.IdFfta);
+
+                        Task.WaitAll(this.ScrapUrl(url, category, archer));
+
+                        Thread.Sleep(TimeSpan.FromMilliseconds(this.rand.Next(1, 1000)));
+                    }
+                    catch (Exception ex)
+                    {
+                        this.logger.Error(ex, "Error in scrap url : {0}", url);
+                    }
+                }
+            }
+        }
+
+        public ArcherDataProvider GetArcher(string code)
+        {
+            var archer = this.repositoryImporter.GetArcher(code);
+
+            this.UpdateArcher(archer);
+
+            return archer;
         }
 
         private async Task ScrapUrl(string url, CompetitionCategory category, ArcherDataProvider archerDataProvider)

@@ -6,5 +6,7 @@
     public interface IStatsProvider
     {
         IEnumerable<ArcherDataProvider> GetArchers();
+
+        ArcherDataProvider GetArcher(string code);
     }
 }

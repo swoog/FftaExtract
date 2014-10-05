@@ -1,4 +1,5 @@
-﻿namespace FftaExtract.Providers
+﻿using System.Diagnostics.Contracts;
+namespace FftaExtract.Providers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -55,6 +56,11 @@
                 }
                 while (hasArcher);
             }
+        }
+
+        public ArcherDataProvider GetArcher(string code)
+        {
+            return new ArcherDataProvider() { Code = code };
         }
 
         private async Task<IList<ArcherDataProvider>> ScrapUrl(string url, CompetitionCategory category)
