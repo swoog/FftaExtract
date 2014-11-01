@@ -28,6 +28,12 @@ namespace FftaExtract.Web.Controllers
         public ActionResult Index(string code)
         {
             var archerModel = this.GetArcherModel(code);
+
+            if (archerModel == null)
+            {
+                return this.HttpNotFound();
+            }
+
             return View(archerModel);
         }
 
@@ -37,7 +43,7 @@ namespace FftaExtract.Web.Controllers
 
             if (archer == null)
             {
-                return this.HttpNotFound();
+                return null;
             }
 
             var bows = this.repository.GetBows(code);
