@@ -26,6 +26,11 @@ namespace FftaExtract.Web.Controllers
         {
             var archer = this.repository.GetArcher(code);
 
+            if (archer == null)
+            {
+                return this.HttpNotFound();
+            }
+
             var bows = this.repository.GetBows(code);
 
             var bestScores = this.repository.GetBestScores(code);
