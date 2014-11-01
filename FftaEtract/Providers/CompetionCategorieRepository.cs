@@ -41,34 +41,34 @@ namespace FftaExtract.Providers
                                                               { "2009_Salle_SF_CL", 3394 },
                                                               { "2012_Salle_JH_CL", 5458 },
 
-{ "2013_Salle_CF_BB", 6143},
-{ "2013_Salle_CH_BB", 6144},
-{ "2013_Salle_SCF_BB", 6111},
-{ "2013_Salle_SCH_BB", 6110},
-{ "2013_Salle_BF_CL", 6112},
-{ "2013_Salle_BH_CL", 6113},
-{ "2013_Salle_MF_CL", 6114},
-{ "2013_Salle_MH_CL", 6115},
-{ "2013_Salle_CF_CL", 6116},
-{ "2013_Salle_CH_CL", 6117},
-{ "2013_Salle_JF_CL", 6118},
-{ "2013_Salle_JH_CL", 6119},
-{ "2013_Salle_SF_CL", 6120},
-{ "2013_Salle_SH_CL", 6121},
-{ "2013_Salle_VF_CL", 6122},
-{ "2013_Salle_VH_CL", 6123},
-{ "2013_Salle_SVF_CL", 6124},
-{ "2013_Salle_SVH_CL", 6125},
-{ "2013_Salle_CF_CO", 6141},
-{ "2013_Salle_CH_CO", 6142},
-{ "2013_Salle_JF_CO", 6126},
-{ "2013_Salle_JH_CO", 6127},
-{ "2013_Salle_SF_CO", 6128},
-{ "2013_Salle_SH_CO", 6129},
-{ "2013_Salle_VF_CO", 6130},
-{ "2013_Salle_VH_CO", 6131},
-{ "2013_Salle_SVF_CO", 6132},
-{ "2013_Salle_SVH_CO", 6133},
+                                                            { "2013_Salle_CF_BB", 6143},
+                                                            { "2013_Salle_CH_BB", 6144},
+                                                            { "2013_Salle_SCF_BB", 6111},
+                                                            { "2013_Salle_SCH_BB", 6110},
+                                                            { "2013_Salle_BF_CL", 6112},
+                                                            { "2013_Salle_BH_CL", 6113},
+                                                            { "2013_Salle_MF_CL", 6114},
+                                                            { "2013_Salle_MH_CL", 6115},
+                                                            { "2013_Salle_CF_CL", 6116},
+                                                            { "2013_Salle_CH_CL", 6117},
+                                                            { "2013_Salle_JF_CL", 6118},
+                                                            { "2013_Salle_JH_CL", 6119},
+                                                            { "2013_Salle_SF_CL", 6120},
+                                                            { "2013_Salle_SH_CL", 6121},
+                                                            { "2013_Salle_VF_CL", 6122},
+                                                            { "2013_Salle_VH_CL", 6123},
+                                                            { "2013_Salle_SVF_CL", 6124},
+                                                            { "2013_Salle_SVH_CL", 6125},
+                                                            { "2013_Salle_CF_CO", 6141},
+                                                            { "2013_Salle_CH_CO", 6142},
+                                                            { "2013_Salle_JF_CO", 6126},
+                                                            { "2013_Salle_JH_CO", 6127},
+                                                            { "2013_Salle_SF_CO", 6128},
+                                                            { "2013_Salle_SH_CO", 6129},
+                                                            { "2013_Salle_VF_CO", 6130},
+                                                            { "2013_Salle_VH_CO", 6131},
+                                                            { "2013_Salle_SVF_CO", 6132},
+                                                            { "2013_Salle_SVH_CO", 6133},
 
                                             { "2013_Fita_BF_CL", 6600},
                                             { "2013_Fita_BH_CL", 6601},
@@ -224,7 +224,7 @@ namespace FftaExtract.Providers
                                 throw new NotImplementedException(key);
                             }
 
-                            yield return new CompetitionCategory(competitionType, bowType, code[key], year, key.Contains("H_") ? Sexe.Homme : Sexe.Femme);
+                            yield return new CompetitionCategory(competitionType, bowType, code[key], year, key.Contains("H_") ? Sexe.Homme : Sexe.Femme, category);
                         }
                     }
                 }
@@ -234,6 +234,12 @@ namespace FftaExtract.Providers
         private static T[] GetTypes<T>()
         {
             return Enum.GetValues(typeof(T)).Cast<T>().ToArray();
+        }
+
+        public CompetitionCategory GetCategory(Category cat, CompetitionType competitionType)
+        {
+            var q = from c in categories where c.CompetitionType == competitionType && c.Category == cat  select c;
+            return q.FirstOrDefault();
         }
     }
 }

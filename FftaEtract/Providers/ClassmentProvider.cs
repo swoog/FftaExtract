@@ -14,53 +14,18 @@ namespace FftaExtract.Providers
 
     using Ninject.Extensions.Logging;
 
-    public class ClassmentProvider : IStatsProvider
+    public class ClassmentProvider
     {
         private readonly CompetionCategorieRepository competionCategorieRepository;
 
         private readonly ILogger logger;
+        private Job job;
 
-        public ClassmentProvider(CompetionCategorieRepository competionCategorieRepository, ILogger logger)
+        public ClassmentProvider(CompetionCategorieRepository competionCategorieRepository, ILogger logger, Job job)
         {
             this.competionCategorieRepository = competionCategorieRepository;
             this.logger = logger;
-        }
-
-        public IEnumerable<ArcherDataProvider> GetArchers()
-        {
-            var urlFormat = "http://ffta-public.cvf.fr/servlet/ResAffichClassement?ANNEE={0}&DISCIP=S&TYPE=I&SELECTIF=0&NIVEAU=L&DEBUT={1}&NUMCLASS={2}";
-
-            foreach (var category in this.competionCategorieRepository.GetCategories(null))
-            {
-                int page = 0;
-                var hasArcher = false;
-                do
-                {
-                    this.logger.Info(
-                        "Scrap {0} {1} from {2} to {3} ",
-                        category.Year,
-                        category.CompetitionType,
-                        page,
-                        page + 50);
-                    hasArcher = false;
-                    var url = string.Format(urlFormat, category.Year, page, category.IdFfta);
-
-                    var scrapUrl = this.ScrapUrl(url, category);
-                    foreach (var archerDataProvider in scrapUrl.Result)
-                    {
-                        hasArcher = true;
-                        yield return archerDataProvider;
-                    }
-
-                    page += 50;
-                }
-                while (hasArcher);
-            }
-        }
-
-        public ArcherDataProvider GetArcher(string code)
-        {
-            return new ArcherDataProvider() { Code = code };
+            this.job = job;
         }
 
         private async Task<IList<ArcherDataProvider>> ScrapUrl(string url, CompetitionCategory category)
@@ -124,6 +89,44 @@ namespace FftaExtract.Providers
             var words = from w in name.Split(' ') where w.ToUpperInvariant() != w select w;
 
             return string.Join(" ", words.ToArray());
+        }
+
+        public IEnumerable<ArcherDataProvider> GetArchers(Category cat, CompetitionType competitionType, int page)
+        {
+            var category = this.competionCategorieRepository.GetCategory(cat, competitionType);
+
+            if (category == null)
+            {
+                yield break;
+            }
+
+            var urlFormat = "http://ffta-public.cvf.fr/servlet/ResAffichClassement?ANNEE={0}&DISCIP=S&TYPE=I&SELECTIF=0&NIVEAU=L&DEBUT={1}&NUMCLASS={2}";
+            this.logger.Info(
+                "Scrap {0} {1} from {2} to {3} ",
+                category.Year,
+                category.CompetitionType,
+                page,
+                page + 50);
+            var hasArcher = false;
+            var url = string.Format(urlFormat, category.Year, page, category.IdFfta);
+
+            var scrapUrl = this.ScrapUrl(url, category);
+
+            Task.WaitAll(scrapUrl);
+
+            foreach (var archerDataProvider in scrapUrl.Result)
+            {
+                hasArcher = true;
+                yield return archerDataProvider;
+            }
+
+            page += 50;
+
+            if (hasArcher)
+            {
+                this.job.Push("api/Competion/{0}/{1}/{2}", cat, competitionType, page);
+            }
+
         }
     }
 }

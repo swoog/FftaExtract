@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FftaExtract.DatabaseModel
+﻿namespace FftaExtract.DatabaseModel
 {
     public class CompetitionScore
     {

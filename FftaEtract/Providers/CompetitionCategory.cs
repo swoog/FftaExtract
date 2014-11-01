@@ -14,8 +14,11 @@ namespace FftaExtract.Providers
 
         public Sexe Sexe { get; private set; }
 
-        public CompetitionCategory(CompetitionType competitionType, BowType bowType, int idFFTA, int year, Sexe sexe)
+        public Category Category { get; private set; }
+
+        public CompetitionCategory(CompetitionType competitionType, BowType bowType, int idFFTA, int year, Sexe sexe, Category category)
         {
+            this.Category = category;
             this.Year = year;
             this.Sexe = sexe;
             this.BowType = bowType;
