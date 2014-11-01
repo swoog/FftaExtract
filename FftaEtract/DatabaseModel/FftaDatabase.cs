@@ -16,5 +16,7 @@
         public DbSet<Club> Clubs { get; set; }
 
         public DbSet<ArcherClub> ArchersClubs { get; set; }
+
+        public DbSet<JobInfo> JobsInfos { get; set; }
     }
 }

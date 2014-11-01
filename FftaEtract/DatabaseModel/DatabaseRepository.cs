@@ -1,5 +1,6 @@
 namespace FftaExtract.DatabaseModel
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.InteropServices.ComTypes;
@@ -29,15 +30,15 @@ namespace FftaExtract.DatabaseModel
                 var q = from s in db.CompetitionsScores
                         where s.ArcherCode == code
                         group s by new { s.BowType, s.Competition.Type }
-                        into s2
-                        select
-                            new BestScore()
-                        {
-                            BowType = s2.FirstOrDefault().BowType,
-                            CompetitionType = s2.FirstOrDefault().Competition.Type,
-                            Score = s2.Max(p => p.Score),
-                            CompetitionName = s2.FirstOrDefault(s => s.Score == s2.Max(p => p.Score)).Competition.CompetitionInfo.Name,
-                        };
+                            into s2
+                            select
+                                new BestScore()
+                            {
+                                BowType = s2.FirstOrDefault().BowType,
+                                CompetitionType = s2.FirstOrDefault().Competition.Type,
+                                Score = s2.Max(p => p.Score),
+                                CompetitionName = s2.FirstOrDefault(s => s.Score == s2.Max(p => p.Score)).Competition.CompetitionInfo.Name,
+                            };
 
                 return q.ToList();
             }
@@ -98,6 +99,18 @@ namespace FftaExtract.DatabaseModel
                         };
 
                 return q.ToList();
+            }
+        }
+
+        public void AddJobInfo(JobInfo jobInfo)
+        {
+            using (var db = new FftaDatabase())
+            {
+                jobInfo.JobStatus = JobStatus.None;
+                jobInfo.CreatedDateTime = DateTime.Now;
+
+                db.JobsInfos.Add(jobInfo);
+                db.SaveChanges();
             }
         }
     }

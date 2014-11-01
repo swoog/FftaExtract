@@ -85,6 +85,8 @@
     <Compile Include="DatabaseModel\FftaDatabase.cs" />
     <Compile Include="DatabaseModel\IRepository.cs" />
     <Compile Include="DatabaseModel\IRepositoryImporter.cs" />
+    <Compile Include="DatabaseModel\JobInfo.cs" />
+    <Compile Include="DatabaseModel\JobStatus.cs" />
     <Compile Include="DatabaseModel\Sexe.cs" />
     <Compile Include="DatabaseModel\YearArcher.cs" />
     <Compile Include="Extractor.cs" />

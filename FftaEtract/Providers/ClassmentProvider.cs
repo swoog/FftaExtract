@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.Contracts;
-namespace FftaExtract.Providers
+﻿namespace FftaExtract.Providers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -19,6 +18,7 @@ namespace FftaExtract.Providers
         private readonly CompetionCategorieRepository competionCategorieRepository;
 
         private readonly ILogger logger;
+
         private Job job;
 
         public ClassmentProvider(CompetionCategorieRepository competionCategorieRepository, ILogger logger, Job job)
@@ -26,6 +26,43 @@ namespace FftaExtract.Providers
             this.competionCategorieRepository = competionCategorieRepository;
             this.logger = logger;
             this.job = job;
+        }
+
+        public IEnumerable<ArcherDataProvider> GetArchers(Category cat, CompetitionType competitionType, int page)
+        {
+            var category = this.competionCategorieRepository.GetCategory(cat, competitionType);
+
+            if (category == null)
+            {
+                yield break;
+            }
+
+            const string UrlFormat = "http://ffta-public.cvf.fr/servlet/ResAffichClassement?ANNEE={0}&DISCIP=S&TYPE=I&SELECTIF=0&NIVEAU=L&DEBUT={1}&NUMCLASS={2}";
+            this.logger.Info(
+                "Scrap {0} {1} from {2} to {3} ",
+                category.Year,
+                category.CompetitionType,
+                page,
+                page + 50);
+            var hasArcher = false;
+            var url = string.Format(UrlFormat, category.Year, page, category.IdFfta);
+
+            var scrapUrl = this.ScrapUrl(url, category);
+
+            Task.WaitAll(scrapUrl);
+
+            foreach (var archerDataProvider in scrapUrl.Result)
+            {
+                hasArcher = true;
+
+                this.job.Push("api/Palmares/{0}/{1}/{2}", cat, competitionType, archerDataProvider.Code);
+                yield return archerDataProvider;
+            }
+
+            if (hasArcher)
+            {
+                this.job.Push("api/Competion/{0}/{1}/{2}", cat, competitionType, page + 50);
+            }
         }
 
         private async Task<IList<ArcherDataProvider>> ScrapUrl(string url, CompetitionCategory category)
@@ -52,8 +89,8 @@ namespace FftaExtract.Providers
 
                     var name = HttpUtility.HtmlDecode(columns[3].InnerText).Trim();
 
-                    var firstName = GetFirstName(name);
-                    var lastName = GetLastName(name);
+                    var firstName = this.GetFirstName(name);
+                    var lastName = this.GetLastName(name);
 
                     var club = columns[4].InnerText.Trim();
 
@@ -89,44 +126,6 @@ namespace FftaExtract.Providers
             var words = from w in name.Split(' ') where w.ToUpperInvariant() != w select w;
 
             return string.Join(" ", words.ToArray());
-        }
-
-        public IEnumerable<ArcherDataProvider> GetArchers(Category cat, CompetitionType competitionType, int page)
-        {
-            var category = this.competionCategorieRepository.GetCategory(cat, competitionType);
-
-            if (category == null)
-            {
-                yield break;
-            }
-
-            var urlFormat = "http://ffta-public.cvf.fr/servlet/ResAffichClassement?ANNEE={0}&DISCIP=S&TYPE=I&SELECTIF=0&NIVEAU=L&DEBUT={1}&NUMCLASS={2}";
-            this.logger.Info(
-                "Scrap {0} {1} from {2} to {3} ",
-                category.Year,
-                category.CompetitionType,
-                page,
-                page + 50);
-            var hasArcher = false;
-            var url = string.Format(urlFormat, category.Year, page, category.IdFfta);
-
-            var scrapUrl = this.ScrapUrl(url, category);
-
-            Task.WaitAll(scrapUrl);
-
-            foreach (var archerDataProvider in scrapUrl.Result)
-            {
-                hasArcher = true;
-                yield return archerDataProvider;
-            }
-
-            page += 50;
-
-            if (hasArcher)
-            {
-                this.job.Push("api/Competion/{0}/{1}/{2}", cat, competitionType, page);
-            }
-
         }
     }
 }

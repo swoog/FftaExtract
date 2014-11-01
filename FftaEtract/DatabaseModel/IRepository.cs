@@ -20,5 +20,7 @@ namespace FftaExtract.DatabaseModel
         Club GetClub(int id);
 
         List<YearArcher> GetArchersByYear(int id);
+
+        void AddJobInfo(JobInfo jobInfo);
     }
 }
