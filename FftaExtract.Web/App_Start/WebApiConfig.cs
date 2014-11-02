@@ -8,9 +8,16 @@
         {
             config.MapHttpAttributeRoutes();
 
+            //config.Routes.MapHttpRoute(
+            //    name: "PalmaresController",
+            //    routeTemplate: "api/Palmares/{code}",
+            //    defaults: new { controller = "Palmares", year = RouteParameter.Optional });
+
             config.Routes.MapHttpRoute(
                 name: "PalmaresController",
-                routeTemplate: "api/{controller}/{code}");
+                routeTemplate: "api/Palmares/{code}/{year}",
+                defaults: new { controller = "Palmares", year = RouteParameter.Optional });
+
 
             config.Routes.MapHttpRoute(
                 name: "ClassmentController",
