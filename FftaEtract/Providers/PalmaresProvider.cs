@@ -139,6 +139,22 @@ namespace FftaExtract.Providers
                                     CultureInfo.InvariantCulture,
                                     DateTimeStyles.None);
                             }
+                            else
+                            {
+                                matchText = Regex.Match(
+                                        dateText,
+                                        "^([0-9]{1,2}/[0-9]{1,2}/[0-9]{4})$");
+
+                                if (matchText.Success)
+                                {
+                                    begin = DateTime.ParseExact(
+                                        matchText.Groups[1].Value,
+                                        new string[] { "dd/MM/yyyy", "d/MM/yyyy" },
+                                        CultureInfo.InvariantCulture,
+                                        DateTimeStyles.None);
+                                    end = begin;
+                                }
+                            }
 
                             var name = td[2].InnerText;
                             var score = td[4].InnerText;
