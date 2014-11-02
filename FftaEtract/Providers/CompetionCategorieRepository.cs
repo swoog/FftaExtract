@@ -12,7 +12,7 @@ namespace FftaExtract.Providers
 
     public class CompetionCategorieRepository
     {
-        private static int[] years = new[] { 2013, 2014 };
+        private static int[] years = new[] { 2013, 2014, 2015 };
 
         private static string[] ignoredCategories = new[]
                                                         {
@@ -32,6 +32,14 @@ namespace FftaExtract.Providers
                                                             "2014_Salle_SCF_CL",
                                                             "2014_Salle_SCH_CO",
                                                             "2014_Salle_SCF_CO",
+                                                            "2015_Salle_SCH_CL",
+                                                            "2015_Salle_SCF_CL",
+                                                            "2015_Salle_SCH_CO",
+                                                            "2015_Salle_SCF_CO",
+                                                           "2015_Fita_SH_CL",
+                                                            "2015_Fita_SF_CL",
+                                                            "2015_Fita_SH_CO",
+                                                            "2015_Fita_SF_CO",
                                                         };
 
 
@@ -147,6 +155,62 @@ namespace FftaExtract.Providers
                                                               { "2014_Fita_SVH_CO", 7271 },
                                                               { "2014_Fita_SCF_CO", 7362 },
                                                               { "2014_Fita_SCH_CO", 7363 },
+                                                              
+                                                            { "2015_Salle_CF_BB", 8700},
+                                                            { "2015_Salle_CH_BB", 8701},
+                                                            { "2015_Salle_SCF_BB", 8668},
+                                                            { "2015_Salle_SCH_BB", 8667},
+                                                            { "2015_Salle_BF_CL", 8669},
+                                                            { "2015_Salle_BH_CL", 8670},
+                                                            { "2015_Salle_MF_CL", 8671},
+                                                            { "2015_Salle_MH_CL", 8672},
+                                                            { "2015_Salle_CF_CL", 8673},
+                                                            { "2015_Salle_CH_CL", 8674},
+                                                            { "2015_Salle_JF_CL", 8675},
+                                                            { "2015_Salle_JH_CL", 8676},
+                                                            { "2015_Salle_SF_CL", 8677},
+                                                            { "2015_Salle_SH_CL", 8678},
+                                                            { "2015_Salle_VF_CL", 8679},
+                                                            { "2015_Salle_VH_CL", 8680},
+                                                            { "2015_Salle_SVF_CL", 8681},
+                                                            { "2015_Salle_SVH_CL", 8682},
+                                                            { "2015_Salle_CF_CO", 8698},
+                                                            { "2015_Salle_CH_CO", 8699},
+                                                            { "2015_Salle_JF_CO", 8683},
+                                                            { "2015_Salle_JH_CO", 8684},
+                                                            { "2015_Salle_SF_CO", 8685},
+                                                            { "2015_Salle_SH_CO", 8686},
+                                                            { "2015_Salle_VF_CO", 8687},
+                                                            { "2015_Salle_VH_CO", 8688},
+                                                            { "2015_Salle_SVF_CO", 8689},
+                                                            { "2015_Salle_SVH_CO", 8690},
+
+                                            { "2015_Fita_BF_CL", 9149},
+                                            { "2015_Fita_BH_CL", 9150},
+                                            { "2015_Fita_MF_CL", 9151},
+                                            { "2015_Fita_MH_CL", 9152},
+                                            { "2015_Fita_CF_CL", 9153},
+                                            { "2015_Fita_CH_CL", 9154},
+                                            { "2015_Fita_JF_CL", 9155},
+                                            { "2015_Fita_JH_CL", 9156},
+                                            { "2015_Fita_VF_CL", 9159},
+                                            { "2015_Fita_VH_CL", 9160},
+                                            { "2015_Fita_SVF_CL", 9161},
+                                            { "2015_Fita_SVH_CL", 9162},
+                                            { "2015_Fita_SCF_CL", 9259},
+                                            { "2015_Fita_SCH_CL", 9260},
+                                            { "2015_Fita_CF_CO", 9174},
+                                            { "2015_Fita_CH_CO", 9171},
+                                            { "2015_Fita_JF_CO", 9163},
+                                            { "2015_Fita_JH_CO", 9164},
+                                            { "2015_Fita_VF_CO", 9167},
+                                            { "2015_Fita_VH_CO", 9168},
+                                            { "2015_Fita_SVF_CO", 9169},
+                                            { "2015_Fita_SVH_CO", 9170},
+                                            { "2015_Fita_SCF_CO", 9261},
+                                            { "2015_Fita_SCH_CO", 9262},
+                                   
+
                                                           };
 
         private static Dictionary<BowType, string> bowTypeToText = new Dictionary<BowType, string>()
