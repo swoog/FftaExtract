@@ -114,6 +114,10 @@
     <Compile Include="Migrations\201410042214327_Add competition rank.Designer.cs">
       <DependentUpon>201410042214327_Add competition rank.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201411011655040_Add job info.cs" />
+    <Compile Include="Migrations\201411011655040_Add job info.Designer.cs">
+      <DependentUpon>201411011655040_Add job info.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ArcherDataProvider.cs" />
@@ -149,6 +153,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201410042214327_Add competition rank.resx">
       <DependentUpon>201410042214327_Add competition rank.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201411011655040_Add job info.resx">
+      <DependentUpon>201411011655040_Add job info.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
