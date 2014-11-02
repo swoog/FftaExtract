@@ -19,7 +19,7 @@
 #if DEBUG
         private string urlLocalHost = "http://localhost:10151/";
 #else
-        private string urlLocalHost = "http://localhost/";
+        private string urlLocalHost = "http://fftaextract.azurewebsites.net/";
 #endif
         public Extractor(Job job, ILogger logger)
         {
