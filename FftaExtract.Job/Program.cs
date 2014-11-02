@@ -22,13 +22,12 @@ namespace FftaExtract.Job
 
             var kernel = new StandardKernel();
 
+            kernel.Bind<IRepository>().To<DatabaseRepository>();
             kernel.Bind<IRepositoryImporter>().To<DataBaseRepositoryImporter>();
-
-            kernel.Bind<IStatsProvider>().To<PalmaresProvider>();
 
             var extractor = kernel.Get<Extractor>();
 
-            extractor.Run();
+            Task.WaitAll(extractor.Run());
         }
     }
 }

@@ -28,10 +28,10 @@
             this.job = job;
         }
 
-        public async Task<IList<ArcherDataProvider>> GetArchers(Category cat, CompetitionType competitionType, int page)
+        public async Task<IList<ArcherDataProvider>> GetArchers(int year, Category cat, CompetitionType competitionType, BowType bowType, int page)
         {
             var archers = new List<ArcherDataProvider>();
-            var category = this.competionCategorieRepository.GetCategory(cat, competitionType);
+            var category = this.competionCategorieRepository.GetCategory(year, cat, competitionType, bowType);
 
             if (category == null)
             {
@@ -50,19 +50,17 @@
 
             var scrapUrl = await this.ScrapUrl(url, category);
 
-            //Task.WaitAll(scrapUrl);
-
             foreach (var archerDataProvider in scrapUrl)
             {
                 hasArcher = true;
 
-                this.job.Push("api/Palmares/{0}/{1}/{2}", cat, competitionType, archerDataProvider.Code);
+                this.job.Push("api/Palmares/{0}", archerDataProvider.Code);
                 archers.Add(archerDataProvider);
             }
 
             if (hasArcher)
             {
-                this.job.Push("api/Competion/{0}/{1}/{2}", cat, competitionType, page + 50);
+                this.job.Push("api/Classment/{0}/{1}/{2}/{3}/{4}", year, cat, competitionType, bowType, page + 50);
             }
 
             return archers;

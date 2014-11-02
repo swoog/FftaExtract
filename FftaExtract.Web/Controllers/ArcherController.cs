@@ -10,6 +10,7 @@ namespace FftaExtract.Web.Controllers
 
     using FftaExtract;
     using FftaExtract.DatabaseModel;
+    using FftaExtract.Providers;
     using FftaExtract.Web.Models;
 
     public class ArcherController : Controller
@@ -18,10 +19,13 @@ namespace FftaExtract.Web.Controllers
 
         private Extractor extractor;
 
-        public ArcherController(IRepository repository, Extractor extractor)
+        private Job job;
+
+        public ArcherController(IRepository repository, Extractor extractor, Job job)
         {
             this.repository = repository;
             this.extractor = extractor;
+            this.job = job;
         }
 
         // GET: Archer
@@ -116,7 +120,7 @@ namespace FftaExtract.Web.Controllers
 
             if (archer.LastUpdate < DateTime.Now.AddDays(-7))
             {
-                this.extractor.UpdateArcher(code);
+                this.job.Push("api/Palmares/{0}", code);
             }
 
             var archerModel = this.GetArcherModel(code);

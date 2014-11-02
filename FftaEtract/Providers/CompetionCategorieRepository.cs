@@ -236,10 +236,14 @@ namespace FftaExtract.Providers
             return Enum.GetValues(typeof(T)).Cast<T>().ToArray();
         }
 
-        public CompetitionCategory GetCategory(Category cat, CompetitionType competitionType)
+        public CompetitionCategory GetCategory(int year, Category cat, CompetitionType competitionType, BowType bowType)
         {
-            var q = from c in categories where c.CompetitionType == competitionType && c.Category == cat  select c;
-            return q.FirstOrDefault();
+            var q = from c in categories
+                    where
+                        c.CompetitionType == competitionType && c.Category == cat && c.Year == year
+                        && c.BowType == bowType
+                    select c;
+            return q.SingleOrDefault();
         }
     }
 }

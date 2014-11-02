@@ -22,5 +22,11 @@ namespace FftaExtract.DatabaseModel
         List<YearArcher> GetArchersByYear(int id);
 
         void AddJobInfo(JobInfo jobInfo);
+
+        JobInfo GetNextJobInfo();
+
+        void CompleteJobInfo(JobInfo job);
+
+        void ErrorJobInfo(JobInfo job, string reasonPhrase);
     }
 }

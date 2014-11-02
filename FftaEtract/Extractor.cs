@@ -1,5 +1,8 @@
 ﻿namespace FftaExtract
 {
+    using System;
+    using System.Net.Http;
+    using System.Threading;
     using System.Threading.Tasks;
 
     using FftaExtract.DatabaseModel;
@@ -9,45 +12,51 @@
 
     public class Extractor
     {
-        private IStatsProvider[] providers;
-
-        private IRepositoryImporter repositoryImporter;
+        private Job job;
 
         private ILogger logger;
 
-        public Extractor(IStatsProvider[] providers, IRepositoryImporter repositoryImporter, ILogger logger)
+#if DEBUG
+        private string urlLocalHost = "http://localhost:10151/";
+#else
+        private string urlLocalHost = "http://localhost/";
+#endif
+        public Extractor(Job job, ILogger logger)
         {
-            this.providers = providers;
-            this.repositoryImporter = repositoryImporter;
+            this.job = job;
             this.logger = logger;
         }
 
-        public void Run()
+        public async Task Run()
         {
-            foreach (var provider in this.providers)
+            while (true)
             {
-                this.logger.Info("Run provider {0}", provider.GetType().Name);
-                foreach (var archer in provider.GetArchers())
+                var job = this.job.GetNextJobInfo();
+
+                if (job == null)
                 {
-                    this.logger.Info("Archer : {0} {1} ({2})", archer.FirstName, archer.LastName, archer.Code);
-                    this.repositoryImporter.SaveArcher(archer);
+                    Thread.Sleep(TimeSpan.FromSeconds(10));
+                    continue;
                 }
 
-                this.logger.Info("Run provider {0} ending", provider.GetType().Name);
-            }
-        }
+                var client = new HttpClient();
 
-        public void UpdateArcher(string code)
-        {
-            foreach (var provider in this.providers)
-            {
-                this.logger.Info("Run provider {0}", provider.GetType().Name);
-                var archer = provider.GetArcher(code);
+                var uri = new Uri(new Uri(this.urlLocalHost), job.Url);
 
-                this.logger.Info("Archer : {0} {1} ({2})", archer.FirstName, archer.LastName, archer.Code);
-                this.repositoryImporter.SaveArcher(archer);
+                this.logger.Info("Start {0}", uri);
+                var response = await client.PostAsync(uri, null);
 
-                this.logger.Info("Run provider {0} ending", provider.GetType().Name);
+                if (response.IsSuccessStatusCode)
+                {
+                    this.job.Complete(job);
+                }
+                else
+                {
+                    this.logger.Error("Error job : {0}", response.ReasonPhrase);
+                    this.job.Error(job, response.ReasonPhrase);
+                }
+
+                Thread.Sleep(TimeSpan.FromSeconds(1));
             }
         }
     }

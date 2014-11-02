@@ -17,5 +17,20 @@ namespace FftaExtract.Providers
 
             this.repository.AddJobInfo(new JobInfo() { Url = url });
         }
+
+        public JobInfo GetNextJobInfo()
+        {
+            return this.repository.GetNextJobInfo();
+        }
+
+        public void Complete(JobInfo job)
+        {
+            this.repository.CompleteJobInfo(job);
+        }
+
+        public void Error(JobInfo job, string reasonPhrase)
+        {
+            this.repository.ErrorJobInfo(job, reasonPhrase);
+        }
     }
 }
