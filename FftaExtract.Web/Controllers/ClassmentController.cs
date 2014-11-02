@@ -1,5 +1,6 @@
 ﻿namespace FftaExtract.Web.Controllers
 {
+    using System.Threading.Tasks;
     using System.Web.Http;
 
     using FftaExtract.DatabaseModel;
@@ -17,9 +18,9 @@
         }
 
         // POST: api/Competion
-        public void Post(Category category, CompetitionType competitionType, int page)
+        public async Task Post(Category category, CompetitionType competitionType, int page)
         {
-            foreach (var archerDataProvider in this.classement.GetArchers(category, competitionType, page))
+            foreach (var archerDataProvider in await this.classement.GetArchers(category, competitionType, page))
             {
                 this.repository.SaveArcher(archerDataProvider);
             }

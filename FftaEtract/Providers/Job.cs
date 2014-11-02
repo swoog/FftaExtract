@@ -6,6 +6,11 @@ namespace FftaExtract.Providers
     {
         private IRepository repository;
 
+        public Job(IRepository repository)
+        {
+            this.repository = repository;
+        }
+
         public void Push(string api, params  object[] parameters)
         {
             var url = string.Format(api, parameters);

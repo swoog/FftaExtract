@@ -4,6 +4,9 @@ namespace FftaExtract.DatabaseModel
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.InteropServices.ComTypes;
+    using System.Security.Cryptography;
+
+    using FftaExtract.Providers;
 
     public class DatabaseRepository : IRepository
     {
@@ -106,12 +109,30 @@ namespace FftaExtract.DatabaseModel
         {
             using (var db = new FftaDatabase())
             {
-                jobInfo.JobStatus = JobStatus.None;
-                jobInfo.CreatedDateTime = DateTime.Now;
+                this.CleanJobs(db);
 
-                db.JobsInfos.Add(jobInfo);
-                db.SaveChanges();
+                if (!db.JobsInfos.Any(j => j.Url == jobInfo.Url && jobInfo.JobStatus == JobStatus.None))
+                {
+                    jobInfo.JobStatus = JobStatus.None;
+                    jobInfo.CreatedDateTime = DateTime.Now;
+
+                    db.JobsInfos.Add(jobInfo);
+                    db.SaveChanges();                    
+                }
             }
+        }
+
+        private void CleanJobs(FftaDatabase db)
+        {
+            var d = DateTime.Now.AddDays(-2);
+
+            var jobs = from j in db.JobsInfos 
+                       where j.JobStatus == JobStatus.Done 
+                           && j.CreatedDateTime < d 
+                       select j;
+
+            db.JobsInfos.RemoveRange(jobs);
+            db.SaveChanges();
         }
     }
 }

@@ -28,13 +28,14 @@
             this.job = job;
         }
 
-        public IEnumerable<ArcherDataProvider> GetArchers(Category cat, CompetitionType competitionType, int page)
+        public async Task<IList<ArcherDataProvider>> GetArchers(Category cat, CompetitionType competitionType, int page)
         {
+            var archers = new List<ArcherDataProvider>();
             var category = this.competionCategorieRepository.GetCategory(cat, competitionType);
 
             if (category == null)
             {
-                yield break;
+                return archers;
             }
 
             const string UrlFormat = "http://ffta-public.cvf.fr/servlet/ResAffichClassement?ANNEE={0}&DISCIP=S&TYPE=I&SELECTIF=0&NIVEAU=L&DEBUT={1}&NUMCLASS={2}";
@@ -47,22 +48,24 @@
             var hasArcher = false;
             var url = string.Format(UrlFormat, category.Year, page, category.IdFfta);
 
-            var scrapUrl = this.ScrapUrl(url, category);
+            var scrapUrl = await this.ScrapUrl(url, category);
 
-            Task.WaitAll(scrapUrl);
+            //Task.WaitAll(scrapUrl);
 
-            foreach (var archerDataProvider in scrapUrl.Result)
+            foreach (var archerDataProvider in scrapUrl)
             {
                 hasArcher = true;
 
                 this.job.Push("api/Palmares/{0}/{1}/{2}", cat, competitionType, archerDataProvider.Code);
-                yield return archerDataProvider;
+                archers.Add(archerDataProvider);
             }
 
             if (hasArcher)
             {
                 this.job.Push("api/Competion/{0}/{1}/{2}", cat, competitionType, page + 50);
             }
+
+            return archers;
         }
 
         private async Task<IList<ArcherDataProvider>> ScrapUrl(string url, CompetitionCategory category)
