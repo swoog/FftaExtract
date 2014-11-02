@@ -32,7 +32,7 @@ namespace FftaExtract.Providers
         private Random rand = new Random();
 
 
-        public async Task UpdateArcher(ArcherDataProvider archer)
+        public async Task UpdateArcher(ArcherDataProvider archer, int? year)
         {
             var sexes = new List<Sexe>();
 
@@ -48,7 +48,7 @@ namespace FftaExtract.Providers
 
             foreach (var sex in sexes)
             {
-                foreach (var category in this.competionCategorieRepository.GetCategories(sex))
+                foreach (var category in this.competionCategorieRepository.GetCategories(sex, year))
                 {
                     string url = string.Empty;
                     try

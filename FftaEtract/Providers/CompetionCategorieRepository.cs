@@ -241,7 +241,17 @@ namespace FftaExtract.Providers
             categoriesFemme = categories.Where(c => c.Sexe == Sexe.Femme).ToArray();
         }
 
-        public IEnumerable<CompetitionCategory> GetCategories(Sexe? sexe)
+        public IEnumerable<CompetitionCategory> GetCategories(Sexe? sexe, int? year)
+        {
+            if (year.HasValue)
+            {
+                return this.GetInternalCategories(sexe).Where(c => c.Year == year);                
+            }
+            
+            return this.GetInternalCategories(sexe);
+        }
+
+        private IEnumerable<CompetitionCategory> GetInternalCategories(Sexe? sexe)
         {
             if (sexe.HasValue)
             {
