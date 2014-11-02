@@ -9,8 +9,12 @@
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
+                name: "PalmaresController",
+                routeTemplate: "api/{controller}/{code}");
+
+            config.Routes.MapHttpRoute(
                 name: "ClassmentController",
-                routeTemplate: "api/{controller}/{category}/{competitionType}/{page}",
+                routeTemplate: "api/{controller}/{year}/{category}/{competitionType}/{bowType}/{page}",
                 defaults: new { page = 0 });
 
 

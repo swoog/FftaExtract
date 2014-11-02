@@ -111,7 +111,11 @@ namespace FftaExtract.DatabaseModel
             {
                 this.CleanJobs(db);
 
-                if (!db.JobsInfos.Any(j => j.Url == jobInfo.Url && jobInfo.JobStatus == JobStatus.None))
+                var q = from j in db.JobsInfos
+                        where j.Url == jobInfo.Url && j.JobStatus == JobStatus.None
+                        select j;
+
+                if (!q.Any())
                 {
                     jobInfo.JobStatus = JobStatus.None;
                     jobInfo.CreatedDateTime = DateTime.Now;
@@ -119,6 +123,49 @@ namespace FftaExtract.DatabaseModel
                     db.JobsInfos.Add(jobInfo);
                     db.SaveChanges();                    
                 }
+            }
+        }
+
+        public JobInfo GetNextJobInfo()
+        {
+            using (var db = new FftaDatabase())
+            {
+                this.CleanJobs(db);
+
+                var q = from j in db.JobsInfos
+                        where j.JobStatus == JobStatus.None
+                        orderby j.CreatedDateTime
+                        select j;
+
+                return q.FirstOrDefault();
+            }
+        }
+
+        public void CompleteJobInfo(JobInfo job)
+        {
+            using (var db = new FftaDatabase())
+            {
+                var q = from j in db.JobsInfos
+                        where j.Id == job .Id
+                        select j;
+                var j1 = q.First();
+
+                j1.JobStatus = JobStatus.Done;
+                db.SaveChanges();
+            }
+        }
+
+        public void ErrorJobInfo(JobInfo job, string reasonPhrase)
+        {
+            using (var db = new FftaDatabase())
+            {
+                var q = from j in db.JobsInfos
+                        where j.Id == job.Id
+                        select j;
+                var j1 = q.First();
+
+                j1.JobStatus = JobStatus.Error;
+                db.SaveChanges();
             }
         }
 

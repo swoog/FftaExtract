@@ -17,34 +17,22 @@ namespace FftaExtract.Providers
 
     using Ninject.Extensions.Logging;
 
-    public class PalmaresProvider : IStatsProvider
+    public class PalmaresProvider
     {
-        private IRepositoryImporter repositoryImporter;
-
         private readonly CompetionCategorieRepository competionCategorieRepository;
 
         private ILogger logger;
 
-        public PalmaresProvider(IRepositoryImporter repositoryImporter, CompetionCategorieRepository competionCategorieRepository, ILogger logger)
+        public PalmaresProvider(CompetionCategorieRepository competionCategorieRepository, ILogger logger)
         {
-            this.repositoryImporter = repositoryImporter;
             this.competionCategorieRepository = competionCategorieRepository;
             this.logger = logger;
         }
 
         private Random rand = new Random();
 
-        public IEnumerable<ArcherDataProvider> GetArchers()
-        {
-            foreach (var archer in this.repositoryImporter.GetAllArchers())
-            {
-                this.UpdateArcher(archer);
 
-                yield return archer;
-            }
-        }
-
-        private void UpdateArcher(ArcherDataProvider archer)
+        public async Task UpdateArcher(ArcherDataProvider archer)
         {
             var sexes = new List<Sexe>();
 
@@ -70,7 +58,7 @@ namespace FftaExtract.Providers
                             archer.Num,
                             category.IdFfta);
 
-                        Task.WaitAll(this.ScrapUrl(url, category, archer));
+                        await this.ScrapUrl(url, category, archer);
 
                         Thread.Sleep(TimeSpan.FromMilliseconds(this.rand.Next(1, 1000)));
                     }
@@ -80,15 +68,6 @@ namespace FftaExtract.Providers
                     }
                 }
             }
-        }
-
-        public ArcherDataProvider GetArcher(string code)
-        {
-            var archer = this.repositoryImporter.GetArcher(code);
-
-            this.UpdateArcher(archer);
-
-            return archer;
         }
 
         private async Task ScrapUrl(string url, CompetitionCategory category, ArcherDataProvider archerDataProvider)

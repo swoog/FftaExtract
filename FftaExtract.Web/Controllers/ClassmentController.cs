@@ -18,9 +18,9 @@
         }
 
         // POST: api/Competion
-        public async Task Post(Category category, CompetitionType competitionType, int page)
+        public async Task Post(int year, Category category, CompetitionType competitionType, BowType bowType, int page)
         {
-            foreach (var archerDataProvider in await this.classement.GetArchers(category, competitionType, page))
+            foreach (var archerDataProvider in await this.classement.GetArchers(year, category, competitionType, bowType, page))
             {
                 this.repository.SaveArcher(archerDataProvider);
             }

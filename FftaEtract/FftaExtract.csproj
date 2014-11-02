@@ -127,7 +127,6 @@
     <Compile Include="Providers\CompetionCategorieRepository.cs" />
     <Compile Include="Providers\CompetitionCategory.cs" />
     <Compile Include="Providers\CompetitionDataProvider.cs" />
-    <Compile Include="Providers\IStatsProvider.cs" />
     <Compile Include="Providers\Job.cs" />
     <Compile Include="Providers\PalmaresProvider.cs" />
   </ItemGroup>
