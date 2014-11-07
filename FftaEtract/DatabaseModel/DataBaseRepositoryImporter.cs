@@ -16,7 +16,7 @@ namespace FftaExtract.DatabaseModel
                 this.SaveArcherInfo(db, archerDataProvider);
 
                 // Clean Competition score
-                CleanCompetitionScore(db, archerDataProvider.Competitions);
+                CleanCompetitionScore(db, archerDataProvider.Competitions, archerDataProvider.Code);
 
                 foreach (var competitionDataProvider in archerDataProvider.Competitions)
                 {
@@ -27,20 +27,21 @@ namespace FftaExtract.DatabaseModel
             }
         }
 
-        private void CleanCompetitionScore(FftaDatabase db, IList<CompetitionDataProvider> competitions)
+        private void CleanCompetitionScore(FftaDatabase db, IList<CompetitionDataProvider> competitions, string archerCode)
         {
             var q = from c in competitions group c by new { c.Begin, c.Name } into c2 select c2;
 
             foreach (var c in q)
             {
-                this.CleanCompetitionScore(db, c.Key.Begin, c.Key.Name);
+                this.CleanCompetitionScore(db, c.Key.Begin, c.Key.Name, archerCode);
             }
         }
 
-        private void CleanCompetitionScore(FftaDatabase db, DateTime competitions, string name)
+        private void CleanCompetitionScore(FftaDatabase db, DateTime competitions, string name, string archerCode)
         {
             var q = from s in db.CompetitionsScores
                     where s.Competition.CompetitionInfo.Name == name && s.Competition.Begin == competitions
+                    && s.ArcherCode == archerCode
                     select s;
 
             db.CompetitionsScores.RemoveRange(q);
