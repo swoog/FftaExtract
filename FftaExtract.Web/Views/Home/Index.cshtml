@@ -1,4 +1,4 @@
-﻿@model FftaExtract.DatabaseModel.GlobalStats
+﻿@model FftaExtract.Web.Models.HomeModel
 @{
     ViewBag.Title = "FFTA Extract";
 }
@@ -29,10 +29,20 @@
             <div class="panel-heading">Stats</div>
             <div class="panel-body">
                 <ul class="list-group ">
-                    <li class="list-group-item">@Model.CountArchers.ToString("### ###") <small>archers</small></li>
-                    <li class="list-group-item">@Model.CountClubs.ToString("### ###") <small>clubs</small></li>
+                    <li class="list-group-item">@Model.Stats.CountArchers.ToString("### ###") <small>archers</small></li>
+                    <li class="list-group-item">@Model.Stats.CountClubs.ToString("### ###") <small>clubs</small></li>
                 </ul>
             </div>
         </div>
     </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">Dernière compétitions</div>
+    <div class="list-group ">
+        @foreach (var competition in Model.LastCompetitions)
+        {
+            <a class="list-group-item">@competition.CompetitionInfo.Name <small>@competition.Begin.ToShortDateString()</small></a>
+        }
+    </div>   
 </div>

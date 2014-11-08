@@ -170,6 +170,7 @@
     <Compile Include="Models\ArcherModel.cs" />
     <Compile Include="Models\ClubModel.cs" />
     <Compile Include="Models\CompetitionModel.cs" />
+    <Compile Include="Models\HomeModel.cs" />
     <Compile Include="Models\YearCompetitionModel.cs" />
     <Compile Include="Models\YearModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -32,5 +32,7 @@ namespace FftaExtract.DatabaseModel
         IList<YearStat> GetClubStats(int clubId);
 
         GlobalStats GetGlobalStats();
+
+        IList<Competition> GetLastCompetitions();
     }
 }

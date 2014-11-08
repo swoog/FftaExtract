@@ -199,6 +199,16 @@ namespace FftaExtract.DatabaseModel
             }
         }
 
+        public IList<Competition> GetLastCompetitions()
+        {
+            using (var db = new FftaDatabase())
+            {
+                var q = from c in db.Competitions.Include("CompetitionInfo") orderby c.Begin descending select c;
+
+                return q.Take(20).ToList();
+            }
+        }
+
         private void CleanJobs(FftaDatabase db)
         {
             var d = DateTime.Now.AddDays(-2);

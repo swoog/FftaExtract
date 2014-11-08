@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -7,6 +6,7 @@ using System.Web.Mvc;
 namespace FftaExtract.Web.Controllers
 {
     using FftaExtract.DatabaseModel;
+    using FftaExtract.Web.Models;
 
     public class HomeController : Controller
     {
@@ -21,7 +21,13 @@ namespace FftaExtract.Web.Controllers
         {
             var stats = this.repository.GetGlobalStats();
 
-            return View(stats);
+            var lastCompetitions = this.repository.GetLastCompetitions();
+
+            return View(new HomeModel
+                            {
+                                Stats = stats,
+                                LastCompetitions = lastCompetitions,
+                            });
         }
 
         public ActionResult About()
