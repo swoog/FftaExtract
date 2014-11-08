@@ -79,6 +79,7 @@
     <Compile Include="DatabaseModel\CompetitionInfo.cs" />
     <Compile Include="DatabaseModel\Competition.cs" />
     <Compile Include="DatabaseModel\CompetitionScore.cs" />
+    <Compile Include="DatabaseModel\CompetitionStats.cs" />
     <Compile Include="DatabaseModel\CompetitionType.cs" />
     <Compile Include="DatabaseModel\DatabaseRepository.cs" />
     <Compile Include="DatabaseModel\DataBaseRepositoryImporter.cs" />

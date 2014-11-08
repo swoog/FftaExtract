@@ -42,7 +42,9 @@
     <div class="list-group ">
         @foreach (var competition in Model.LastCompetitions)
         {
-            <a class="list-group-item">@competition.CompetitionInfo.Name <small>@competition.Begin.ToShortDateString()</small></a>
+            <a class="list-group-item">@competition.CompetitionInfo.Name <small>@competition.Competition.Begin.ToShortDateString()</small>
+                @competition.CountArchers archés
+            </a>
         }
     </div>   
 </div>

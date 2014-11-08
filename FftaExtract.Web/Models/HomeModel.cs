@@ -8,6 +8,6 @@ namespace FftaExtract.Web.Models
     {
         public GlobalStats Stats { get; set; }
 
-        public IList<Competition> LastCompetitions { get; set; }
+        public IList<CompetitionStats> LastCompetitions { get; set; }
     }
 }

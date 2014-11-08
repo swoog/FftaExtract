@@ -199,11 +199,19 @@ namespace FftaExtract.DatabaseModel
             }
         }
 
-        public IList<Competition> GetLastCompetitions()
+        public IList<CompetitionStats> GetLastCompetitions()
         {
             using (var db = new FftaDatabase())
             {
-                var q = from c in db.Competitions.Include("CompetitionInfo") orderby c.Begin descending select c;
+                var q = from competitionsScore in db.CompetitionsScores
+                        group competitionsScore by competitionsScore.Competition into competitionscore2
+                        orderby competitionscore2.Key.Begin descending 
+                        select new CompetitionStats
+                                   {
+                                       Competition = competitionscore2.Key,
+                                       CompetitionInfo = competitionscore2.Key.CompetitionInfo,
+                                       CountArchers = competitionscore2.Count(),
+                                   };
 
                 return q.Take(20).ToList();
             }

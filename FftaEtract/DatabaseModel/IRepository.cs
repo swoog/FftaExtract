@@ -33,6 +33,6 @@ namespace FftaExtract.DatabaseModel
 
         GlobalStats GetGlobalStats();
 
-        IList<Competition> GetLastCompetitions();
+        IList<CompetitionStats> GetLastCompetitions();
     }
 }
