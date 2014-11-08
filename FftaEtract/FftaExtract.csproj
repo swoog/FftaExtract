@@ -83,6 +83,7 @@
     <Compile Include="DatabaseModel\DatabaseRepository.cs" />
     <Compile Include="DatabaseModel\DataBaseRepositoryImporter.cs" />
     <Compile Include="DatabaseModel\FftaDatabase.cs" />
+    <Compile Include="DatabaseModel\GlobalStats.cs" />
     <Compile Include="DatabaseModel\IRepository.cs" />
     <Compile Include="DatabaseModel\IRepositoryImporter.cs" />
     <Compile Include="DatabaseModel\JobInfo.cs" />

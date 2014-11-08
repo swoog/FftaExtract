@@ -30,5 +30,7 @@ namespace FftaExtract.DatabaseModel
         void ErrorJobInfo(JobInfo job, string reasonPhrase);
 
         IList<YearStat> GetClubStats(int clubId);
+
+        GlobalStats GetGlobalStats();
     }
 }

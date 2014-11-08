@@ -188,6 +188,17 @@ namespace FftaExtract.DatabaseModel
             }
         }
 
+        public GlobalStats GetGlobalStats()
+        {
+            using (var db = new FftaDatabase())
+            {
+                var countArchers = db.Archers.Count();
+                var countClubs = db.Clubs.Count();
+
+                return new GlobalStats() { CountArchers = countArchers, CountClubs = countClubs };
+            }
+        }
+
         private void CleanJobs(FftaDatabase db)
         {
             var d = DateTime.Now.AddDays(-2);
