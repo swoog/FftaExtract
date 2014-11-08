@@ -171,6 +171,7 @@
     <Compile Include="Models\ClubModel.cs" />
     <Compile Include="Models\CompetitionModel.cs" />
     <Compile Include="Models\YearCompetitionModel.cs" />
+    <Compile Include="Models\YearModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

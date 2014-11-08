@@ -169,6 +169,25 @@ namespace FftaExtract.DatabaseModel
             }
         }
 
+        public IList<YearStat> GetClubStats(int clubId)
+        {
+            using (var db = new FftaDatabase())
+            {
+                var q = from ac in db.ArchersClubs
+                                 join competitionScore in db.CompetitionsScores on ac.ArcherCode equals
+                                     competitionScore.ArcherCode
+                                 where ac.ClubId == clubId
+                                 && ac.Year == competitionScore.Competition.Year
+                                 group competitionScore by ac.Year
+                                 into score
+                                 select new { score.Key, Depart = score.Count(), Podium = score.Count(s => s.Rank <= 3) };
+                var archers = q.ToList();
+
+                return archers.Select(s => new YearStat { Year = s.Key, Depart = s.Depart, Podium = s.Podium, })
+                    .ToList();
+            }
+        }
+
         private void CleanJobs(FftaDatabase db)
         {
             var d = DateTime.Now.AddDays(-2);

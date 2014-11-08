@@ -24,11 +24,14 @@ namespace FftaExtract.Web.Controllers
 
             var archersByYear = this.repository.GetArchersByYear(id);
 
-            return View(new ClubModel
-                            {
-                                Club = club,
-                                YearsArchers = archersByYear,
-                            });
+            var yearPodium = this.repository.GetClubStats(id);
+
+            var yearsModel = (from arches in archersByYear
+                              join podium in yearPodium on arches.Year equals podium.Year
+                              orderby arches.Year descending 
+                              select new YearModel { Year = arches.Year, Archers = arches, Stats = podium, }).ToList();
+
+            return View(new ClubModel { Club = club, Years = yearsModel, });
         }
     }
 }
