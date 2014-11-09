@@ -21,7 +21,7 @@ namespace FftaExtract.Web.Controllers
 
         private readonly ILogger logger;
 
-        public PalmaresController(PalmaresProvider palmares,  IRepositoryImporter repository, ILogger logger)
+        public PalmaresController(PalmaresProvider palmares, IRepositoryImporter repository, ILogger logger)
         {
             this.palmares = palmares;
             this.repository = repository;
@@ -31,14 +31,24 @@ namespace FftaExtract.Web.Controllers
         public async Task Get(string code)
         {
             this.logger.Info("Get palmares of {0}", code);
-            await Get(code, null);
+            await this.InternalGet(code, null, null, null, null);
         }
 
         public async Task Get(string code, int? year)
         {
+            await this.InternalGet(code, year, null, null, null);
+        }
+
+        public async Task Get(string code, int year, Category category, CompetitionType competitionType, BowType bowType)
+        {
+            await this.InternalGet(code, year, category, competitionType, bowType);
+        }
+
+        private async Task InternalGet(string code, int? year, Category? category, CompetitionType? competitionType, BowType? bowType)
+        {
             var archer = this.repository.GetArcher(code);
 
-            await this.palmares.UpdateArcher(archer, year);
+            await this.palmares.UpdateArcher(archer, year, category, competitionType, bowType);
 
             this.repository.SaveArcher(archer);
         }

@@ -15,8 +15,15 @@
 
             config.Routes.MapHttpRoute(
                 name: "PalmaresController",
-                routeTemplate: "api/Palmares/{code}/{year}",
-                defaults: new { controller = "Palmares", year = RouteParameter.Optional });
+                routeTemplate: "api/Palmares/{code}/{year}/{category}/{competitionType}/{bowType}",
+                defaults: new
+                              {
+                                  controller = "Palmares", 
+                                  year = RouteParameter.Optional,
+                                  category = RouteParameter.Optional,
+                                  competitionType = RouteParameter.Optional,
+                                  bowType = RouteParameter.Optional
+                              });
 
 
             config.Routes.MapHttpRoute(

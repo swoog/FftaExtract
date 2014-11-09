@@ -32,7 +32,7 @@ namespace FftaExtract.Providers
         private Random rand = new Random();
 
 
-        public async Task UpdateArcher(ArcherDataProvider archer, int? year)
+        public async Task UpdateArcher(ArcherDataProvider archer, int? year, Category? category1, CompetitionType? competitionType, BowType? bowType)
         {
             var sexes = new List<Sexe>();
 
@@ -52,6 +52,21 @@ namespace FftaExtract.Providers
             {
                 foreach (var category in this.competitionCategorieRepository.GetCategories(sex, year))
                 {
+                    if (category1.HasValue && category1.Value != category.Category)
+                    {
+                        continue;
+                    }
+
+                    if (competitionType.HasValue && competitionType.Value != category.CompetitionType)
+                    {
+                        continue;
+                    }
+
+                    if (bowType.HasValue && bowType.Value != category.BowType)
+                    {
+                        continue;
+                    }
+
                     string url = string.Empty;
                     try
                     {

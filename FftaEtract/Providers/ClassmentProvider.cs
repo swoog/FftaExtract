@@ -54,7 +54,7 @@
             {
                 hasArcher = true;
 
-                this.job.Push("api/Palmares/{0}/{1}", archerDataProvider.Code, category.Year);
+                this.job.Push("api/Palmares/{0}/{1}/{2}/{3}/{4}", archerDataProvider.Code, category.Year, cat, competitionType, bowType);
                 archers.Add(archerDataProvider);
             }
 
