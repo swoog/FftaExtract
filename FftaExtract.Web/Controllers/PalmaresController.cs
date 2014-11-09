@@ -23,13 +23,12 @@ namespace FftaExtract.Web.Controllers
             this.repository = repository;
         }
 
-        public async Task Post(string code)
+        public async Task Get(string code)
         {
-            await Post(code, null);
+            await Get(code, null);
         }
 
-        // POST: api/Competion
-        public async Task Post(string code, int? year)
+        public async Task Get(string code, int? year)
         {
             var archer = this.repository.GetArcher(code);
 

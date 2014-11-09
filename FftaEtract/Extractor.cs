@@ -48,7 +48,7 @@
                 var uri = new Uri(new Uri(this.urlLocalHost), job.Url);
 
                 this.logger.Info("Start {0}", uri);
-                var response = await client.PostAsync(uri, null);
+                var response = await client.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)
                 {
