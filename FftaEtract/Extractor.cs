@@ -29,12 +29,16 @@
 
         public async Task Run()
         {
+            var random = new Random();
+            this.logger.Info("Start extracting");
+
             while (true)
             {
                 var job = this.job.GetNextJobInfo();
 
                 if (job == null)
                 {
+                    this.logger.Info("No job wait for a job.");
                     Thread.Sleep(TimeSpan.FromSeconds(10));
                     continue;
                 }
@@ -56,7 +60,7 @@
                     this.job.Error(job, response.ReasonPhrase);
                 }
 
-                Thread.Sleep(TimeSpan.FromSeconds(1));
+                Thread.Sleep(TimeSpan.FromMilliseconds(random.Next(1, 1000)));
             }
         }
     }
