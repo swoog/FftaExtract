@@ -15,11 +15,27 @@
 
         private readonly ILogger logger;
 
-        public ClassmentController(ClassmentProvider classement, IRepositoryImporter repository, ILogger logger)
+        private readonly CompetionCategorieRepository competionCategorieRepository;
+
+        private readonly Job job;
+
+        public ClassmentController(ClassmentProvider classement, IRepositoryImporter repository, ILogger logger, CompetionCategorieRepository competionCategorieRepository, Job job)
         {
             this.classement = classement;
             this.repository = repository;
             this.logger = logger;
+            this.competionCategorieRepository = competionCategorieRepository;
+            this.job = job;
+        }
+
+        public void Get(int year, int page)
+        {
+            foreach (var category in this.competionCategorieRepository.GetCategories(null, year))
+            {
+                this.logger.Info("Push : {0} {1} {2}", category.Year, category.CompetitionType, category.Category);
+
+                this.job.Push("api/Classment/{0}/{1}/{2}/{3}", category.Year, category.Category, category.CompetitionType, category.BowType);
+            }
         }
 
         public async Task Get(int year, Category category, CompetitionType competitionType, BowType bowType, int page)

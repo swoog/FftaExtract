@@ -22,7 +22,13 @@
             config.Routes.MapHttpRoute(
                 name: "ClassmentController",
                 routeTemplate: "api/{controller}/{year}/{category}/{competitionType}/{bowType}/{page}",
-                defaults: new { page = 0 });
+                defaults: new
+                {
+                    page = 0,
+                    category = RouteParameter.Optional,
+                    competitionType = RouteParameter.Optional,
+                    bowType = RouteParameter.Optional
+                });
 
 
             config.Routes.MapHttpRoute(

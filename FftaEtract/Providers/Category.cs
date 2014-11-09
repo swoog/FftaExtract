@@ -2,13 +2,13 @@
 {
     public enum Category
     {
-        SeniorHomme,
         JuniorHomme,
-        SeniorFemme,
         JuniorFemme,
-
+        SeniorHomme,       
+        SeniorFemme,
         ScratchHomme,
-
-        ScratchFemme
+        ScratchFemme,
+        VeteranHomme,
+        VeteranFemme,
     }
 }

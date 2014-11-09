@@ -1,6 +1,7 @@
 ﻿namespace FftaExtract
 {
     using System;
+    using System.Collections;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
@@ -12,25 +13,42 @@
 
     public class Extractor
     {
-        private Job job;
+        private readonly Job job;
 
-        private ILogger logger;
+        private readonly ILogger logger;
+
+        private readonly CompetionCategorieRepository competionCategorieRepository;
 
 #if DEBUG
         private string urlLocalHost = "http://localhost:10151/";
 #else
         private string urlLocalHost = "http://fftaextract.azurewebsites.net/";
 #endif
-        public Extractor(Job job, ILogger logger)
+        public Extractor(Job job, ILogger logger, CompetionCategorieRepository competionCategorieRepository)
         {
             this.job = job;
             this.logger = logger;
+            this.competionCategorieRepository = competionCategorieRepository;
         }
 
         public async Task Run()
         {
-            var random = new Random();
             this.logger.Info("Start extracting");
+
+            try
+            {
+                foreach (var category in this.competionCategorieRepository.GetCategories(null, null))
+                {
+                    this.logger.Info("Category : {0} {1} {2}", category.Year, category.CompetitionType, category.Category);
+                }
+            }
+            catch (Exception ex)
+            {
+                this.logger.Error(ex, "Error to get categories");
+                throw;
+            }
+
+            var random = new Random();
 
             while (true)
             {
