@@ -32,7 +32,7 @@
         {
             foreach (var category in this.competitionCategorieRepository.GetCategories(null, year))
             {
-                this.logger.Info("Push : {0} {1} {2}", category.Year, category.CompetitionType, category.Category);
+                this.logger.Info("Push : {0} {1} {2} {3}", category.Year, category.CompetitionType, category.Category, category.BowType);
 
                 this.job.Push("api/Classment/{0}/{1}/{2}/{3}", category.Year, category.Category, category.CompetitionType, category.BowType);
             }
