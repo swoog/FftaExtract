@@ -169,6 +169,54 @@ namespace FftaExtract.DatabaseModel
             }
         }
 
+        public IList<YearStat> GetClubStats(int clubId)
+        {
+            using (var db = new FftaDatabase())
+            {
+                var q = from ac in db.ArchersClubs
+                                 join competitionScore in db.CompetitionsScores on ac.ArcherCode equals
+                                     competitionScore.ArcherCode
+                                 where ac.ClubId == clubId
+                                 && ac.Year == competitionScore.Competition.Year
+                                 group competitionScore by ac.Year
+                                 into score
+                                 select new { score.Key, Depart = score.Count(), Podium = score.Count(s => s.Rank <= 3) };
+                var archers = q.ToList();
+
+                return archers.Select(s => new YearStat { Year = s.Key, Depart = s.Depart, Podium = s.Podium, })
+                    .ToList();
+            }
+        }
+
+        public GlobalStats GetGlobalStats()
+        {
+            using (var db = new FftaDatabase())
+            {
+                var countArchers = db.Archers.Count();
+                var countClubs = db.Clubs.Count();
+
+                return new GlobalStats() { CountArchers = countArchers, CountClubs = countClubs };
+            }
+        }
+
+        public IList<CompetitionStats> GetLastCompetitions()
+        {
+            using (var db = new FftaDatabase())
+            {
+                var q = from competitionsScore in db.CompetitionsScores
+                        group competitionsScore by competitionsScore.Competition into competitionscore2
+                        orderby competitionscore2.Key.Begin descending 
+                        select new CompetitionStats
+                                   {
+                                       Competition = competitionscore2.Key,
+                                       CompetitionInfo = competitionscore2.Key.CompetitionInfo,
+                                       CountArchers = competitionscore2.Count(),
+                                   };
+
+                return q.Take(20).ToList();
+            }
+        }
+
         private void CleanJobs(FftaDatabase db)
         {
             var d = DateTime.Now.AddDays(-2);

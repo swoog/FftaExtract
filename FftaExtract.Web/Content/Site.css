@@ -71,3 +71,16 @@ a.selected {
 .hightScores small{
     font-size: 10px;
 }
+
+.stats {
+    margin: 30px 0px;
+}
+
+.stats ul {
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.stats small{
+    font-size: 10px;
+}

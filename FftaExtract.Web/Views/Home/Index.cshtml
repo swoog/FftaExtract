@@ -1,18 +1,50 @@
-﻿@{
+﻿@model FftaExtract.Web.Models.HomeModel
+@{
     ViewBag.Title = "FFTA Extract";
 }
 
-<div class="jumbotron">
-    <h1>FFTA Extract</h1>
-    <p class="lead">
-        @using (Html.BeginForm("search", "Home"))
-        {
-            <div class="input-group" style="width: 300px">
-                @Html.TextBox("query", null, new { Class = "form-control" })
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit">Chercher !</button>
-                </span>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="jumbotron">
+            <h1>FFTA Extract</h1>
+            <p class="lead">
+
+
+
+                @using (Html.BeginForm("search", "Home"))
+                {
+                    <div class="input-group" style="width: 300px">
+                        @Html.TextBox("query", null, new { Class = "form-control" })
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">Chercher !</button>
+                        </span>
+                    </div>
+                }
+
+            </p>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="panel panel-default stats">
+            <div class="panel-heading">Stats</div>
+            <div class="panel-body">
+                <ul class="list-group ">
+                    <li class="list-group-item">@Model.Stats.CountArchers.ToString("### ###") <small>archers</small></li>
+                    <li class="list-group-item">@Model.Stats.CountClubs.ToString("### ###") <small>clubs</small></li>
+                </ul>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">Dernière compétitions</div>
+    <div class="list-group ">
+        @foreach (var competition in Model.LastCompetitions)
+        {
+            <a class="list-group-item">@competition.CompetitionInfo.Name <small>@competition.Competition.Begin.ToShortDateString()</small>
+                @competition.CountArchers archés
+            </a>
         }
-    </p>
+    </div>   
 </div>

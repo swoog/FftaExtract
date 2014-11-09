@@ -170,7 +170,9 @@
     <Compile Include="Models\ArcherModel.cs" />
     <Compile Include="Models\ClubModel.cs" />
     <Compile Include="Models\CompetitionModel.cs" />
+    <Compile Include="Models\HomeModel.cs" />
     <Compile Include="Models\YearCompetitionModel.cs" />
+    <Compile Include="Models\YearModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +196,8 @@
     <Content Include="Scripts\bootstrap-sortable.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\Chart.js" />
+    <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\jquery-2.1.1.min.js" />
     <Content Include="Scripts\jquery-2.1.1.min.map" />
