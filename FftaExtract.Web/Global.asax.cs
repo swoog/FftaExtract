@@ -14,6 +14,8 @@ namespace FftaExtract.Web
     {
         protected void Application_Start()
         {
+            log4net.Config.XmlConfigurator.Configure();
+
             GlobalConfiguration.Configure(WebApiConfig.Register);
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

@@ -12,19 +12,25 @@ namespace FftaExtract.Web.Controllers
     using FftaExtract.DatabaseModel;
     using FftaExtract.Providers;
 
+    using Ninject.Extensions.Logging;
+
     public class PalmaresController : ApiController
     {
         private readonly PalmaresProvider palmares;
         private readonly IRepositoryImporter repository;
 
-        public PalmaresController(PalmaresProvider palmares,  IRepositoryImporter repository)
+        private readonly ILogger logger;
+
+        public PalmaresController(PalmaresProvider palmares,  IRepositoryImporter repository, ILogger logger)
         {
             this.palmares = palmares;
             this.repository = repository;
+            this.logger = logger;
         }
 
         public async Task Get(string code)
         {
+            this.logger.Info("Get palmares of {0}", code);
             await Get(code, null);
         }
 

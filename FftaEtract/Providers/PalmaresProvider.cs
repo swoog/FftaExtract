@@ -46,6 +46,8 @@ namespace FftaExtract.Providers
                 sexes.Add(Sexe.Femme);
             }
 
+            bool hasError = false;
+
             foreach (var sex in sexes)
             {
                 foreach (var category in this.competionCategorieRepository.GetCategories(sex, year))
@@ -65,8 +67,14 @@ namespace FftaExtract.Providers
                     catch (Exception ex)
                     {
                         this.logger.Error(ex, "Error in scrap url : {0}", url);
+                        hasError = true;
                     }
                 }
+            }
+
+            if (hasError)
+            {
+                throw new Exception("Error to scrap a competition");
             }
         }
 
@@ -183,6 +191,13 @@ namespace FftaExtract.Providers
             {
                 yield return Convert.ToInt32(match.Groups[2].Value);
                 yield return Convert.ToInt32(match.Groups[3].Value);
+                yield break;
+            }
+
+            match = Regex.Match(score, @"^([0-9]+)\s*\(Pas pris en compte\)\s*$", RegexOptions.IgnoreCase);
+            if (match.Success)
+            {
+                yield return Convert.ToInt32(match.Groups[1].Value);
                 yield break;
             }
 
