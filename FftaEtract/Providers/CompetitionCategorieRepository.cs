@@ -7,21 +7,25 @@ using System.Threading.Tasks;
 namespace FftaExtract.Providers
 {
     using System.Collections;
+    using System.Text.RegularExpressions;
 
     using FftaExtract.DatabaseModel;
 
-    public class CompetionCategorieRepository
+    public class CompetitionCategorieRepository
     {
-        private static int[] years = new[] { 2013, 2014, 2015 };
+        private static int[] years = new[] { 2012, 2013, 2014, 2015 };
 
         private static Dictionary<BowType, string> bowTypeToText = new Dictionary<BowType, string>()
                                                          {
                                                              { BowType.Classique, "CL" },
                                                              { BowType.Poulie, "CO" },
+                                                             { BowType.BareBow, "BB" },
                                                          };
 
         private static Dictionary<Category, string> categoryToText = new Dictionary<Category, string>()
                                                          {
+                                                             { Category.JeuneHomme, "JEH" },
+                                                             { Category.JeuneFemme, "JEF" },
                                                              { Category.JuniorHomme, "JH" },
                                                              { Category.JuniorFemme, "JF" },
                                                              { Category.SeniorHomme, "SH" },
@@ -37,7 +41,7 @@ namespace FftaExtract.Providers
         private static CompetitionCategory[] categoriesHomme = null;
         private static CompetitionCategory[] categoriesFemme = null;
 
-        static CompetionCategorieRepository()
+        static CompetitionCategorieRepository()
         {
             categories = InternalGetCategories().ToArray();
             categoriesHomme = categories.Where(c => c.Sexe == Sexe.Homme).ToArray();
@@ -78,6 +82,7 @@ namespace FftaExtract.Providers
             BowType[] bowTypes = GetTypes<BowType>();
             Category[] categories = GetTypes<Category>();
 
+            var regexes = CompetitionCategoryMapping.ignoredCategories.Select(c => new Regex(string.Format("^{0}$", c))).ToList();
             foreach (var year in years)
             {
                 foreach (var competitionType in competitionTypes)
@@ -91,7 +96,7 @@ namespace FftaExtract.Providers
                                 categoryToText[category] + "_" +
                                 bowTypeToText[bowType];
 
-                            if (CompetitionCategoryMapping.ignoredCategories.Contains(key))
+                            if (regexes.Any(r => r.Match(key).Success))
                             {
                                 continue;
                             }

@@ -8,7 +8,61 @@ namespace FftaExtract.Providers
                                                          {
                                                              { "2009_Salle_SH_CL", 3393 },
                                                              { "2009_Salle_SF_CL", 3394 },
-                                                             { "2012_Salle_JH_CL", 5458 },
+
+                                                            { "2012_Salle_JEH_BB", 6067 },
+                                                            { "2012_Salle_JEF_BB", 6065 },
+                                                            { "2012_Salle_SCF_BB", 5450 },
+                                                            { "2012_Salle_SCH_BB", 5449 },
+                                                            { "2012_Salle_BF_CL", 5451 },
+                                                            { "2012_Salle_BH_CL", 5452 },
+                                                            { "2012_Salle_MF_CL", 5453 },
+                                                            { "2012_Salle_MH_CL", 5454 },
+                                                            { "2012_Salle_CF_CL", 5455 },
+                                                            { "2012_Salle_CH_CL", 5456 },
+                                                            { "2012_Salle_JF_CL", 5457 },
+                                                            { "2012_Salle_JH_CL", 5458 },
+                                                            { "2012_Salle_SF_CL", 5459 },
+                                                            { "2012_Salle_SH_CL", 5460 },
+                                                            { "2012_Salle_VF_CL", 5461 },
+                                                            { "2012_Salle_VH_CL", 5462 },
+                                                            { "2012_Salle_SVF_CL", 5463 },
+                                                            { "2012_Salle_SVH_CL", 5464 },
+                                                            { "2012_Salle_JF_CO", 5465 },
+                                                            { "2012_Salle_JH_CO", 5466 },
+                                                            { "2012_Salle_SF_CO", 5467 },
+                                                            { "2012_Salle_SH_CO", 5468 },
+                                                            { "2012_Salle_VF_CO", 5469 },
+                                                            { "2012_Salle_VH_CO", 5470 },
+                                                            { "2012_Salle_SVF_CO", 5471 },
+                                                            { "2012_Salle_SVH_CO", 5472 },  
+                                                            
+
+                                            { "2012_Fita_BF_CL", 5871 },
+                                            { "2012_Fita_BH_CL", 5872 },
+                                            { "2012_Fita_MF_CL", 5873 },
+                                            { "2012_Fita_MH_CL", 5874 },
+                                            { "2012_Fita_CF_CL", 5875 },
+                                            { "2012_Fita_CH_CL", 5876 },
+                                            { "2012_Fita_JF_CL", 5877 },
+                                            { "2012_Fita_JH_CL", 5878 },
+                                            { "2012_Fita_VF_CL", 5881 },
+                                            { "2012_Fita_VH_CL", 5882 },
+                                            { "2012_Fita_SVF_CL", 5883 },
+                                            { "2012_Fita_SVH_CL", 5884 },
+                                            { "2012_Fita_SCF_CL", 5968 },
+                                            { "2012_Fita_SCH_CL", 5969 },
+                                            { "2012_Fita_CF_CO", 5896 },
+                                            { "2012_Fita_CH_CO", 5893 },
+                                            { "2012_Fita_JF_CO", 5885 },
+                                            { "2012_Fita_JH_CO", 5886 },
+                                            { "2012_Fita_VF_CO", 5889 },
+                                            { "2012_Fita_VH_CO", 5890 },
+                                            { "2012_Fita_SVF_CO", 5891 },
+                                            { "2012_Fita_SVH_CO", 5892 },
+                                            { "2012_Fita_SCF_CO", 5970 },
+                                            { "2012_Fita_SCH_CO", 5971 },
+
+
 
                                                              { "2013_Salle_CF_BB", 6143},
                                                              { "2013_Salle_CH_BB", 6144},
@@ -174,32 +228,16 @@ namespace FftaExtract.Providers
 
                                                          };
 
-        public static string[] ignoredCategories = new[]
-                                                        {
-                                                            "2013_Fita_SH_CL",
-                                                            "2013_Fita_SF_CL",
-                                                            "2013_Fita_SH_CO",
-                                                            "2013_Fita_SF_CO",
-                                                            "2013_Salle_SCH_CL",
-                                                            "2013_Salle_SCF_CL",
-                                                            "2013_Salle_SCH_CO",
-                                                            "2013_Salle_SCF_CO",
-                                                            "2014_Fita_SH_CL",
-                                                            "2014_Fita_SF_CL",
-                                                            "2014_Fita_SH_CO",
-                                                            "2014_Fita_SF_CO",
-                                                            "2014_Salle_SCH_CL",
-                                                            "2014_Salle_SCF_CL",
-                                                            "2014_Salle_SCH_CO",
-                                                            "2014_Salle_SCF_CO",
-                                                            "2015_Salle_SCH_CL",
-                                                            "2015_Salle_SCF_CL",
-                                                            "2015_Salle_SCH_CO",
-                                                            "2015_Salle_SCF_CO",
-                                                            "2015_Fita_SH_CL",
-                                                            "2015_Fita_SF_CL",
-                                                            "2015_Fita_SH_CO",
-                                                            "2015_Fita_SF_CO",
-                                                        };
+        public static string[] ignoredCategories = 
+        {
+            "(2012|2013|2014|2015)_(Salle|Fita)_JE[HF]_(CL|CO)",
+            "(2012|2013|2014|2015)_Salle_J(H|F)_BB",
+            "(2012|2013|2014|2015)_Salle_S(H|F)_BB",
+            "(2012|2013|2014|2015)_Salle_V(H|F)_BB",
+            "(2013|2014|2015)_Salle_JE(H|F)_BB", 
+            "[0-9]{4}_Fita_[^_]+_BB", // Barebow doesn't shoot in FITA
+            "(2012|2013|2014|2015)_Salle_SC(H|F)_(CL|CO)",
+            "(2012|2013|2014|2015)_Fita_S(H|F)_(CL|CO)",
+        };
     }
 }

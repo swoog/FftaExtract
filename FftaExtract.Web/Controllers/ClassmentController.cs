@@ -15,22 +15,22 @@
 
         private readonly ILogger logger;
 
-        private readonly CompetionCategorieRepository competionCategorieRepository;
+        private readonly CompetitionCategorieRepository competitionCategorieRepository;
 
         private readonly Job job;
 
-        public ClassmentController(ClassmentProvider classement, IRepositoryImporter repository, ILogger logger, CompetionCategorieRepository competionCategorieRepository, Job job)
+        public ClassmentController(ClassmentProvider classement, IRepositoryImporter repository, ILogger logger, CompetitionCategorieRepository competitionCategorieRepository, Job job)
         {
             this.classement = classement;
             this.repository = repository;
             this.logger = logger;
-            this.competionCategorieRepository = competionCategorieRepository;
+            this.competitionCategorieRepository = competitionCategorieRepository;
             this.job = job;
         }
 
         public void Get(int year, int page)
         {
-            foreach (var category in this.competionCategorieRepository.GetCategories(null, year))
+            foreach (var category in this.competitionCategorieRepository.GetCategories(null, year))
             {
                 this.logger.Info("Push : {0} {1} {2}", category.Year, category.CompetitionType, category.Category);
 

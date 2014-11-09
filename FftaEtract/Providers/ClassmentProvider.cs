@@ -15,15 +15,15 @@
 
     public class ClassmentProvider
     {
-        private readonly CompetionCategorieRepository competionCategorieRepository;
+        private readonly CompetitionCategorieRepository competitionCategorieRepository;
 
         private readonly ILogger logger;
 
         private Job job;
 
-        public ClassmentProvider(CompetionCategorieRepository competionCategorieRepository, ILogger logger, Job job)
+        public ClassmentProvider(CompetitionCategorieRepository competitionCategorieRepository, ILogger logger, Job job)
         {
-            this.competionCategorieRepository = competionCategorieRepository;
+            this.competitionCategorieRepository = competitionCategorieRepository;
             this.logger = logger;
             this.job = job;
         }
@@ -31,7 +31,7 @@
         public async Task<IList<ArcherDataProvider>> GetArchers(int year, Category cat, CompetitionType competitionType, BowType bowType, int page)
         {
             var archers = new List<ArcherDataProvider>();
-            var category = this.competionCategorieRepository.GetCategory(year, cat, competitionType, bowType);
+            var category = this.competitionCategorieRepository.GetCategory(year, cat, competitionType, bowType);
 
             if (category == null)
             {

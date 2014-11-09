@@ -4,5 +4,7 @@ namespace FftaExtract.DatabaseModel
     {
         Classique,
         Poulie,
+
+        BareBow
     }
 }

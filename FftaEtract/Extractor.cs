@@ -17,18 +17,18 @@
 
         private readonly ILogger logger;
 
-        private readonly CompetionCategorieRepository competionCategorieRepository;
+        private readonly CompetitionCategorieRepository competitionCategorieRepository;
 
 #if DEBUG
         private string urlLocalHost = "http://localhost:10151/";
 #else
         private string urlLocalHost = "http://fftaextract.azurewebsites.net/";
 #endif
-        public Extractor(Job job, ILogger logger, CompetionCategorieRepository competionCategorieRepository)
+        public Extractor(Job job, ILogger logger, CompetitionCategorieRepository competitionCategorieRepository)
         {
             this.job = job;
             this.logger = logger;
-            this.competionCategorieRepository = competionCategorieRepository;
+            this.competitionCategorieRepository = competitionCategorieRepository;
         }
 
         public async Task Run()
@@ -37,7 +37,7 @@
 
             try
             {
-                foreach (var category in this.competionCategorieRepository.GetCategories(null, null))
+                foreach (var category in this.competitionCategorieRepository.GetCategories(null, null))
                 {
                     this.logger.Info("Category : {0} {1} {2}", category.Year, category.CompetitionType, category.Category);
                 }

@@ -19,13 +19,13 @@ namespace FftaExtract.Providers
 
     public class PalmaresProvider
     {
-        private readonly CompetionCategorieRepository competionCategorieRepository;
+        private readonly CompetitionCategorieRepository competitionCategorieRepository;
 
         private ILogger logger;
 
-        public PalmaresProvider(CompetionCategorieRepository competionCategorieRepository, ILogger logger)
+        public PalmaresProvider(CompetitionCategorieRepository competitionCategorieRepository, ILogger logger)
         {
-            this.competionCategorieRepository = competionCategorieRepository;
+            this.competitionCategorieRepository = competitionCategorieRepository;
             this.logger = logger;
         }
 
@@ -50,7 +50,7 @@ namespace FftaExtract.Providers
 
             foreach (var sex in sexes)
             {
-                foreach (var category in this.competionCategorieRepository.GetCategories(sex, year))
+                foreach (var category in this.competitionCategorieRepository.GetCategories(sex, year))
                 {
                     string url = string.Empty;
                     try

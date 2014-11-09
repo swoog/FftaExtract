@@ -10,5 +10,9 @@
         ScratchFemme,
         VeteranHomme,
         VeteranFemme,
+
+        JeuneHomme,
+
+        JeuneFemme
     }
 }
