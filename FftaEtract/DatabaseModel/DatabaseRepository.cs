@@ -183,8 +183,29 @@ namespace FftaExtract.DatabaseModel
                                  select new { score.Key, Depart = score.Count(), Podium = score.Count(s => s.Rank <= 3) };
                 var archers = q.ToList();
 
-                return archers.Select(s => new YearStat { Year = s.Key, Depart = s.Depart, Podium = s.Podium, })
+                var yearStats = archers.Select(s => new YearStat { Year = s.Key, Depart = s.Depart, Podium = s.Podium, })
                     .ToList();
+
+                foreach (var yearStat in yearStats)
+                {
+                    var year = yearStat.Year;
+
+                    var q2 = from ac in db.ArchersClubs
+                            join competitionScore in db.CompetitionsScores on ac.ArcherCode equals
+                                competitionScore.ArcherCode
+                            where ac.ClubId == clubId
+                            && ac.Year == competitionScore.Competition.Year
+                           && ac.Year == year
+                            group competitionScore by competitionScore.Competition.Type
+                                into score
+                                select new { score.Key, Depart = score.Count(), Podium = score.Count(s => s.Rank <= 3) };
+
+                    yearStat.Types =
+                        q2.Select(s => new TypeCompetitionStat() { Depart = s.Depart, Podium = s.Podium, Type = s.Key })
+                            .ToList();
+                }
+
+                return yearStats;
             }
         }
 
