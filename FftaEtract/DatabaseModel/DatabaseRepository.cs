@@ -121,7 +121,7 @@ namespace FftaExtract.DatabaseModel
                     jobInfo.CreatedDateTime = DateTime.Now;
 
                     db.JobsInfos.Add(jobInfo);
-                    db.SaveChanges();                    
+                    db.SaveChanges();
                 }
             }
         }
@@ -146,7 +146,7 @@ namespace FftaExtract.DatabaseModel
             using (var db = new FftaDatabase())
             {
                 var q = from j in db.JobsInfos
-                        where j.Id == job .Id
+                        where j.Id == job.Id
                         select j;
                 var j1 = q.First();
 
@@ -174,13 +174,13 @@ namespace FftaExtract.DatabaseModel
             using (var db = new FftaDatabase())
             {
                 var q = from ac in db.ArchersClubs
-                                 join competitionScore in db.CompetitionsScores on ac.ArcherCode equals
-                                     competitionScore.ArcherCode
-                                 where ac.ClubId == clubId
-                                 && ac.Year == competitionScore.Competition.Year
-                                 group competitionScore by ac.Year
-                                 into score
-                                 select new { score.Key, Depart = score.Count(), Podium = score.Count(s => s.Rank <= 3) };
+                        join competitionScore in db.CompetitionsScores on ac.ArcherCode equals
+                            competitionScore.ArcherCode
+                        where ac.ClubId == clubId
+                        && ac.Year == competitionScore.Competition.Year
+                        group competitionScore by ac.Year
+                            into score
+                            select new { score.Key, Depart = score.Count(), Podium = score.Count(s => s.Rank <= 3 && s.Rank != 0) };
                 var archers = q.ToList();
 
                 var yearStats = archers.Select(s => new YearStat { Year = s.Key, Depart = s.Depart, Podium = s.Podium, })
@@ -191,14 +191,14 @@ namespace FftaExtract.DatabaseModel
                     var year = yearStat.Year;
 
                     var q2 = from ac in db.ArchersClubs
-                            join competitionScore in db.CompetitionsScores on ac.ArcherCode equals
-                                competitionScore.ArcherCode
-                            where ac.ClubId == clubId
-                            && ac.Year == competitionScore.Competition.Year
-                           && ac.Year == year
-                            group competitionScore by competitionScore.Competition.Type
-                                into score
-                                select new { score.Key, Depart = score.Count(), Podium = score.Count(s => s.Rank <= 3) };
+                             join competitionScore in db.CompetitionsScores on ac.ArcherCode equals
+                                 competitionScore.ArcherCode
+                             where ac.ClubId == clubId
+                             && ac.Year == competitionScore.Competition.Year
+                            && ac.Year == year
+                             group competitionScore by competitionScore.Competition.Type
+                                 into score
+                                 select new { score.Key, Depart = score.Count(), Podium = score.Count(s => s.Rank <= 3 && s.Rank != 0) };
 
                     yearStat.Types =
                         q2.Select(s => new TypeCompetitionStat() { Depart = s.Depart, Podium = s.Podium, Type = s.Key })
@@ -226,7 +226,7 @@ namespace FftaExtract.DatabaseModel
             {
                 var q = from competitionsScore in db.CompetitionsScores
                         group competitionsScore by competitionsScore.Competition into competitionscore2
-                        orderby competitionscore2.Key.Begin descending 
+                        orderby competitionscore2.Key.Begin descending
                         select new CompetitionStats
                                    {
                                        Competition = competitionscore2.Key,
@@ -242,9 +242,9 @@ namespace FftaExtract.DatabaseModel
         {
             var d = DateTime.Now.AddDays(-2);
 
-            var jobs = from j in db.JobsInfos 
-                       where j.JobStatus == JobStatus.Done 
-                           && j.CreatedDateTime < d 
+            var jobs = from j in db.JobsInfos
+                       where j.JobStatus == JobStatus.Done
+                           && j.CreatedDateTime < d
                        select j;
 
             db.JobsInfos.RemoveRange(jobs);
