@@ -4,6 +4,7 @@ namespace FftaExtract.Providers
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
 
     public class CompetitionCategoryMapping
     {
@@ -11,29 +12,38 @@ namespace FftaExtract.Providers
 
         static CompetitionCategoryMapping()
         {
-            var lines = File.ReadAllLines("categories.csv").Skip(1);
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "FftaExtract.categories.csv";
 
-            foreach (var lineT in lines)
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream))
             {
-                var line = lineT.Split(';');
+                string result = reader.ReadToEnd();
 
-                if (line.Length != 7)
+                var lines = result.Split('\n').Skip(1);
+
+                foreach (var lineT in lines)
                 {
-                    continue;
+                    var line = lineT.Replace("\r", "").Split(';');
+
+                    if (line.Length != 7)
+                    {
+                        continue;
+                    }
+
+                    var key = string.Format("{0}_{1}_{2}{3}_{4}", line[1], line[2], line[3], line[4], line[5]);
+
+                    if (code.ContainsKey(key))
+                    {
+                        continue; // TODO : AG : Remove duplicate categorie
+                        throw new NotImplementedException();
+                    }
+
+                    code.Add(key, Convert.ToInt32(line[6]));
                 }
-
-                var key = string.Format("{0}_{1}_{2}{3}_{4}", line[1], line[2], line[3], line[4], line[5]);
-
-                if (code.ContainsKey(key))
-                {
-                    continue; // TODO : AG : Remove duplicate categorie
-                    throw new NotImplementedException();
-                }
-
-                code.Add(key, Convert.ToInt32(line[6]));
             }
         }
-                                                        
+
         public static string[] ignoredCategories = 
         {
             "(2012|2013|2014|2015)_(Salle|Fita|Federal)_JE[HF]_(CL|CO)",

@@ -137,9 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="categories.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <EmbeddedResource Include="categories.csv" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

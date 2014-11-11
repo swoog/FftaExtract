@@ -93,7 +93,19 @@
                     var firstName = this.GetFirstName(name);
                     var lastName = this.GetLastName(name);
 
-                    var club = columns[4].InnerText.Trim();
+
+                    var club = string.Empty;
+
+                    int v;
+                    var col5 = columns[5].InnerText.Replace("&nbsp;", string.Empty);
+                    if (!int.TryParse(col5.Trim(), out v))
+                    {
+                        club = col5.Trim();                        
+                    }
+                    else
+                    {
+                        club = columns[4].InnerText.Trim().Replace("&nbsp;", string.Empty);
+                    }
 
                     var clubYear = new ClubDataProvider { Club = club, Year = category.Year, };
 
