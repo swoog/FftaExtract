@@ -83,6 +83,9 @@ namespace FftaExtract.Providers
             Category[] categories = GetTypes<Category>();
 
             var regexes = CompetitionCategoryMapping.ignoredCategories.Select(c => new Regex(string.Format("^{0}$", c))).ToList();
+
+            var sb = new StringBuilder();
+
             foreach (var year in years)
             {
                 foreach (var competitionType in competitionTypes)
@@ -103,13 +106,20 @@ namespace FftaExtract.Providers
 
                             if (!CompetitionCategoryMapping.code.ContainsKey(key))
                             {
-                                throw new NotImplementedException(key);
+                                sb.AppendLine(key);
                             }
-
-                            yield return new CompetitionCategory(competitionType, bowType, CompetitionCategoryMapping.code[key], year, key.Contains("H_") ? Sexe.Homme : Sexe.Femme, category);
+                            else
+                            {
+                                yield return new CompetitionCategory(competitionType, bowType, CompetitionCategoryMapping.code[key], year, key.Contains("H_") ? Sexe.Homme : Sexe.Femme, category);
+                            }
                         }
                     }
                 }
+            }
+
+            if (sb.Length > 0)
+            {
+                throw new NotImplementedException(sb.ToString());
             }
         }
 
