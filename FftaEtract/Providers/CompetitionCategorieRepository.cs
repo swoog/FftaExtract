@@ -43,6 +43,15 @@ namespace FftaExtract.Providers
         private static CompetitionCategory[] categoriesHomme = null;
         private static CompetitionCategory[] categoriesFemme = null;
 
+        private static new Dictionary<CompetitionType, string> conmpetitionTypeToText = new Dictionary<CompetitionType, string>()
+                                                         {
+                                                             { CompetitionType.Salle, "Salle" },
+                                                             { CompetitionType.Fita, "Fita" },
+                                                             { CompetitionType.Federal, "Federal" },
+                                                             { CompetitionType.Campagne, "Campagne" },
+                                                             { CompetitionType.Parcour3D, "3D" },
+                                                         };
+
         static CompetitionCategorieRepository()
         {
             categories = InternalGetCategories().ToArray();
@@ -97,18 +106,18 @@ namespace FftaExtract.Providers
                         foreach (var bowType in bowTypes)
                         {
                             var key = year + "_" +
-                                competitionType + "_" +
+                                conmpetitionTypeToText[competitionType] + "_" +
                                 categoryToText[category] + "_" +
                                 bowTypeToText[bowType];
 
-                            if (regexes.Any(r => r.Match(key).Success))
-                            {
-                                continue;
-                            }
+                            //if (regexes.Any(r => r.Match(key).Success))
+                            //{
+                            //    continue;
+                            //}
 
                             if (!CompetitionCategoryMapping.code.ContainsKey(key))
                             {
-                                sb.AppendLine(key);
+                                //sb.AppendLine(key);
                             }
                             else
                             {

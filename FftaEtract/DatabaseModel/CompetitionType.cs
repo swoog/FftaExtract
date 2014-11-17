@@ -6,5 +6,6 @@ namespace FftaExtract.DatabaseModel
         Fita,
         Federal,
         Campagne,
+        Parcour3D,
     }
 }
