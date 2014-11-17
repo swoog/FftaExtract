@@ -56,6 +56,9 @@ namespace FftaExtract.Providers
             "(2012|2013|2014|2015)_Fita_S(H|F)_(CL|CO)",
             "(2012|2013|2014|2015)_Campagne_S(H|F)_(CL|CO|BB)", // Campagne Senior are class to Scratch
             "(2012|2013|2014|2015)_Campagne_JE(H|F)_(CL|CO|BB)", // Campagne Jeune is not a categorie
+            "2012_Salle_C(H|F)_(CO|BB)", // No compound for Cadet in 2012
+            "2012_Federal_C(H|F)_CO", // No compound for Cadet in 2012
+            "(2012|2013|2014)_Campagne_C(H|F)_CO", // No compound for Cadet in 2012
         };
     }
 }

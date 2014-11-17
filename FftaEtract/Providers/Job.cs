@@ -11,7 +11,7 @@ namespace FftaExtract.Providers
             this.repository = repository;
         }
 
-        public void Push(string api, params  object[] parameters)
+        public void Push(string api, params object[] parameters)
         {
             var url = string.Format(api, parameters);
 

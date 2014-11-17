@@ -34,6 +34,8 @@ namespace FftaExtract.Providers
                                                              { Category.VeteranFemme, "VF" },
                                                              { Category.ScratchHomme, "SCH" },
                                                              { Category.ScratchFemme, "SCF" },
+                                                             { Category.CadetHomme, "CH" },
+                                                             { Category.CadetFemme, "CF" },
                                                          };
 
         private static CompetitionCategory[] categories = null;

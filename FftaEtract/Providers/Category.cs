@@ -13,6 +13,9 @@
 
         JeuneHomme,
 
-        JeuneFemme
+        JeuneFemme,
+
+        CadetHomme,
+        CadetFemme,
     }
 }
