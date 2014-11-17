@@ -17,5 +17,11 @@
 
         CadetHomme,
         CadetFemme,
+        BenjaminHomme,
+        BenjaminFemme,
+        MinimeHomme,
+        MinimeFemme,
+        SuperVeteranHomme,
+        SuperVeteranFemme,
     }
 }
