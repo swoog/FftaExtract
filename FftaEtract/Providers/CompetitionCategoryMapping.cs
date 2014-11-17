@@ -46,19 +46,21 @@ namespace FftaExtract.Providers
 
         public static string[] ignoredCategories = 
         {
-            "(2012|2013|2014|2015)_(Salle|Fita|Federal)_JE[HF]_(CL|CO)",
-            "(2012|2013|2014|2015)_Salle_J(H|F)_BB",
-            "(2012|2013|2014|2015)_Salle_S(H|F)_BB",
-            "(2012|2013|2014|2015)_Salle_V(H|F)_BB",
-            "(2013|2014|2015)_Salle_JE(H|F)_BB", 
+            "(2011|2012|2013|2014|2015)_(Salle|Fita|Federal)_JE[HF]_(CL|CO)",
+            "(2011|2012|2013|2014|2015)_Salle_J(H|F)_BB",
+            "2011_Salle_SC(H|F)_BB", // Barebow are senior in 2011 and scratch after 2011
+            "(2012|2013|2014|2015)_Salle_S(H|F)_BB", // Barebow senior are scratch after 2011
+            "(2011|2012|2013|2014|2015)_Salle_V(H|F)_BB", 
+            "(2011|2013|2014|2015)_Salle_JE(H|F)_BB", 
             "[0-9]{4}_(Fita|Federal)_[^_]+_BB", // Barebow doesn't shoot in FITA and Federal
-            "(2012|2013|2014|2015)_(Salle|Federal)_SC(H|F)_(CL|CO)",
-            "(2012|2013|2014|2015)_Fita_S(H|F)_(CL|CO)",
-            "(2012|2013|2014|2015)_Campagne_S(H|F)_(CL|CO|BB)", // Campagne Senior are class to Scratch
-            "(2012|2013|2014|2015)_Campagne_JE(H|F)_(CL|CO|BB)", // Campagne Jeune is not a categorie
-            "2012_Salle_C(H|F)_(CO|BB)", // No compound for Cadet in 2012
-            "2012_Federal_C(H|F)_CO", // No compound for Cadet in 2012
-            "(2012|2013|2014)_Campagne_C(H|F)_CO", // No compound for Cadet in 2012
+            "(2011|2012|2013|2014|2015)_(Salle|Federal)_SC(H|F)_(CL|CO)",
+            "(2011|2012|2013|2014|2015)_Fita_S(H|F)_(CL|CO)",
+            "(2011|2012|2013|2014|2015)_Campagne_S(H|F)_(CL|CO|BB)", // Campagne Senior are class to Scratch
+            "(2011|2012|2013|2014|2015)_Campagne_JE(H|F)_(CL|CO|BB)", // Campagne Jeune is not a categorie
+            "(2011|2012)_Salle_C(H|F)_(CO|BB)", // No compound and barebow for Cadet before 2012
+            "2011_Fita_C(H|F)_CO", // No compound for Cadet before 2011
+            "(2011|2012)_Federal_C(H|F)_CO", // No compound for Cadet before 2012
+            "(2011|2012|2013|2014)_Campagne_C(H|F)_CO", // No compound for Cadet in campagne
         };
     }
 }

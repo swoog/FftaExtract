@@ -13,7 +13,7 @@ namespace FftaExtract.Providers
 
     public class CompetitionCategorieRepository
     {
-        private static int[] years = new[] { 2012, 2013, 2014, 2015 };
+        private static int[] years = new[] { 2011, 2012, 2013, 2014, 2015 };
 
         private static Dictionary<BowType, string> bowTypeToText = new Dictionary<BowType, string>()
                                                          {
