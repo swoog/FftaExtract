@@ -44,7 +44,7 @@
             {
                 foreach (var category in this.competitionCategorieRepository.GetCategories(null, null))
                 {
-                    this.logger.Info("Category : {0} {1} {2}", category.Year, category.CompetitionType, category.Category);
+                    this.logger.Info("Category : {0} {1} {2} {3}", category.Year, category.CompetitionType, category.Category, category.BowType);
                 }
             }
             catch (Exception ex)
