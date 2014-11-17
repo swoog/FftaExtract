@@ -23,12 +23,17 @@
         private string urlLocalHost = "http://localhost:10151/";
 #else
         private string urlLocalHost = "http://fftaextract.azurewebsites.net/";
+
 #endif
-        public Extractor(Job job, ILogger logger, CompetitionCategorieRepository competitionCategorieRepository)
+
+        private WebJobRunning azure;
+
+        public Extractor(Job job, ILogger logger, CompetitionCategorieRepository competitionCategorieRepository, WebJobRunning azure)
         {
             this.job = job;
             this.logger = logger;
             this.competitionCategorieRepository = competitionCategorieRepository;
+            this.azure = azure;
         }
 
         public async Task Run()
@@ -50,7 +55,7 @@
 
             var random = new Random();
 
-            while (true)
+            while (this.azure.IsRunning)
             {
                 var job = this.job.GetNextJobInfo();
 
@@ -80,6 +85,8 @@
 
                 Thread.Sleep(TimeSpan.FromMilliseconds(random.Next(1, 1000)));
             }
+
+            this.logger.Info("Stop extractor");
         }
     }
 }

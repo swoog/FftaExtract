@@ -134,6 +134,7 @@
     <Compile Include="Providers\CompetitionDataProvider.cs" />
     <Compile Include="Providers\Job.cs" />
     <Compile Include="Providers\PalmaresProvider.cs" />
+    <Compile Include="WebJobRunning.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
