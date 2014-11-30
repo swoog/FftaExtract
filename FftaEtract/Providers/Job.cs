@@ -2,18 +2,25 @@ namespace FftaExtract.Providers
 {
     using FftaExtract.DatabaseModel;
 
+    using Ninject.Extensions.Logging;
+
     public class Job
     {
-        private IRepository repository;
+        private readonly IRepository repository;
 
-        public Job(IRepository repository)
+        private readonly ILogger logger;
+
+        public Job(IRepository repository, ILogger logger)
         {
             this.repository = repository;
+            this.logger = logger;
         }
 
         public void Push(string api, params object[] parameters)
         {
             var url = string.Format(api, parameters);
+
+            this.logger.Info("Push : {0}", url);
 
             this.repository.AddJobInfo(new JobInfo() { Url = url });
         }

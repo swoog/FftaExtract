@@ -58,6 +58,23 @@ namespace FftaExtract.Providers
                                                              { CompetitionType.Parcour3D, "3D" },
                                                          };
 
+        private Dictionary<CompetitionType, string> conmpetitionTypeToCode = new Dictionary<CompetitionType, string>
+                                                                                 {
+                                                                                     {
+                                                                                         CompetitionType
+                                                                                         .Salle,
+                                                                                         "S"
+                                                                                     },
+                                                                                     {
+                                                                                         CompetitionType
+                                                                                         .Fita,
+                                                                                         "F"
+                                                                                     },
+                                                                                     { CompetitionType.Federal, "E" },
+                                                                                     { CompetitionType.Campagne, "C" },
+                                                                                     { CompetitionType.Parcour3D, "3" },
+                                                                                 };
+
         static CompetitionCategorieRepository()
         {
             categories = InternalGetCategories().ToArray();
@@ -154,5 +171,22 @@ namespace FftaExtract.Providers
                     select c;
             return q.SingleOrDefault();
         }
+
+        public IEnumerable<CompetitionTypeInfo> GetCompetitionTypes()
+        {
+            foreach (var competition in Enum.GetValues(typeof(CompetitionType)).Cast<CompetitionType>())
+            {
+                yield return new CompetitionTypeInfo { Code = conmpetitionTypeToCode[competition], Name = conmpetitionTypeToText[competition], EnumType = competition };
+            }
+        }
+    }
+
+    public class CompetitionTypeInfo
+    {
+        public string Code { get; set; }
+
+        public string Name { get; set; }
+
+        public CompetitionType EnumType { get; set; }
     }
 }
