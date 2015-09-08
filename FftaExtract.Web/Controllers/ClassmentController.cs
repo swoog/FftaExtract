@@ -38,9 +38,9 @@
 
         public async Task Get(int year, Category category, CompetitionType competitionType, BowType bowType, int page)
         {
-            this.logger.Info("Get classement of {1} {0} {2} {3} page {4}", year, category, competitionType, bowType, page);
+            this.logger.Info("Get classement of {1} {0} {2} {3}", year, category, competitionType, bowType);
 
-            foreach (var archerDataProvider in await this.classement.GetArchers(year, category, competitionType, bowType, page))
+            foreach (var archerDataProvider in await this.classement.GetArchers(year, category, competitionType, bowType))
             {
                 this.repository.SaveArcher(archerDataProvider);
             }

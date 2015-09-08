@@ -28,7 +28,7 @@
             this.job = job;
         }
 
-        public async Task<IList<ArcherDataProvider>> GetArchers(int year, Category cat, CompetitionType competitionType, BowType bowType, int page)
+        public async Task<IList<ArcherDataProvider>> GetArchers(int year, Category cat, CompetitionType competitionType, BowType bowType)
         {
             var archers = new List<ArcherDataProvider>();
             var category = this.competitionCategorieRepository.GetCategory(year, cat, competitionType, bowType);
@@ -38,29 +38,20 @@
                 return archers;
             }
 
-            const string UrlFormat = "http://ffta-public.cvf.fr/servlet/ResAffichClassement?ANNEE={0}&DISCIP=S&TYPE=I&SELECTIF=0&NIVEAU=L&DEBUT={1}&NUMCLASS={2}";
+            const string UrlFormat = "http://classements.ffta.fr/iframe/classements/{0}.html";
             this.logger.Info(
-                "Scrap {0} {1} from {2} to {3} ",
+                "Scrap {0} {1}",
                 category.Year,
-                category.CompetitionType,
-                page,
-                page + 50);
-            var hasArcher = false;
-            var url = string.Format(UrlFormat, category.Year, page, category.IdFfta);
+                category.CompetitionType);
+            var url = string.Format(UrlFormat, category.IdFfta);
 
             var scrapUrl = await this.ScrapUrl(url, category);
 
             foreach (var archerDataProvider in scrapUrl)
             {
-                hasArcher = true;
 
                 this.job.Push("api/Palmares/{0}/{1}/{2}/{3}/{4}", archerDataProvider.Code, category.Year, cat, competitionType, bowType);
                 archers.Add(archerDataProvider);
-            }
-
-            if (hasArcher)
-            {
-                this.job.Push("api/Classment/{0}/{1}/{2}/{3}/{4}", year, cat, competitionType, bowType, page + 50);
             }
 
             return archers;
@@ -76,19 +67,17 @@
             HtmlDocument doc = new HtmlDocument();
             doc.Load(await result.Content.ReadAsStreamAsync());
 
-            var archersLines = doc.DocumentNode.SelectNodes("//table[@class='texteMoteur']//tr");
+            var archersLines = doc.DocumentNode.SelectNodes("//table[@class='crh clmt']//tr");
 
             if (archersLines != null)
             {
-                foreach (var archerLine in archersLines.Skip(3))
+                foreach (var archerLine in archersLines.Skip(1))
                 {
                     var columns = archerLine.SelectNodes("td");
 
-                    var htmlNode = archerLine.Descendants("a").First();
-                    var href = htmlNode.Attributes["href"].Value;
-                    var code = Regex.Match(href, @"^JavaScript:view_fiche\('([0-9]+)'\);$").Groups[1].Value;
+                    var code = columns[3].InnerText;
 
-                    var name = HttpUtility.HtmlDecode(columns[3].InnerText).Trim();
+                    var name = HttpUtility.HtmlDecode(columns[4].InnerText).Trim();
 
                     var firstName = this.GetFirstName(name);
                     var lastName = this.GetLastName(name);
@@ -97,14 +86,14 @@
                     var club = string.Empty;
 
                     int v;
-                    var col5 = columns[5].InnerText.Replace("&nbsp;", string.Empty);
-                    if (!int.TryParse(col5.Trim(), out v))
+                    var col6 = columns[6].InnerText.Replace("&nbsp;", string.Empty);
+                    if (!int.TryParse(col6.Trim(), out v))
                     {
-                        club = col5.Trim();                        
+                        club = col6.Trim();                        
                     }
                     else
                     {
-                        club = columns[4].InnerText.Trim().Replace("&nbsp;", string.Empty);
+                        club = columns[5].InnerText.Trim().Replace("&nbsp;", string.Empty);
                     }
 
                     var clubYear = new ClubDataProvider { Club = club, Year = category.Year, };

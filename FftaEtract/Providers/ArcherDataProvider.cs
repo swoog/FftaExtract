@@ -1,6 +1,5 @@
 namespace FftaExtract.Providers
 {
-    using System;
     using System.Collections.Generic;
 
     using FftaExtract.DatabaseModel;
@@ -15,14 +14,6 @@ namespace FftaExtract.Providers
         public string LastName { get; set; }
 
         public string FirstName { get; set; }
-
-        public int Num
-        {
-            get
-            {
-                return Convert.ToInt32(this.Code);
-            }
-        }
 
         public string Code { get; set; }
 

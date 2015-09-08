@@ -135,9 +135,14 @@ namespace FftaExtract.DatabaseModel
 
         private void SaveArcherInfo(FftaDatabase db, ArcherDataProvider archerDataProvider)
         {
+            var c = archerDataProvider.Code;
 
+            if (c.Last() > 'A' && c.Last() < 'Z')
+            {
+                c = c.Substring(0, c.Length - 1);
+            }
 
-            var q = from a in db.Archers where a.Code == archerDataProvider.Code select a;
+            var q = from a in db.Archers where a.Code == c select a;
 
             var dataBaseArcher = q.FirstOrDefault();
 
@@ -146,11 +151,12 @@ namespace FftaExtract.DatabaseModel
                 dataBaseArcher = db.Archers.Add(
                     new Archer
                 {
-                    Code = archerDataProvider.Code,
+                    Code = c,
                     FirstName = archerDataProvider.FirstName,
                     LastName = archerDataProvider.LastName,
                     Sexe = archerDataProvider.Sexe,
-                    LastUpdate = DateTime.Now
+                    LastUpdate = DateTime.Now,
+                    CodeArcher = archerDataProvider.Code,
                 });
             }
             else
@@ -163,6 +169,7 @@ namespace FftaExtract.DatabaseModel
 
                 dataBaseArcher.Sexe = archerDataProvider.Sexe;
                 dataBaseArcher.LastUpdate = DateTime.Now;
+                dataBaseArcher.CodeArcher = archerDataProvider.Code;
             }
 
             db.SaveChanges();

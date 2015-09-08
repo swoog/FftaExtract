@@ -72,7 +72,7 @@ namespace FftaExtract.Providers
                     {
                         url = string.Format(
                             "http://ffta-public.cvf.fr/servlet/ResPalmares?NUM_ADH={0}&CLASS_SELECT={1}",
-                            archer.Num,
+                            archer.Code,
                             category.IdFfta);
 
                         await this.ScrapUrl(url, category, archer);

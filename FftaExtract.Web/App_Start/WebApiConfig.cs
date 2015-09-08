@@ -2,10 +2,16 @@
 {
     using System.Web.Http;
 
+    using FftaExtract.Web.App_Start;
+
+    using Ninject.Web.WebApi;
+
     public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
         {
+            config.DependencyResolver  =new NinjectDependencyResolver(NinjectWebCommon.bootstrapper.Kernel);
+
             config.MapHttpAttributeRoutes();
 
             //config.Routes.MapHttpRoute(

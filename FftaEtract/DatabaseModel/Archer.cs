@@ -23,5 +23,7 @@
         public Sexe? Sexe { get; set; }
 
         public DateTime LastUpdate { get; set; }
+
+        public string CodeArcher { get; set; }
     }
 }
