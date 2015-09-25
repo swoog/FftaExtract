@@ -6,6 +6,7 @@ namespace FftaExtract.Providers
     using System.Linq;
     using System.Net.Http;
     using System.Security.Policy;
+    using System.Text;
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Threading.Tasks;
@@ -67,21 +68,15 @@ namespace FftaExtract.Providers
                         continue;
                     }
 
-                    string url = string.Empty;
                     try
                     {
-                        url = string.Format(
-                            "http://ffta-public.cvf.fr/servlet/ResPalmares?NUM_ADH={0}&CLASS_SELECT={1}",
-                            archer.Code,
-                            category.IdFfta);
-
-                        await this.ScrapUrl(url, category, archer);
+                        await this.ScrapUrl(category, archer);
 
                         Thread.Sleep(TimeSpan.FromMilliseconds(this.rand.Next(1, 500)));
                     }
                     catch (Exception ex)
                     {
-                        this.logger.Error(ex, "Error in scrap url : {0}", url);
+                        this.logger.Error(ex, $"Error in scrap archer {archer.Code} with category {category.IdFfta}");
                         hasError = true;
                     }
                 }
@@ -93,13 +88,16 @@ namespace FftaExtract.Providers
             }
         }
 
-        private async Task ScrapUrl(string url, CompetitionCategory category, ArcherDataProvider archerDataProvider)
+        private async Task ScrapUrl(CompetitionCategory category, ArcherDataProvider archerDataProvider)
         {
             var client = new HttpClient();
-            var result = await client.GetAsync(url);
+            var content =
+                new StringContent(
+                    $"operation=clsPers&ClassementId={category.IdFfta}&PersonneId={archerDataProvider.Code}", Encoding.UTF8, "application/x-www-form-urlencoded");
+            var result = await client.PostAsync("http://classements.ffta.fr/actions/outils/AjaxPalmares.php ", content);
 
             HtmlDocument doc = new HtmlDocument();
-            doc.Load(await result.Content.ReadAsStreamAsync());
+            doc.Load(await result.Content.ReadAsStreamAsync(), Encoding.UTF8);
 
             //ScrapArcher(archerDataProvider, doc);
 
@@ -115,7 +113,7 @@ namespace FftaExtract.Providers
         private static List<CompetitionDataProvider> ScrapCompetition(HtmlDocument doc, CompetitionCategory category)
         {
             var competitions = new List<CompetitionDataProvider>();
-            var grostitre = doc.DocumentNode.SelectNodes("//td[@class='grostitre']");
+            var grostitre = doc.DocumentNode.SelectNodes("//tr[@class='clmt']/td[@colspan='2']/b");
             int year = 0;
 
             if (grostitre != null)
@@ -125,23 +123,40 @@ namespace FftaExtract.Providers
                     year = Convert.ToInt32(Regex.Match(titre.InnerText.Trim(), "[0-9]+$").Groups[0].Value);
                 }
             }
+            else
+            {
+                var h3 = doc.DocumentNode.SelectNodes("//h3");
+
+                if (h3 != null)
+                {
+                    foreach (var titre in h3)
+                    {
+                        year = Convert.ToInt32(Regex.Match(titre.InnerText.Trim(), "[0-9]+$").Groups[0].Value);
+                    }
+                }
+            }
 
 
-            var tables = doc.DocumentNode.SelectNodes("//table[@class='texteMoteur']");
+            var tables = doc.DocumentNode.SelectNodes("//table");
 
             if (tables != null)
             {
                 foreach (HtmlNode table in tables)
                 {
-                    var trs = table.SelectNodes("tr");
+                    var trs = table.SelectNodes("//tr");
 
                     if (trs != null)
                     {
-                        foreach (var tr in trs.Skip(2))
+                        foreach (var tr in trs.Skip(3))
                         {
                             var td = tr.SelectNodes("td");
 
-                            var dateText = td[1].InnerText;
+                            if (td.Count == 3)
+                            {
+                                //continue;
+                            }
+
+                            var dateText = td[0].InnerText.Trim();
 
                             var matchText = Regex.Match(
                                 dateText,
@@ -179,16 +194,21 @@ namespace FftaExtract.Providers
                                 }
                             }
 
-                            var name = td[2].InnerText;
-                            var score = td[4].InnerText;
-                            var rank = Convert.ToInt32(td[3].InnerText);
+                            var name = td[1].InnerText;
+                            var score = td.Count == 4 ? td[3].InnerText : td[2].InnerText;
+                            var rankString = td.Count == 4 ? td[2].InnerText : "0";
+                            int rank;
+                            if (!int.TryParse(rankString, out rank))
+                            {
+                                rank = 0;
+                            }
 
                             var scores = ExtractScore(score);
                             foreach (var score1 in scores)
                             {
                                 competitions.Add(
-                                    new CompetitionDataProvider(year, begin, end,
-                                        td[2].InnerText.Trim(),
+                                    new CompetitionDataProvider(year, begin.Date, end.Date,
+                                        td[1].InnerText.Trim(),
                                         category.CompetitionType, category.BowType, score1, rank));
                             }
                         }
@@ -206,6 +226,13 @@ namespace FftaExtract.Providers
             {
                 yield return Convert.ToInt32(match.Groups[2].Value);
                 yield return Convert.ToInt32(match.Groups[3].Value);
+                yield break;
+            }
+
+            match = Regex.Match(score, @"^([0-9]+)\s*pts\s*$", RegexOptions.IgnoreCase);
+            if (match.Success)
+            {
+                yield return Convert.ToInt32(match.Groups[1].Value);
                 yield break;
             }
 

@@ -28,7 +28,7 @@
             this.job = job;
         }
 
-        public void Get(int year, int page)
+        public void Get(int year)
         {
             foreach (var category in this.competitionCategorieRepository.GetCategories(null, year))
             {
@@ -36,7 +36,7 @@
             }
         }
 
-        public async Task Get(int year, Category category, CompetitionType competitionType, BowType bowType, int page)
+        public async Task Get(int year, Category category, CompetitionType competitionType, BowType bowType)
         {
             this.logger.Info("Get classement of {1} {0} {2} {3}", year, category, competitionType, bowType);
 

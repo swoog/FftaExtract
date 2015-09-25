@@ -46,10 +46,9 @@
 
             config.Routes.MapHttpRoute(
                 name: "ClassmentController",
-                routeTemplate: "api/{controller}/{year}/{category}/{competitionType}/{bowType}/{page}",
+                routeTemplate: "api/{controller}/{year}/{category}/{competitionType}/{bowType}",
                 defaults: new
                 {
-                    page = 0,
                     category = RouteParameter.Optional,
                     competitionType = RouteParameter.Optional,
                     bowType = RouteParameter.Optional

@@ -116,12 +116,14 @@ namespace FftaExtract.Providers
             BowType[] bowTypes = GetTypes<BowType>();
             Category[] categories = GetTypes<Category>();
 
-            var regexes = CompetitionCategoryMapping.ignoredCategories.Select(c => new Regex(string.Format("^{0}$", c))).ToList();
+            var regexes = CompetitionCategoryMapping.ignoredCategories.Select(c => new Regex($"^{c}$")).ToList();
 
             var sb = new StringBuilder();
 
             foreach (var year in years)
             {
+                CompetitionCategoryMapping.LoadYear(year);
+
                 foreach (var competitionType in competitionTypes)
                 {
                     foreach (var category in categories)
@@ -138,13 +140,16 @@ namespace FftaExtract.Providers
                             //    continue;
                             //}
 
-                            if (!CompetitionCategoryMapping.code.ContainsKey(key))
+                            if (CompetitionCategoryMapping.code.ContainsKey(key))
                             {
-                                //sb.AppendLine(key);
-                            }
-                            else
-                            {
-                                yield return new CompetitionCategory(competitionType, bowType, CompetitionCategoryMapping.code[key], year, key.Contains("H_") ? Sexe.Homme : Sexe.Femme, category);
+                                yield return
+                                    new CompetitionCategory(
+                                        competitionType,
+                                        bowType,
+                                        CompetitionCategoryMapping.code[key],
+                                        year,
+                                        key.Contains("H_") ? Sexe.Homme : Sexe.Femme,
+                                        category);
                             }
                         }
                     }
