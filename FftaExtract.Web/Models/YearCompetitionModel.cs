@@ -4,6 +4,7 @@
     using System.Collections.Generic;
 
     using FftaExtract.DatabaseModel;
+    using FftaExtract.Web.Controllers;
 
     public class YearCompetitionModel
     {
@@ -16,10 +17,10 @@
     {
         public IList<CompetitionScore> Competitions { get; set; }
 
-        public CompetitionType Type { get; set; }
-
         public CompetitionScore[] HighScores { get; set; }
 
         public int Average { get; set; }
+
+        public CompetitionTypeBowType Info { get; set; }
     }
 }

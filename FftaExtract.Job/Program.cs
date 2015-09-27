@@ -26,8 +26,14 @@ namespace FftaExtract.Job
             kernel.Bind<IRepositoryImporter>().To<DataBaseRepositoryImporter>();
 
             var extractor = kernel.Get<Extractor>();
-
-            Task.WaitAll(extractor.Run());
+            try
+            {
+                Task.WaitAll(extractor.Run());
+            }
+            catch (AggregateException ex)
+            {
+                throw ex.InnerExceptions.First();
+            }
         }
     }
 }
