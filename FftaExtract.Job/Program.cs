@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace FftaExtract.Job
 {
+    using System.Data.Entity;
+    using System.Data.Entity.Migrations;
+    using System.Data.Entity.Migrations.Model;
+
     using FftaExtract.DatabaseModel;
     using FftaExtract.Providers;
 

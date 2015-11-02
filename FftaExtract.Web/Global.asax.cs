@@ -8,12 +8,18 @@ using System.Web.Routing;
 
 namespace FftaExtract.Web
 {
+    using System.Data.Entity;
+    using System.Data.Entity.Migrations;
     using System.Web.Http;
+
+    using FftaExtract.DatabaseModel;
 
     public class MvcApplication : System.Web.HttpApplication
     {
         protected void Application_Start()
         {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<FftaDatabase, FftaConfiguration>());
+
             log4net.Config.XmlConfigurator.Configure();
 
             GlobalConfiguration.Configure(WebApiConfig.Register);
@@ -22,5 +28,8 @@ namespace FftaExtract.Web
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+    }
+    public class FftaConfiguration : DbMigrationsConfiguration<FftaDatabase>
+    {
     }
 }
