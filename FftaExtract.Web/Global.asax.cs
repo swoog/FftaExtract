@@ -20,6 +20,11 @@ namespace FftaExtract.Web
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<FftaDatabase, FftaConfiguration>());
 
+            using (var db = new FftaDatabase())
+            {
+                db.Database.Initialize(true);
+            }
+
             log4net.Config.XmlConfigurator.Configure();
 
             GlobalConfiguration.Configure(WebApiConfig.Register);
