@@ -31,5 +31,9 @@ namespace FftaExtract.Web
     }
     public class FftaConfiguration : DbMigrationsConfiguration<FftaDatabase>
     {
+        public FftaConfiguration()
+        {
+            this.AutomaticMigrationsEnabled = true;
+        }
     }
 }
