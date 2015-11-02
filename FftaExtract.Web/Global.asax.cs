@@ -18,8 +18,9 @@ namespace FftaExtract.Web
     {
         protected void Application_Start()
         {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<FftaDatabase, FftaConfiguration>());
+            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<FftaDatabase, FftaConfiguration>());
 
+            Database.SetInitializer<FftaDatabase>(null);
             var configuration = new FftaConfiguration();
             var migrator = new DbMigrator(configuration);
             migrator.Update();
