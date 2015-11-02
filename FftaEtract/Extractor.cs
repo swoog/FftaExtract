@@ -67,7 +67,8 @@
                 }
 
                 var client = new HttpClient();
-
+                client.Timeout = TimeSpan.FromHours(1);
+             
                 var uri = new Uri(new Uri(this.urlLocalHost), job.Url);
 
                 this.logger.Info("Start {0}", uri);

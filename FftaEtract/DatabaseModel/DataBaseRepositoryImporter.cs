@@ -80,7 +80,8 @@ namespace FftaExtract.DatabaseModel
                 CompetitionId = competitionId,
                 BowType = competitionDataProvider.BowType,
                 Score = competitionDataProvider.Score,
-                Rank = competitionDataProvider.Rank
+                Rank = competitionDataProvider.Rank,
+                ImportedRank = competitionDataProvider.Rank,
             });
 
             db.SaveChanges();

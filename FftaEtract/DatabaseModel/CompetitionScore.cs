@@ -14,7 +14,9 @@
 
         public int Score { get; set; }
 
-        public int Rank { get; set; }
+        public int? Rank { get; set; }
+
+        public int? ImportedRank { get; set; }
 
         public BowType BowType { get; set; }
     }
