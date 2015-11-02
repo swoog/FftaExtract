@@ -5,7 +5,7 @@ namespace FftaExtract.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<FftaExtract.DatabaseModel.FftaDatabase>
+    public sealed class Configuration : DbMigrationsConfiguration<FftaExtract.DatabaseModel.FftaDatabase>
     {
         public Configuration()
         {

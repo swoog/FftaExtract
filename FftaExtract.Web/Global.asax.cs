@@ -9,21 +9,16 @@ using System.Web.Routing;
 namespace FftaExtract.Web
 {
     using System.Data.Entity;
-    using System.Data.Entity.Migrations;
     using System.Web.Http;
 
     using FftaExtract.DatabaseModel;
+    using FftaExtract.Migrations;
 
     public class MvcApplication : System.Web.HttpApplication
     {
         protected void Application_Start()
         {
-            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<FftaDatabase, FftaConfiguration>());
-
-            Database.SetInitializer<FftaDatabase>(null);
-            var configuration = new FftaConfiguration();
-            var migrator = new DbMigrator(configuration);
-            migrator.Update("Add rank import");
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<FftaDatabase, Configuration>());
 
             log4net.Config.XmlConfigurator.Configure();
 
@@ -32,13 +27,6 @@ namespace FftaExtract.Web
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-        }
-    }
-    public class FftaConfiguration : DbMigrationsConfiguration<FftaDatabase>
-    {
-        public FftaConfiguration()
-        {
-            this.AutomaticMigrationsEnabled = true;
         }
     }
 }
