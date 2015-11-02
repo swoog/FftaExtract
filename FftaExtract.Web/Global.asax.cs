@@ -23,7 +23,7 @@ namespace FftaExtract.Web
             Database.SetInitializer<FftaDatabase>(null);
             var configuration = new FftaConfiguration();
             var migrator = new DbMigrator(configuration);
-            migrator.Update();
+            migrator.Update("Add rank import");
 
             log4net.Config.XmlConfigurator.Configure();
 
