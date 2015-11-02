@@ -4,6 +4,7 @@ namespace FftaExtract.Providers
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Net;
     using System.Net.Http;
     using System.Security.Policy;
     using System.Text;
@@ -156,7 +157,7 @@ namespace FftaExtract.Providers
                                 //continue;
                             }
 
-                            var dateText = td[0].InnerText.Trim();
+                            var dateText = WebUtility.HtmlDecode(td[0].InnerText).Trim();
 
                             var matchText = Regex.Match(
                                 dateText,
