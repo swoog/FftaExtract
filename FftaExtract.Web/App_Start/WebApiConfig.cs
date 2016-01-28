@@ -4,13 +4,18 @@
 
     using FftaExtract.Web.App_Start;
 
+    using Ninject;
+    using Ninject.Extensions.Logging;
     using Ninject.Web.WebApi;
 
     public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
         {
-            config.DependencyResolver  =new NinjectDependencyResolver(NinjectWebCommon.bootstrapper.Kernel);
+            var kernel = NinjectWebCommon.bootstrapper.Kernel;
+            config.DependencyResolver  =new NinjectDependencyResolver(kernel);
+
+            config.Filters.Add(new LogError(kernel.Get<ILogger>()));
 
             config.MapHttpAttributeRoutes();
 
