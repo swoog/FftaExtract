@@ -13,9 +13,9 @@
         public static void Register(HttpConfiguration config)
         {
             var kernel = NinjectWebCommon.bootstrapper.Kernel;
-            config.DependencyResolver  =new NinjectDependencyResolver(kernel);
+            config.DependencyResolver = new NinjectDependencyResolver(kernel);
 
-            config.Filters.Add(new LogError(kernel.Get<ILogger>()));
+            config.Filters.Add(kernel.Get<LogError>());
 
             config.MapHttpAttributeRoutes();
 
@@ -40,13 +40,13 @@
                 name: "PalmaresController",
                 routeTemplate: "api/Palmares/{code}/{year}/{category}/{competitionType}/{bowType}",
                 defaults: new
-                              {
-                                  controller = "Palmares", 
-                                  year = RouteParameter.Optional,
-                                  category = RouteParameter.Optional,
-                                  competitionType = RouteParameter.Optional,
-                                  bowType = RouteParameter.Optional
-                              });
+                {
+                    controller = "Palmares",
+                    year = RouteParameter.Optional,
+                    category = RouteParameter.Optional,
+                    competitionType = RouteParameter.Optional,
+                    bowType = RouteParameter.Optional
+                });
 
 
             config.Routes.MapHttpRoute(

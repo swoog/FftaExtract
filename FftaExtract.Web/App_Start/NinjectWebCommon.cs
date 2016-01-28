@@ -65,6 +65,7 @@ namespace FftaExtract.Web.App_Start
         {
             kernel.Bind<IRepositoryImporter>().To<DataBaseRepositoryImporter>();
             kernel.Bind<IRepository>().To<DatabaseRepository>();
+            kernel.Bind<LogError>().ToSelf();
         }
     }
 }
