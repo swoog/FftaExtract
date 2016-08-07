@@ -4,7 +4,10 @@ using System.Threading.Tasks;
 
 namespace FftaExtract.Job
 {
+    using System.Data.Entity;
+
     using FftaExtract.DatabaseModel;
+    using FftaExtract.Migrations;
 
     using log4net.Config;
 
@@ -15,6 +18,8 @@ namespace FftaExtract.Job
     {
         static void Main()
         {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<FftaDatabase, Configuration>());
+
             XmlConfigurator.Configure();
 
             var kernel = new StandardKernel();

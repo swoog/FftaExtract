@@ -18,7 +18,7 @@ namespace FftaExtract.Web
     {
         protected void Application_Start()
         {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<FftaDatabase, Configuration>());
+            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<FftaDatabase, Configuration>());
 
             log4net.Config.XmlConfigurator.Configure();
 
