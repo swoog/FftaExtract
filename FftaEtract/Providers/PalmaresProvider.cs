@@ -129,7 +129,7 @@ namespace FftaExtract.Providers
                 grostitre = doc.DocumentNode.SelectNodes("//tr[@class='clmt']/td/strong");
                 if (grostitre != null)
                 {
-                    foreach (var titre in grostitre)
+                    foreach (var titre in grostitre.Take(1))
                     {
                         year = Convert.ToInt32(Regex.Match(titre.InnerText.Trim(), "[0-9]+$").Groups[0].Value);
                     }
@@ -163,9 +163,9 @@ namespace FftaExtract.Providers
                         {
                             var td = tr.SelectNodes("td");
 
-                            if (td.Count == 3)
+                            if (td.Count != 4 && td.Count != 3)
                             {
-                                //continue;
+                                continue;
                             }
 
                             var dateText = WebUtility.HtmlDecode(td[0].InnerText).Trim();

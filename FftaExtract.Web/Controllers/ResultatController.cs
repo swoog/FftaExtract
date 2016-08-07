@@ -22,6 +22,7 @@
             this.competitionCategorieRepository = competitionCategorieRepository;
         }
 
+        [Route("api/resultat")]
         public async Task<IHttpActionResult> Get()
         {
             return await this.Job(
@@ -41,6 +42,7 @@
                     });
         }
 
+        [Route("api/resultat/{code}/{beginDate}/{endDate}")]
         public async Task<IHttpActionResult> Get(string code, DateTime beginDate, DateTime endDate)
         {
             return await this.Job(async () =>

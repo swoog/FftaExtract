@@ -28,6 +28,7 @@ namespace FftaExtract.Web.Controllers
             this.logger = logger;
         }
 
+        [Route("api/palmares/{code}")]
         public async Task<IHttpActionResult> Get(string code)
         {
             return await this.Job(
@@ -38,7 +39,8 @@ namespace FftaExtract.Web.Controllers
                     });
         }
 
-        public async Task<IHttpActionResult> Get(string code, int? year)
+        [Route("api/palmares/{code}/{year}")]
+        public async Task<IHttpActionResult> Get(string code, int year)
         {
             return await this.Job(
                 async () =>
@@ -47,6 +49,7 @@ namespace FftaExtract.Web.Controllers
                     });
         }
 
+        [Route("api/palmares/{code}/{year}/{category}/{competitionType}/{bowType}")]
         public async Task<IHttpActionResult> Get(string code, int year, Category category, CompetitionType competitionType, BowType bowType)
         {
             return await this.Job(

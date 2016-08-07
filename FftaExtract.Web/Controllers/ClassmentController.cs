@@ -28,6 +28,7 @@
             this.job = job;
         }
 
+        [Route("api/classment/{year}")]
         public async Task<IHttpActionResult> Get(int year)
         {
             return await this.Job(
@@ -46,6 +47,7 @@
                     });
         }
 
+        [Route("api/classment/{year}/{category}/{competitionType}/{bowType}")]
         public async Task<IHttpActionResult> Get(int year, Category category, CompetitionType competitionType, BowType bowType)
         {
             return await this.Job(
