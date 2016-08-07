@@ -23,5 +23,9 @@
         MinimeFemme,
         SuperVeteranHomme,
         SuperVeteranFemme,
+
+        PoussinHomme,
+
+        PoussinFemme
     }
 }

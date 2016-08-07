@@ -5,6 +5,14 @@ namespace FftaExtract.DatabaseModel
         Classique,
         Poulie,
 
-        BareBow
+        BareBow,
+
+        Droit,
+
+        Chasse,
+
+        PoulieNu,
+
+        Libre
     }
 }
