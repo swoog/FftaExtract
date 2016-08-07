@@ -2,6 +2,7 @@
 namespace FftaExtract.Web.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -58,45 +59,45 @@ namespace FftaExtract.Web.Controllers
             var club = this.repository.GetCurrentClub(code);
 
             var archerModel = new ArcherModel
-                                  {
-                                      Archer = archer,
-                                      Bows = bows,
-                                      BestScores = bestScores,
-                                      Competitions = qCompetttions.ToList(),
-                                      Club = club,
-                                  };
+            {
+                Archer = archer,
+                Bows = bows,
+                BestScores = bestScores,
+                Competitions = qCompetttions.ToList(),
+                Club = club,
+            };
             return archerModel;
         }
 
         private static YearCompetitionModel CreateYearCompetitionModel(IGrouping<int, CompetitionScore> s2)
         {
             var tyepCompetitionModels = (from t in s2
-                                          group t by new CompetitionTypeBowType(t.Competition.Type, t.BowType)
+                                         group t by new CompetitionTypeBowType(t.Competition.Type, t.BowType)
                                           into t2
-                                          orderby t2.Key
-                                          select
-                                              CreateTyepCompetitionModel(t2)).ToList();
+                                         orderby t2.Key
+                                         select
+                                             CreateTyepCompetitionModel(t2)).ToList();
             return new YearCompetitionModel()
-                       {
-                           Year = s2.Key,
-                           Types = tyepCompetitionModels,
-                       };
+            {
+                Year = s2.Key,
+                Types = tyepCompetitionModels,
+            };
         }
 
         private static TyepCompetitionModel CreateTyepCompetitionModel(IGrouping<CompetitionTypeBowType, CompetitionScore> t2)
         {
             return new TyepCompetitionModel
-                       {
-                           Info = t2.Key,
-                           HighScores = t2.OrderByDescending(s3 => s3.Score).Take(3).ToArray(),
-                           Average =
+            {
+                Info = t2.Key,
+                HighScores = t2.OrderByDescending(s3 => s3.Score).Take(3).ToArray(),
+                Average =
                                (int)
                                Math.Ceiling(
                                    (double)
                                    (t2.OrderByDescending(s3 => s3.Score).Take(3).Sum(s3 => s3.Score)
                                     / 3)),
-                           Competitions = t2.ToList(),
-                       };
+                Competitions = t2.ToList(),
+            };
         }
 
         public ActionResult Update(string code)

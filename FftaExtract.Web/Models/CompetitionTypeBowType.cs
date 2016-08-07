@@ -58,5 +58,19 @@ namespace FftaExtract.Web.Models
 
             return null;
         }
+
+        public double? GetTirAverage(int average)
+        {
+            switch (this.Type)
+            {
+                case CompetitionType.Salle:
+                    return average / 20.0;
+                case CompetitionType.Federal:
+                case CompetitionType.Fita:
+                    return average / 12.0;
+            }
+
+            return null;
+        }
     }
 }
