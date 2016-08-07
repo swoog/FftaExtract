@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FftaExtract.Tests
+﻿namespace FftaExtract.Tests
 {
     using FftaExtract.DatabaseModel;
     using FftaExtract.Providers;
@@ -15,7 +9,7 @@ namespace FftaExtract.Tests
 
     using Xunit;
 
-    public class ScrapUrl
+    public class ScrapUrlPalmares
     {
         [Fact]
         public void Should_scrap_url_When_year_is_2009()
@@ -50,16 +44,19 @@ namespace FftaExtract.Tests
             Assert.Equal(3, archerDataProvider.Competitions.Count);
             Assert.Equal(530, archerDataProvider.Competitions[0].Score);
             Assert.Equal(2016, archerDataProvider.Competitions[0].Year);
+            Assert.Equal(7, archerDataProvider.Competitions[0].Rank);
             Assert.Equal(513, archerDataProvider.Competitions[1].Score);
             Assert.Equal(2016, archerDataProvider.Competitions[1].Year);
+            Assert.Equal(6, archerDataProvider.Competitions[1].Rank);
             Assert.Equal(496, archerDataProvider.Competitions[2].Score);
             Assert.Equal(2016, archerDataProvider.Competitions[2].Year);
+            Assert.Equal(30, archerDataProvider.Competitions[2].Rank);
         }
 
         private static ArcherDataProvider RunScrapUrl(string codeArcher, CompetitionType competitionType, BowType bowType, int idFfta, int year, Sexe sex, Category category)
         {
             var palmares = new PalmaresProvider(null, Substitute.For<ILogger>());
-            var archerDataProvider = new ArcherDataProvider() { Code = codeArcher };
+            var archerDataProvider = new ArcherDataProvider(codeArcher);
             var competitionCategory = new CompetitionCategory(
                 competitionType,
                 bowType,

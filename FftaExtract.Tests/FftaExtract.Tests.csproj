@@ -80,7 +80,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ScrapUrl.cs" />
+    <Compile Include="ScrapUrlClassment.cs" />
+    <Compile Include="ScrapUrlPalmares.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

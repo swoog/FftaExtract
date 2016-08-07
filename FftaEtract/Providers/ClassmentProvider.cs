@@ -38,14 +38,7 @@
                 return archers;
             }
 
-            const string UrlFormat = "http://classements.ffta.fr/iframe/classements/{0}.html";
-            this.logger.Info(
-                "Scrap {0} {1}",
-                category.Year,
-                category.CompetitionType);
-            var url = string.Format(UrlFormat, category.IdFfta);
-
-            var scrapUrl = await this.ScrapUrl(url, category);
+            var scrapUrl = await this.ScrapUrl(category);
 
             foreach (var archerDataProvider in scrapUrl)
             {
@@ -57,8 +50,12 @@
             return archers;
         }
 
-        private async Task<IList<ArcherDataProvider>> ScrapUrl(string url, CompetitionCategory category)
+        public async Task<IList<ArcherDataProvider>> ScrapUrl(CompetitionCategory category)
         {
+            const string UrlFormat = "http://classements.ffta.fr/iframe/classements/{0}.html";
+            this.logger.Info("Scrap {0} {1}", category.Year, category.CompetitionType);
+            var url = string.Format(UrlFormat, category.IdFfta);
+
             var archers = new List<ArcherDataProvider>();
 
             var client = new HttpClient();
@@ -98,18 +95,17 @@
 
                     var clubYear = new ClubDataProvider { Club = club, Year = category.Year, };
 
-                    archers.Add(new ArcherDataProvider()
-                    {
-                        LastName = lastName,
-                        FirstName = firstName,
-                        Club =
-                            new List<ClubDataProvider>()
-                                {
-                                    new ClubDataProvider() { Club = club, Year = category.Year }
-                                },
-                        Code = code,
-                        Sexe = category.Sexe,
-                    });
+                    archers.Add(new ArcherDataProvider(code)
+                                    {
+                                        LastName = lastName,
+                                        FirstName = firstName,
+                                        Club =
+                                            new List<ClubDataProvider>()
+                                                {
+                                                    new ClubDataProvider() { Club = club, Year = category.Year }
+                                                },
+                                        Sexe = category.Sexe,
+                                    });
                 }
             }
 

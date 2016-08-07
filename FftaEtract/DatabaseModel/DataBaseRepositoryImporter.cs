@@ -106,13 +106,13 @@ namespace FftaExtract.DatabaseModel
             {
                 competition = db.Competitions.Add(
                     new Competition()
-                {
-                    CompetitionInfoId = competitionInfoId,
-                    Type = competitionDataProvider.CompetitionType,
-                    Year = competitionDataProvider.Year,
-                    Begin = competitionDataProvider.Begin,
-                    End = competitionDataProvider.End,
-                });
+                    {
+                        CompetitionInfoId = competitionInfoId,
+                        Type = competitionDataProvider.CompetitionType,
+                        Year = competitionDataProvider.Year,
+                        Begin = competitionDataProvider.Begin,
+                        End = competitionDataProvider.End,
+                    });
                 db.SaveChanges();
             }
 
@@ -151,14 +151,14 @@ namespace FftaExtract.DatabaseModel
             {
                 dataBaseArcher = db.Archers.Add(
                     new Archer
-                {
-                    Code = c,
-                    FirstName = archerDataProvider.FirstName,
-                    LastName = archerDataProvider.LastName,
-                    Sexe = archerDataProvider.Sexe,
-                    LastUpdate = DateTime.Now,
-                    CodeArcher = archerDataProvider.Code,
-                });
+                    {
+                        Code = c,
+                        FirstName = archerDataProvider.FirstName,
+                        LastName = archerDataProvider.LastName,
+                        Sexe = archerDataProvider.Sexe,
+                        LastUpdate = DateTime.Now,
+                        CodeArcher = archerDataProvider.Code,
+                    });
             }
             else
             {
@@ -225,15 +225,14 @@ namespace FftaExtract.DatabaseModel
             using (var db = new FftaDatabase())
             {
                 var q = from a in db.Archers
-                        //where a.Code == "359095"
+                            //where a.Code == "359095"
                         orderby a.LastUpdate
                         select a;
 
                 foreach (var archer in q)
                 {
-                    yield return new ArcherDataProvider()
+                    yield return new ArcherDataProvider(archer.Code, archer.CodeArcher)
                     {
-                        Code = archer.Code,
                         FirstName = archer.FirstName,
                         LastName = archer.LastName,
                         Sexe = archer.Sexe,
@@ -254,12 +253,11 @@ namespace FftaExtract.DatabaseModel
 
                 if (archer == null)
                 {
-                    return new ArcherDataProvider() { Code = code };
+                    return new ArcherDataProvider(code, null);
                 }
 
-                return new ArcherDataProvider()
+                return new ArcherDataProvider(archer.Code, archer.CodeArcher)
                 {
-                    Code = archer.Code,
                     FirstName = archer.FirstName,
                     LastName = archer.LastName,
                     Sexe = archer.Sexe,

@@ -21,13 +21,13 @@
 
         public IEnumerable<ArcherDataProvider> GetAllArchers()
         {
-            yield return new ArcherDataProvider() { Code = "661811K", };
-            yield return new ArcherDataProvider() { Code = "359095W", };
+            yield return new ArcherDataProvider("661811K");
+            yield return new ArcherDataProvider("359095W");
         }
 
         public ArcherDataProvider GetArcher(string code)
         {
-            return new ArcherDataProvider() { Code = code, };
+            return new ArcherDataProvider(code);
         }
     }
 }

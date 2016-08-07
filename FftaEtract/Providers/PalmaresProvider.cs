@@ -209,10 +209,11 @@ namespace FftaExtract.Providers
                             var name = td[1].InnerText;
                             var score = td.Count == 4 ? td[3].InnerText : td[2].InnerText;
                             var rankString = td.Count == 4 ? td[2].InnerText : "0";
-                            int rank;
-                            if (!int.TryParse(rankString, out rank))
+                            int rank = 0;
+                            var m = Regex.Match(rankString, "[0-9]+");
+                            if (m.Success)
                             {
-                                rank = 0;
+                                rank = Convert.ToInt32(m.Groups[0].Value);
                             }
 
                             var scores = ExtractScore(score);
