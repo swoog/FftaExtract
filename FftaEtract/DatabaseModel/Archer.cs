@@ -10,9 +10,11 @@
         public string Code { get; set; }
 
         [Index("IX_Lastname")]
+        [MaxLength(200)]
         public string LastName { get; set; }
 
         [Index("IX_Firstname")]
+        [MaxLength(200)]
         public string FirstName { get; set; }
 
         public string FullName => $"{this.FirstName} {this.LastName}";

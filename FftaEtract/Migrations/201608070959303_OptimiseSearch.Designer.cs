@@ -13,7 +13,7 @@ namespace FftaExtract.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201608070916374_OptimiseSearch"; }
+            get { return "201608070959303_OptimiseSearch"; }
         }
         
         string IMigrationMetadata.Source
