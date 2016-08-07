@@ -89,13 +89,13 @@ namespace FftaExtract.Providers
             }
         }
 
-        private async Task ScrapUrl(CompetitionCategory category, ArcherDataProvider archerDataProvider)
+        public async Task ScrapUrl(CompetitionCategory category, ArcherDataProvider archerDataProvider)
         {
             var client = new HttpClient();
             var content =
                 new StringContent(
                     $"operation=clsPers&ClassementId={category.IdFfta}&PersonneId={archerDataProvider.Code}", Encoding.UTF8, "application/x-www-form-urlencoded");
-            var result = await client.PostAsync("http://classements.ffta.fr/actions/outils/AjaxPalmares.php ", content);
+            var result = await client.PostAsync("http://classements.ffta.fr/actions/outils/AjaxPalmares.php", content);
 
             HtmlDocument doc = new HtmlDocument();
             doc.Load(await result.Content.ReadAsStreamAsync(), Encoding.UTF8);
@@ -126,13 +126,24 @@ namespace FftaExtract.Providers
             }
             else
             {
-                var h3 = doc.DocumentNode.SelectNodes("//h3");
-
-                if (h3 != null)
+                grostitre = doc.DocumentNode.SelectNodes("//tr[@class='clmt']/td/strong");
+                if (grostitre != null)
                 {
-                    foreach (var titre in h3)
+                    foreach (var titre in grostitre)
                     {
                         year = Convert.ToInt32(Regex.Match(titre.InnerText.Trim(), "[0-9]+$").Groups[0].Value);
+                    }
+                }
+                else
+                {
+                    var h3 = doc.DocumentNode.SelectNodes("//h3");
+
+                    if (h3 != null)
+                    {
+                        foreach (var titre in h3)
+                        {
+                            year = Convert.ToInt32(Regex.Match(titre.InnerText.Trim(), "[0-9]+$").Groups[0].Value);
+                        }
                     }
                 }
             }
@@ -148,7 +159,7 @@ namespace FftaExtract.Providers
 
                     if (trs != null)
                     {
-                        foreach (var tr in trs.Skip(3))
+                        foreach (var tr in trs.Skip(2))
                         {
                             var td = tr.SelectNodes("td");
 

@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Performance1.psess = Performance1.psess
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FftaExtract.Tests", "FftaExtract.Tests\FftaExtract.Tests.csproj", "{30B4F1F3-62EB-4035-8504-2129D5F20E7E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{C7CA91DD-7CA0-4627-90EE-0559F0DB38F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7CA91DD-7CA0-4627-90EE-0559F0DB38F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7CA91DD-7CA0-4627-90EE-0559F0DB38F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30B4F1F3-62EB-4035-8504-2129D5F20E7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30B4F1F3-62EB-4035-8504-2129D5F20E7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30B4F1F3-62EB-4035-8504-2129D5F20E7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30B4F1F3-62EB-4035-8504-2129D5F20E7E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
