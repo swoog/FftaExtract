@@ -8,7 +8,7 @@
 
     using Ninject.Extensions.Logging;
 
-    public class ClassmentController : ApiController
+    public class ClassmentController : JobController
     {
         private readonly ClassmentProvider classement;
         private readonly IRepositoryImporter repository;
@@ -28,22 +28,37 @@
             this.job = job;
         }
 
-        public void Get(int year)
+        public async Task<IHttpActionResult> Get(int year)
         {
-            foreach (var category in this.competitionCategorieRepository.GetCategories(null, year))
-            {
-                this.job.Push("api/Classment/{0}/{1}/{2}/{3}", category.Year, category.Category, category.CompetitionType, category.BowType);
-            }
+            return await this.Job(
+                () =>
+                    {
+                        foreach (var category in this.competitionCategorieRepository.GetCategories(null, year))
+                        {
+                            this.job.Push(
+                                "api/Classment/{0}/{1}/{2}/{3}",
+                                category.Year,
+                                category.Category,
+                                category.CompetitionType,
+                                category.BowType);
+
+                        }
+                    });
         }
 
-        public async Task Get(int year, Category category, CompetitionType competitionType, BowType bowType)
+        public async Task<IHttpActionResult> Get(int year, Category category, CompetitionType competitionType, BowType bowType)
         {
-            this.logger.Info("Get classement of {1} {0} {2} {3}", year, category, competitionType, bowType);
+            return await this.Job(
+                async () =>
+                    {
+                        this.logger.Info("Get classement of {1} {0} {2} {3}", year, category, competitionType, bowType);
 
-            foreach (var archerDataProvider in await this.classement.GetArchers(year, category, competitionType, bowType))
-            {
-                this.repository.SaveArcher(archerDataProvider);
-            }
+                        foreach (var archerDataProvider in
+                            await this.classement.GetArchers(year, category, competitionType, bowType))
+                        {
+                            this.repository.SaveArcher(archerDataProvider);
+                        }
+                    });
         }
     }
 }

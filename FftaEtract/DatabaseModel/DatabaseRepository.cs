@@ -165,6 +165,7 @@ namespace FftaExtract.DatabaseModel
                 var j1 = q.First();
 
                 j1.JobStatus = JobStatus.Error;
+                j1.ReasonPhrase = reasonPhrase;
                 db.SaveChanges();
             }
         }

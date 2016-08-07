@@ -18,8 +18,6 @@ namespace FftaExtract.Job
     {
         static void Main()
         {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<FftaDatabase, Configuration>());
-
             XmlConfigurator.Configure();
 
             var kernel = new StandardKernel();

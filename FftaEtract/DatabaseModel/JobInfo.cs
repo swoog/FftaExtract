@@ -14,5 +14,7 @@ namespace FftaExtract.DatabaseModel
 
         [Index("IX_JobStatus", 2)]
         public DateTime CreatedDateTime { get; set; }
+
+        public string ReasonPhrase { get; set; }
     }
 }

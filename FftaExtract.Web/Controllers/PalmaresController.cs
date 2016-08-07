@@ -14,7 +14,7 @@ namespace FftaExtract.Web.Controllers
 
     using Ninject.Extensions.Logging;
 
-    public class PalmaresController : ApiController
+    public class PalmaresController : JobController
     {
         private readonly PalmaresProvider palmares;
         private readonly IRepositoryImporter repository;
@@ -28,20 +28,32 @@ namespace FftaExtract.Web.Controllers
             this.logger = logger;
         }
 
-        public async Task Get(string code)
+        public async Task<IHttpActionResult> Get(string code)
         {
-            this.logger.Info("Get palmares of {0}", code);
-            await this.InternalGet(code, null, null, null, null);
+            return await this.Job(
+                async () =>
+                    {
+                        this.logger.Info("Get palmares of {0}", code);
+                        await this.InternalGet(code, null, null, null, null);
+                    });
         }
 
-        public async Task Get(string code, int? year)
+        public async Task<IHttpActionResult> Get(string code, int? year)
         {
-            await this.InternalGet(code, year, null, null, null);
+            return await this.Job(
+                async () =>
+                    {
+                        await this.InternalGet(code, year, null, null, null);
+                    });
         }
 
-        public async Task Get(string code, int year, Category category, CompetitionType competitionType, BowType bowType)
+        public async Task<IHttpActionResult> Get(string code, int year, Category category, CompetitionType competitionType, BowType bowType)
         {
-            await this.InternalGet(code, year, category, competitionType, bowType);
+            return await this.Job(
+                async () =>
+                    {
+                        await this.InternalGet(code, year, category, competitionType, bowType);
+                    });
         }
 
         private async Task InternalGet(string code, int? year, Category? category, CompetitionType? competitionType, BowType? bowType)

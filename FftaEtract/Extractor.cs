@@ -9,6 +9,8 @@
     using FftaExtract.DatabaseModel;
     using FftaExtract.Providers;
 
+    using Newtonsoft.Json;
+
     using Ninject.Extensions.Logging;
 
     public class Extractor
@@ -66,16 +68,17 @@
                 var uri = new Uri(new Uri(this.urlLocalHost), job.Url);
 
                 this.logger.Info("Start {0}", uri);
-                var response = await client.GetAsync(uri);
+                var value = await client.GetStringAsync(uri);
+                var response = JsonConvert.DeserializeObject<JobResult>(value);
 
-                if (response.IsSuccessStatusCode)
+                if (response.Error)
                 {
-                    this.job.Complete(job);
+                    this.logger.Error("Error job : {0}", response.ErrorMessage);
+                    this.job.Error(job, response.ErrorMessage);
                 }
                 else
                 {
-                    this.logger.Error("Error job : {0}", response.ReasonPhrase);
-                    this.job.Error(job, response.ReasonPhrase);
+                    this.job.Complete(job);
                 }
 
                 Thread.Sleep(TimeSpan.FromMilliseconds(random.Next(1, 1000)));
