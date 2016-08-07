@@ -16,7 +16,7 @@ namespace FftaExtract.Providers
 
     public class CompetitionCategoryMapping
     {
-        public static Dictionary<string, int> code = new Dictionary<string, int>();
+        private static Dictionary<string, int> code = new Dictionary<string, int>();
 
         private static HashSet<int> years = new HashSet<int>();
 
@@ -77,27 +77,18 @@ namespace FftaExtract.Providers
 
                 a = a.Replace($" {year}", "");
 
-                var discipline = GetDiscipline(td[1].InnerText);
+                var competitionType = GetDiscipline(td[1].InnerText);
                 var sex = GetSex(a);
                 var categ = GetCateg(a, sex);
-                var key = $"{year}_{discipline}_{categ}";
+                var competitionCategory = new CompetitionCategory(competitionType, categ.Bow, Convert.ToInt32(val), year, sex, categ.Category);
 
-                if (code.ContainsKey(key))
-                {
-                    if (code[key] != Convert.ToInt32(val))
-                    {
-                        continue;
-                        throw new NotSupportedException(key);
-                    }
-                }
-
-                code.Add(key, Convert.ToInt32(val));
+                CompetitionCategories.Add(competitionCategory);
             }
         }
 
-        private static string GetCateg(string name, string sex)
+        private static BowTypeCategory GetCateg(string name, Sexe sex)
         {
-            if (sex == "H")
+            if (sex == Sexe.Homme)
             {
                 name = name.Replace("Homme ", "");
             }
@@ -106,164 +97,170 @@ namespace FftaExtract.Providers
                 name = name.Replace("Femme ", "");
             }
 
-            var bow = string.Empty;
+            BowType bow;
 
             if (name.EndsWith("Arc classique"))
             {
-                bow = "CL";
+                bow = BowType.Classique;
                 name = name.Replace(" Arc classique", "");
             }
             else if (name.EndsWith("Arc Classique"))
             {
-                bow = "CL";
+                bow = BowType.Classique;
                 name = name.Replace(" Arc Classique", "");
             }
             else if (name.EndsWith("Classique"))
             {
-                bow = "CL";
+                bow = BowType.Classique;
                 name = name.Replace(" Classique", "");
             }
             else if (name.EndsWith("Arc à Poulies"))
             {
-                bow = "CO";
+                bow = BowType.Poulie;
                 name = name.Replace(" Arc à Poulies", "");
             }
             else if (name.EndsWith("Arc à poulies"))
             {
-                bow = "CO";
+                bow = BowType.Poulie;
                 name = name.Replace("Arc à poulies", "");
             }
             else if (name.EndsWith("Arc a poulies"))
             {
-                bow = "CO";
+                bow = BowType.Poulie;
                 name = name.Replace("Arc a poulies", "");
             }
             else if (name.EndsWith("Poulie"))
             {
-                bow = "CO";
+                bow = BowType.Poulie;
                 name = name.Replace(" Poulie", "");
             }
             else if (name.EndsWith("Poulies"))
             {
-                bow = "CO";
+                bow = BowType.Poulie;
                 name = name.Replace(" Poulies", "");
             }
             else if (name.EndsWith("Bare Bow"))
             {
-                bow = "BB";
+                bow = BowType.BareBow;
                 name = name.Replace(" Bare Bow", "");
             }
             else if (name.EndsWith("Bare bow"))
             {
-                bow = "BB";
+                bow = BowType.BareBow;
                 name = name.Replace(" Bare bow", "");
             }
             else if (name.EndsWith("Arc Droit"))
             {
-                bow = "AD";
+                bow = BowType.Droit;
                 name = name.Replace(" Arc Droit", "");
             }
             else if (name.EndsWith("Arc droit"))
             {
-                bow = "AD";
+                bow = BowType.Droit;
                 name = name.Replace(" Arc droit", "");
             }
             else if (name.EndsWith("Arc chasse"))
             {
-                bow = "AC";
+                bow = BowType.Chasse;
                 name = name.Replace(" Arc chasse", "");
             }
             else if (name.EndsWith("Arc Chasse"))
             {
-                bow = "AC";
+                bow = BowType.Chasse;
                 name = name.Replace(" Arc Chasse", "");
             }
             else if (name.EndsWith("Arc libre"))
             {
-                bow = "AL";
+                bow = BowType.Libre;
                 name = name.Replace(" Arc libre", "");
             }
             else if (name.EndsWith("Arc Libre"))
             {
-                bow = "AL";
+                bow = BowType.Libre;
                 name = name.Replace(" Arc Libre", "");
             }
             else if (name.EndsWith("Arc à Poulies nu"))
             {
-                bow = "PN";
+                bow = BowType.PoulieNu;
                 name = name.Replace(" Arc à Poulies nu", "");
             }
             else if (name.EndsWith("Arc à poulies nu"))
             {
-                bow = "PN";
+                bow = BowType.PoulieNu;
                 name = name.Replace(" Arc à poulies nu", "");
+            }
+            else
+            {
+                throw new NotSupportedException(name);
             }
 
             switch (name.Trim())
             {
                 case "Benjamin":
-                    return $"B{sex}_{bow}";
+                    return new BowTypeCategory(bow, sex == Sexe.Homme ? Category.BenjaminHomme : Category.BenjaminFemme);
                 case "Benjamine":
-                    return $"B{sex}_{bow}";
+                    return new BowTypeCategory(bow, sex == Sexe.Homme ? Category.BenjaminHomme : Category.BenjaminFemme);
                 case "Minime":
-                    return $"M{sex}_{bow}";
+                    return new BowTypeCategory(bow, sex == Sexe.Homme ? Category.MinimeHomme : Category.MinimeFemme);
                 case "Cadet":
-                    return $"C{sex}_{bow}";
+                    return new BowTypeCategory(bow, sex == Sexe.Homme ? Category.CadetHomme : Category.CadetFemme);
                 case "Junior":
-                    return $"J{sex}_{bow}";
+                    return new BowTypeCategory(bow, sex == Sexe.Homme ? Category.JuniorHomme : Category.JuniorFemme);
                 case "Senior":
-                    return $"S{sex}_{bow}";
+                    return new BowTypeCategory(bow, sex == Sexe.Homme ? Category.SeniorHomme : Category.SeniorFemme);
                 case "Vétéran":
-                    return $"V{sex}_{bow}";
+                    return new BowTypeCategory(bow, sex == Sexe.Homme ? Category.VeteranHomme : Category.VeteranFemme);
                 case "Veteran":
-                    return $"V{sex}_{bow}";
+                    return new BowTypeCategory(bow, sex == Sexe.Homme ? Category.VeteranHomme : Category.VeteranFemme);
                 case "Super Vétéran":
-                    return $"SV{sex}_{bow}";
+                    return new BowTypeCategory(bow, sex == Sexe.Homme ? Category.SuperVeteranHomme : Category.SuperVeteranFemme);
                 case "Super Veteran":
-                    return $"SV{sex}_{bow}";
+                    return new BowTypeCategory(bow, sex == Sexe.Homme ? Category.SuperVeteranHomme : Category.SuperVeteranFemme);
                 case "Scratch":
-                    return $"SC{sex}_{bow}";
+                    return new BowTypeCategory(bow, sex == Sexe.Homme ? Category.ScratchHomme : Category.ScratchFemme);
                 case "Scartch":
-                    return $"SC{sex}_{bow}";
+                    return new BowTypeCategory(bow, sex == Sexe.Homme ? Category.ScratchHomme : Category.ScratchFemme);
                 case "Jeune":
-                    return $"JE{sex}_{bow}";
+                    return new BowTypeCategory(bow, sex == Sexe.Homme ? Category.JeuneHomme : Category.JeuneFemme);
+                case "Poussin":
+                    return new BowTypeCategory(bow, sex == Sexe.Homme ? Category.PoussinHomme : Category.PoussinFemme);
             }
 
             throw new NotSupportedException(name);
         }
 
-        private static string GetSex(string name)
+        private static Sexe GetSex(string name)
         {
             if (name.Contains("Homme"))
             {
-                return "H";
+                return Sexe.Homme;
             }
             else if (name.Contains("Femme"))
             {
-                return "F";
+                return Sexe.Femme;
             }
 
             throw new NotSupportedException(name);
         }
 
-        private static string GetDiscipline(string discipline)
+        private static CompetitionType GetDiscipline(string discipline)
         {
             switch (discipline.Trim())
             {
                 case "Tir Fédérale":
-                    return "Federal";
+                    return CompetitionType.Federal;
                 case "Tir Fédéral":
-                    return "Federal";
+                    return CompetitionType.Federal;
                 case "Tir en Campagne":
-                    return "Campagne";
+                    return CompetitionType.Campagne;
                 case "Tir en Salle":
-                    return "Salle";
+                    return CompetitionType.Salle;
                 case "Tir 3D":
-                    return "3D";
+                    return CompetitionType.Parcour3D;
                 case "Tir Fita":
-                    return "Fita";
+                    return CompetitionType.Fita;
                 case "Tir Nature":
-                    return "Nature";
+                    return CompetitionType.Nature;
             }
 
             throw new NotSupportedException(discipline);
@@ -322,5 +319,28 @@ namespace FftaExtract.Providers
             "(2011|2012)_Federal_C(H|F)_CO", // No compound for Cadet before 2012
             "(2011|2012|2013|2014)_Campagne_C(H|F)_CO", // No compound for Cadet in campagne
         };
+
+        public static IList<CompetitionCategory> CompetitionCategories { get; } = new List<CompetitionCategory>();
+    }
+
+    public class Discipline
+    {
+        public Discipline(int year, CompetitionType discipline, BowType bow, Category category, Sexe sexe, int idCateg)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    internal class BowTypeCategory
+    {
+        public BowType Bow { get; set; }
+
+        public Category Category { get; set; }
+
+        public BowTypeCategory(BowType bow, Category category)
+        {
+            this.Bow = bow;
+            this.Category = category;
+        }
     }
 }

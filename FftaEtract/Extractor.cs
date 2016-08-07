@@ -26,7 +26,7 @@
 
 #endif
 
-        private WebJobRunning azure;
+        private readonly WebJobRunning azure;
 
         public Extractor(Job job, ILogger logger, CompetitionCategorieRepository competitionCategorieRepository, WebJobRunning azure)
         {
@@ -40,17 +40,11 @@
         {
             this.logger.Info("Start extracting");
 
-            try
+            this.DisplayAllCategories();
+
+            foreach (var year in CompetitionCategorieRepository.Years)
             {
-                foreach (var category in this.competitionCategorieRepository.GetCategories(null, null))
-                {
-                    this.logger.Info("Category : {0} {1} {2} {3}", category.Year, category.CompetitionType, category.Category, category.BowType);
-                }
-            }
-            catch (Exception ex)
-            {
-                this.logger.Error(ex, "Error to get categories");
-                throw;
+                this.job.Push($"api/Classment/{year}");
             }
 
             var random = new Random();
@@ -88,6 +82,27 @@
             }
 
             this.logger.Info("Stop extractor");
+        }
+
+        private void DisplayAllCategories()
+        {
+            try
+            {
+                foreach (var category in this.competitionCategorieRepository.GetCategories(null, null))
+                {
+                    this.logger.Info(
+                        "Category : {0} {1} {2} {3}",
+                        category.Year,
+                        category.CompetitionType,
+                        category.Category,
+                        category.BowType);
+                }
+            }
+            catch (Exception ex)
+            {
+                this.logger.Error(ex, "Error to get categories");
+                throw;
+            }
         }
     }
 }

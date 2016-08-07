@@ -1,28 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace FftaExtract.Providers
 {
-    using System.Collections;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+
     using System.Text.RegularExpressions;
 
     using FftaExtract.DatabaseModel;
 
     public class CompetitionCategorieRepository
     {
-        private static int[] years = new[] { 2009, 2010, 2011, 2012, 2013, 2014, 2015 };
+        public static int[] Years { get; } = { 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 };
 
-        private static Dictionary<BowType, string> bowTypeToText = new Dictionary<BowType, string>()
+        private static readonly Dictionary<BowType, string> bowTypeToText = new Dictionary<BowType, string>()
                                                          {
                                                              { BowType.Classique, "CL" },
                                                              { BowType.Poulie, "CO" },
                                                              { BowType.BareBow, "BB" },
                                                          };
 
-        private static Dictionary<Category, string> categoryToText = new Dictionary<Category, string>()
+        private static readonly Dictionary<Category, string> categoryToText = new Dictionary<Category, string>()
                                                          {
                                                              { Category.JeuneHomme, "JEH" },
                                                              { Category.JeuneFemme, "JEF" },
@@ -49,7 +48,7 @@ namespace FftaExtract.Providers
         private static CompetitionCategory[] categoriesHomme = null;
         private static CompetitionCategory[] categoriesFemme = null;
 
-        private static new Dictionary<CompetitionType, string> conmpetitionTypeToText = new Dictionary<CompetitionType, string>()
+        private static readonly Dictionary<CompetitionType, string> conmpetitionTypeToText = new Dictionary<CompetitionType, string>()
                                                          {
                                                              { CompetitionType.Salle, "Salle" },
                                                              { CompetitionType.Fita, "Fita" },
@@ -58,7 +57,7 @@ namespace FftaExtract.Providers
                                                              { CompetitionType.Parcour3D, "3D" },
                                                          };
 
-        private Dictionary<CompetitionType, string> conmpetitionTypeToCode = new Dictionary<CompetitionType, string>
+        private readonly Dictionary<CompetitionType, string> conmpetitionTypeToCode = new Dictionary<CompetitionType, string>
                                                                                  {
                                                                                      {
                                                                                          CompetitionType
@@ -75,15 +74,26 @@ namespace FftaExtract.Providers
                                                                                      { CompetitionType.Parcour3D, "3" },
                                                                                  };
 
-        static CompetitionCategorieRepository()
+        private static void InitializeCategories()
         {
-            categories = InternalGetCategories().ToArray();
-            categoriesHomme = categories.Where(c => c.Sexe == Sexe.Homme).ToArray();
-            categoriesFemme = categories.Where(c => c.Sexe == Sexe.Femme).ToArray();
+            if (categories == null)
+            {
+                lock (Years)
+                {
+                    if (categories == null)
+                    {
+                        categories = InternalGetCategories().ToArray();
+                        categoriesHomme = categories.Where(c => c.Sexe == Sexe.Homme).ToArray();
+                        categoriesFemme = categories.Where(c => c.Sexe == Sexe.Femme).ToArray();
+                    }
+                }
+            }
         }
 
         public IEnumerable<CompetitionCategory> GetCategories(Sexe? sexe, int? year)
         {
+            InitializeCategories();
+
             if (year.HasValue)
             {
                 return this.GetInternalCategories(sexe).Where(c => c.Year == year);
@@ -112,63 +122,21 @@ namespace FftaExtract.Providers
 
         private static IEnumerable<CompetitionCategory> InternalGetCategories()
         {
-            CompetitionType[] competitionTypes = GetTypes<CompetitionType>();
-            BowType[] bowTypes = GetTypes<BowType>();
-            Category[] categories = GetTypes<Category>();
-
-            var regexes = CompetitionCategoryMapping.ignoredCategories.Select(c => new Regex($"^{c}$")).ToList();
-
-            var sb = new StringBuilder();
-
-            foreach (var year in years)
+            foreach (var year in Years)
             {
                 CompetitionCategoryMapping.LoadYear(year);
-
-                foreach (var competitionType in competitionTypes)
-                {
-                    foreach (var category in categories)
-                    {
-                        foreach (var bowType in bowTypes)
-                        {
-                            var key = year + "_" +
-                                conmpetitionTypeToText[competitionType] + "_" +
-                                categoryToText[category] + "_" +
-                                bowTypeToText[bowType];
-
-                            //if (regexes.Any(r => r.Match(key).Success))
-                            //{
-                            //    continue;
-                            //}
-
-                            if (CompetitionCategoryMapping.code.ContainsKey(key))
-                            {
-                                yield return
-                                    new CompetitionCategory(
-                                        competitionType,
-                                        bowType,
-                                        CompetitionCategoryMapping.code[key],
-                                        year,
-                                        key.Contains("H_") ? Sexe.Homme : Sexe.Femme,
-                                        category);
-                            }
-                        }
-                    }
-                }
             }
 
-            if (sb.Length > 0)
+            foreach (var competitionCategory in CompetitionCategoryMapping.CompetitionCategories)
             {
-                throw new NotImplementedException(sb.ToString());
+                yield return competitionCategory;
             }
-        }
-
-        private static T[] GetTypes<T>()
-        {
-            return Enum.GetValues(typeof(T)).Cast<T>().ToArray();
         }
 
         public CompetitionCategory GetCategory(int year, Category cat, CompetitionType competitionType, BowType bowType)
         {
+            InitializeCategories();
+
             var q = from c in categories
                     where
                         c.CompetitionType == competitionType && c.Category == cat && c.Year == year
@@ -179,6 +147,8 @@ namespace FftaExtract.Providers
 
         public IEnumerable<CompetitionTypeInfo> GetCompetitionTypes()
         {
+            InitializeCategories();
+
             foreach (var competition in Enum.GetValues(typeof(CompetitionType)).Cast<CompetitionType>())
             {
                 yield return new CompetitionTypeInfo { Code = conmpetitionTypeToCode[competition], Name = conmpetitionTypeToText[competition], EnumType = competition };

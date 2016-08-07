@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace FftaExtract.Job
 {
-    using System.Data.Entity;
-    using System.Data.Entity.Migrations;
-    using System.Data.Entity.Migrations.Model;
-
     using FftaExtract.DatabaseModel;
-    using FftaExtract.Providers;
 
     using log4net.Config;
 
@@ -32,7 +25,7 @@ namespace FftaExtract.Job
             var extractor = kernel.Get<Extractor>();
             try
             {
-                Task.WaitAll(extractor.Run());
+                Task.WaitAll(Task.Run(() => extractor.Run()));
             }
             catch (AggregateException ex)
             {

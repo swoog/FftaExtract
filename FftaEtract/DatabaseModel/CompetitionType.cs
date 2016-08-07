@@ -7,5 +7,7 @@ namespace FftaExtract.DatabaseModel
         Federal,
         Campagne,
         Parcour3D,
+
+        Nature
     }
 }
