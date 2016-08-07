@@ -2,9 +2,9 @@ namespace FftaExtract.DatabaseModel
 {
     public enum JobStatus
     {
-        None,
-        Wait,
-        Done,
-        Error,
+        None = 0,
+        Wait = 1,
+        Done = 2,
+        Error = 3,
     }
 }
