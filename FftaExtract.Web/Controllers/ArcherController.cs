@@ -1,30 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-
+﻿
 namespace FftaExtract.Web.Controllers
 {
-    using System.Security.Cryptography;
+    using System;
+    using System.Linq;
+    using System.Web.Mvc;
 
-    using FftaExtract;
     using FftaExtract.DatabaseModel;
     using FftaExtract.Providers;
     using FftaExtract.Web.Models;
 
     public class ArcherController : Controller
     {
-        private IRepository repository;
+        private readonly IRepository repository;
 
-        private Extractor extractor;
+        private readonly Job job;
 
-        private Job job;
-
-        public ArcherController(IRepository repository, Extractor extractor, Job job)
+        public ArcherController(IRepository repository, Job job)
         {
             this.repository = repository;
-            this.extractor = extractor;
             this.job = job;
         }
 
@@ -95,33 +88,14 @@ namespace FftaExtract.Web.Controllers
             return new TyepCompetitionModel
                        {
                            Info = t2.Key,
-                           HighScores =
-                               t2
-                               .OrderByDescending
-                               (s3 => s3.Score)
-                               .Take(3)
-                               .ToArray(),
+                           HighScores = t2.OrderByDescending(s3 => s3.Score).Take(3).ToArray(),
                            Average =
                                (int)
                                Math.Ceiling(
                                    (double)
-                                   (t2
-                                        .OrderByDescending
-                                        (
-                                            s3
-                                            =>
-                                            s3
-                                                .Score)
-                                        .Take(
-                                            3)
-                                        .Sum(
-                                            s3
-                                            =>
-                                            s3
-                                                .Score)
+                                   (t2.OrderByDescending(s3 => s3.Score).Take(3).Sum(s3 => s3.Score)
                                     / 3)),
-                           Competitions =
-                               t2.ToList(),
+                           Competitions = t2.ToList(),
                        };
         }
 

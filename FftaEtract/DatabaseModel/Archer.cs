@@ -2,23 +2,20 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public class Archer
     {
         [Key]
         public string Code { get; set; }
 
+        [Index("IX_Lastname")]
         public string LastName { get; set; }
 
+        [Index("IX_Firstname")]
         public string FirstName { get; set; }
 
-        public string FullName
-        {
-            get
-            {
-                return string.Format("{0} {1}", this.FirstName, this.LastName);
-            }
-        }
+        public string FullName => $"{this.FirstName} {this.LastName}";
 
         public Sexe? Sexe { get; set; }
 

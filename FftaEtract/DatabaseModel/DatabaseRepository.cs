@@ -61,7 +61,7 @@ namespace FftaExtract.DatabaseModel
         {
             using (var db = new FftaDatabase())
             {
-                var q = from a in db.Archers where a.FirstName.Contains(query) || a.LastName.Contains(query) select a;
+                var q = from a in db.Archers where a.FirstName.StartsWith(query) || a.LastName.StartsWith(query) select a;
 
                 return q.ToList();
             }
