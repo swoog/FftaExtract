@@ -50,11 +50,17 @@ namespace FftaExtract.DatabaseModel
 
         private void SaveCompetitionInfo(FftaDatabase db, string code, CompetitionDataProvider competitionDataProvider)
         {
+            var competitionId = this.SaveCompetitionDetails(db, competitionDataProvider);
+
+            this.SaveScore(db, code, competitionId, competitionDataProvider);
+        }
+
+        private int SaveCompetitionDetails(FftaDatabase db, CompetitionDataProvider competitionDataProvider)
+        {
             var competitionInfoId = this.SaveCompetitionInfo(db, competitionDataProvider);
 
             var competitionId = SaveCompetition(db, competitionDataProvider, competitionInfoId);
-
-            this.SaveScore(db, code, competitionId, competitionDataProvider);
+            return competitionId;
         }
 
         private void SaveScore(
@@ -119,7 +125,7 @@ namespace FftaExtract.DatabaseModel
             return competition.Id;
         }
 
-        private int SaveCompetitionInfo(FftaDatabase db, CompetitionDataProvider competitionDataProvider)
+        private int SaveCompetitionInfo(FftaDatabase db, CompetitionDataProviderBase competitionDataProvider)
         {
             var q = from c in db.CompetitionInfos where c.Name == competitionDataProvider.Name select c;
 

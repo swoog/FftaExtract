@@ -79,6 +79,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CalendrierProvider.cs" />
     <Compile Include="ConsoleRepositoryImporter.cs" />
     <Compile Include="DatabaseModel\Archer.cs" />
     <Compile Include="DatabaseModel\ArcherClub.cs" />
