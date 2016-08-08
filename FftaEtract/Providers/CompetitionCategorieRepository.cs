@@ -10,6 +10,14 @@ namespace FftaExtract.Providers
 
     using FftaExtract.DatabaseModel;
 
+    public static class EnumExtensions
+    {
+        public static string GetCode(this CompetitionType type)
+        {
+            return CompetitionCategorieRepository.conmpetitionTypeToCode[type];
+        }
+    }
+
     public class CompetitionCategorieRepository
     {
         public static int[] Years { get; } = { 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016 };
@@ -57,7 +65,7 @@ namespace FftaExtract.Providers
                                                              { CompetitionType.Parcour3D, "3D" },
                                                          };
 
-        private readonly Dictionary<CompetitionType, string> conmpetitionTypeToCode = new Dictionary<CompetitionType, string>
+        public static readonly Dictionary<CompetitionType, string> conmpetitionTypeToCode = new Dictionary<CompetitionType, string>
                                                                                  {
                                                                                      {
                                                                                          CompetitionType

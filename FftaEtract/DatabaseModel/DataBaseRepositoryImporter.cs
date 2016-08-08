@@ -27,6 +27,14 @@ namespace FftaExtract.DatabaseModel
             }
         }
 
+        public int SaveCompetitionDetails(CompetitionDataProviderBase competitionDataProvider)
+        {
+            using (var db = new FftaDatabase())
+            {
+                return this.SaveCompetitionDetails(db, competitionDataProvider);
+            }
+        }
+
         private void CleanCompetitionScore(FftaDatabase db, IList<CompetitionDataProvider> competitions, string archerCode)
         {
             var q = from c in competitions group c by new { c.Begin, c.Name } into c2 select c2;
@@ -50,11 +58,17 @@ namespace FftaExtract.DatabaseModel
 
         private void SaveCompetitionInfo(FftaDatabase db, string code, CompetitionDataProvider competitionDataProvider)
         {
+            var competitionId = this.SaveCompetitionDetails(db, competitionDataProvider);
+
+            this.SaveScore(db, code, competitionId, competitionDataProvider);
+        }
+
+        private int SaveCompetitionDetails(FftaDatabase db, CompetitionDataProviderBase competitionDataProvider)
+        {
             var competitionInfoId = this.SaveCompetitionInfo(db, competitionDataProvider);
 
             var competitionId = SaveCompetition(db, competitionDataProvider, competitionInfoId);
-
-            this.SaveScore(db, code, competitionId, competitionDataProvider);
+            return competitionId;
         }
 
         private void SaveScore(
@@ -90,7 +104,7 @@ namespace FftaExtract.DatabaseModel
 
         private static int SaveCompetition(
             FftaDatabase db,
-            CompetitionDataProvider competitionDataProvider,
+            CompetitionDataProviderBase competitionDataProvider,
             int competitionInfoId)
         {
             var q = from c in db.Competitions
@@ -119,7 +133,7 @@ namespace FftaExtract.DatabaseModel
             return competition.Id;
         }
 
-        private int SaveCompetitionInfo(FftaDatabase db, CompetitionDataProvider competitionDataProvider)
+        private int SaveCompetitionInfo(FftaDatabase db, CompetitionDataProviderBase competitionDataProvider)
         {
             var q = from c in db.CompetitionInfos where c.Name == competitionDataProvider.Name select c;
 

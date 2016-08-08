@@ -8,6 +8,8 @@ namespace FftaExtract.DatabaseModel
     {
         void SaveArcher(ArcherDataProvider archerDataProvider);
 
+        int SaveCompetitionDetails(CompetitionDataProviderBase competitionDataProvider);
+
         IEnumerable<ArcherDataProvider> GetAllArchers();
 
         ArcherDataProvider GetArcher(string code);
