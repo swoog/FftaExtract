@@ -7,10 +7,6 @@ namespace FftaExtract.Tests
     using FftaExtract.DatabaseModel;
     using FftaExtract.Providers;
 
-    using Ninject.Extensions.Logging;
-
-    using NSubstitute;
-
     using Xunit;
 
     public class ScrapUrlCalendrier
@@ -18,38 +14,57 @@ namespace FftaExtract.Tests
         [Fact]
         public void Should_scrap_calendrier_When_have_two_date()
         {
-            var archerDataProvider = RunScrapUrl(CompetitionType.Fita);
+            var archerDataProvider = RunScrapUrl(CompetitionType.Fita, new DateTime(2015, 8, 8), new DateTime(2015, 8, 8));
 
             Assert.Equal(2, archerDataProvider.Count);
-            AssertCompetition(archerDataProvider[0], "ROUVRES", CompetitionType.Fita);
-            AssertCompetition(archerDataProvider[1], "CACHY", CompetitionType.Fita);
+            AssertCompetition(archerDataProvider[0], "ROUVRES", CompetitionType.Fita, new DateTime(2015, 8, 8), new DateTime(2015, 8, 9), 2015);
+            AssertCompetition(archerDataProvider[1], "CACHY", CompetitionType.Fita, new DateTime(2015, 8, 8), new DateTime(2015, 8, 9), 2015);
         }
 
         [Fact]
         public void Should_scrap_calendrier_When_is_federal()
         {
-            var archerDataProvider = RunScrapUrl(CompetitionType.Federal);
+            var archerDataProvider = RunScrapUrl(CompetitionType.Federal, new DateTime(2015, 8, 8), new DateTime(2015, 8, 8));
 
             Assert.Equal(3, archerDataProvider.Count);
-            AssertCompetition(archerDataProvider[0], "NOYON", CompetitionType.Federal);
-            AssertCompetition(archerDataProvider[1], "ROUVRES STADE", CompetitionType.Federal);
-            AssertCompetition(archerDataProvider[2], "CACHY", CompetitionType.Federal);
+            AssertCompetition(archerDataProvider[0], "NOYON", CompetitionType.Federal, new DateTime(2015, 8, 8), new DateTime(2015, 8, 9), 2015);
+            AssertCompetition(archerDataProvider[1], "ROUVRES STADE", CompetitionType.Federal, new DateTime(2015, 8, 8), new DateTime(2015, 8, 9), 2015);
+            AssertCompetition(archerDataProvider[2], "CACHY", CompetitionType.Federal, new DateTime(2015, 8, 8), new DateTime(2015, 8, 9), 2015);
         }
 
-        private static void AssertCompetition(CompetitionDataProviderBase competitionDataProviderBase, string name, CompetitionType competitionType)
+        [Fact]
+        public void Should_scrap_calendrier_When_is_federal_and_other_date()
+        {
+            var archerDataProvider = RunScrapUrl(CompetitionType.Federal, new DateTime(2015, 8, 15), new DateTime(2015, 8, 15));
+
+            Assert.Equal(2, archerDataProvider.Count);
+            AssertCompetition(archerDataProvider[0], "VILLE SOUS LA FERTE", CompetitionType.Federal, new DateTime(2015, 8, 15), new DateTime(2015, 8, 16), 2015);
+            AssertCompetition(archerDataProvider[1], "NOYON", CompetitionType.Federal, new DateTime(2015, 8, 15), new DateTime(2015, 8, 16), 2015);
+        }
+
+        [Fact]
+        public void Should_scrap_calendrier_When_is_salle_and_other_date()
+        {
+            var archerDataProvider = RunScrapUrl(CompetitionType.Salle, new DateTime(2016, 9, 17), new DateTime(2016, 9, 19));
+
+            Assert.Equal(1, archerDataProvider.Count);
+            AssertCompetition(archerDataProvider[0], "NOUMEA", CompetitionType.Salle, new DateTime(2016, 9, 18), new DateTime(2016, 9, 18), 2017);
+        }
+
+        private static void AssertCompetition(CompetitionDataProviderBase competitionDataProviderBase, string name, CompetitionType competitionType, DateTime beginDate, DateTime endDate, int year)
         {
             Assert.Equal(name, competitionDataProviderBase.Name);
-            Assert.Equal(2015, competitionDataProviderBase.Year);
-            Assert.Equal(new DateTime(2015, 8, 8), competitionDataProviderBase.Begin);
-            Assert.Equal(new DateTime(2015, 8, 9), competitionDataProviderBase.End);
+            Assert.Equal(year, competitionDataProviderBase.Year);
+            Assert.Equal(beginDate, competitionDataProviderBase.Begin);
+            Assert.Equal(endDate, competitionDataProviderBase.End);
             Assert.Equal(competitionType, competitionDataProviderBase.CompetitionType);
         }
 
-        private static IList<CompetitionDataProviderBase> RunScrapUrl(CompetitionType competitionType)
+        private static IList<CompetitionDataProviderBase> RunScrapUrl(CompetitionType competitionType, DateTime beginDate, DateTime endDate)
         {
-            var palmares = new CalendrierProvider(null, Substitute.For<ILogger>(), null);
+            var palmares = new CalendrierProvider(null);
             
-            return palmares.ScrapUrl(competitionType).Result;
+            return palmares.ScrapUrl(competitionType, beginDate, endDate).Result;
         }
     }
 }

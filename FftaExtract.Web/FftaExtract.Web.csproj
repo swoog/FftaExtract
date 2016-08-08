@@ -188,6 +188,7 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ArcherController.cs" />
+    <Compile Include="Controllers\CalendrierController.cs" />
     <Compile Include="Controllers\ClubController.cs" />
     <Compile Include="Controllers\ClassmentController.cs" />
     <Compile Include="Controllers\JobController.cs" />

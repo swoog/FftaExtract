@@ -19,6 +19,11 @@
             }
         }
 
+        public int SaveCompetitionDetails(CompetitionDataProviderBase competitionDataProvider)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<ArcherDataProvider> GetAllArchers()
         {
             yield return new ArcherDataProvider("661811K");

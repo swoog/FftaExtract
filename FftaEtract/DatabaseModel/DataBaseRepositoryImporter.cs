@@ -27,6 +27,14 @@ namespace FftaExtract.DatabaseModel
             }
         }
 
+        public int SaveCompetitionDetails(CompetitionDataProviderBase competitionDataProvider)
+        {
+            using (var db = new FftaDatabase())
+            {
+                return this.SaveCompetitionDetails(db, competitionDataProvider);
+            }
+        }
+
         private void CleanCompetitionScore(FftaDatabase db, IList<CompetitionDataProvider> competitions, string archerCode)
         {
             var q = from c in competitions group c by new { c.Begin, c.Name } into c2 select c2;
@@ -55,7 +63,7 @@ namespace FftaExtract.DatabaseModel
             this.SaveScore(db, code, competitionId, competitionDataProvider);
         }
 
-        private int SaveCompetitionDetails(FftaDatabase db, CompetitionDataProvider competitionDataProvider)
+        private int SaveCompetitionDetails(FftaDatabase db, CompetitionDataProviderBase competitionDataProvider)
         {
             var competitionInfoId = this.SaveCompetitionInfo(db, competitionDataProvider);
 
@@ -96,7 +104,7 @@ namespace FftaExtract.DatabaseModel
 
         private static int SaveCompetition(
             FftaDatabase db,
-            CompetitionDataProvider competitionDataProvider,
+            CompetitionDataProviderBase competitionDataProvider,
             int competitionInfoId)
         {
             var q = from c in db.Competitions
