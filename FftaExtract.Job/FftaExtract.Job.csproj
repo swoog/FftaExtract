@@ -68,6 +68,22 @@
       <HintPath>..\packages\Ninject.Extensions.Logging.Log4net.3.2.3.0\lib\net45-full\Ninject.Extensions.Logging.Log4Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Pattern.Config, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Pattern.Config.1.0.0-beta-559\lib\net45\Pattern.Config.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Pattern.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Pattern.Core.1.0.0-beta-559\lib\net451\Pattern.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Pattern.Core.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Pattern.Core.Interfaces.1.0.0-beta-559\lib\net451\Pattern.Core.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Pattern.Core.Ninject, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Pattern.Core.Ninject.1.0.0-beta-559\lib\net451\Pattern.Core.Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />

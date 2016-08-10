@@ -13,6 +13,9 @@ namespace FftaExtract.Job
 
     using Ninject;
 
+    using Pattern.Config;
+    using Pattern.Core.Ninject;
+
     // To learn more about Microsoft Azure WebJobs, please see http://go.microsoft.com/fwlink/?LinkID=401557
     class Program
     {
@@ -22,8 +25,10 @@ namespace FftaExtract.Job
 
             var kernel = new StandardKernel();
 
-            kernel.Bind<IRepository>().To<DatabaseRepository>();
-            kernel.Bind<IRepositoryImporter>().To<DataBaseRepositoryImporter>();
+            var pattern = kernel.BindPattern();
+
+            pattern.Bind<IRepository>().To<DatabaseRepository>();
+            pattern.Bind<IRepositoryImporter>().To<DataBaseRepositoryImporter>();
 
             var extractor = kernel.Get<Extractor>();
             try
