@@ -2,7 +2,7 @@ namespace FftaExtract.Providers
 {
     using FftaExtract.DatabaseModel;
 
-    using Ninject.Extensions.Logging;
+    using Pattern.Logging;
 
     public class Job
     {
@@ -20,7 +20,7 @@ namespace FftaExtract.Providers
         {
             var url = string.Format(api, parameters);
 
-            this.logger.Info("Push : {0}", url);
+            this.logger.Info($"Push : {url}");
 
             this.repository.AddJobInfo(new JobInfo() { Url = url });
         }

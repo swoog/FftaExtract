@@ -6,24 +6,22 @@ namespace FftaExtract.Providers
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Security.Policy;
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Web;
 
     using FftaExtract.DatabaseModel;
 
     using HtmlAgilityPack;
 
-    using Ninject.Extensions.Logging;
+    using Pattern.Logging;
 
     public class PalmaresProvider
     {
         private readonly CompetitionCategorieRepository competitionCategorieRepository;
 
-        private ILogger logger;
+        private readonly ILogger logger;
 
         public PalmaresProvider(CompetitionCategorieRepository competitionCategorieRepository, ILogger logger)
         {

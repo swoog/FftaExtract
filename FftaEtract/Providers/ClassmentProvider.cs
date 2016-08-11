@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http;
-    using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using System.Web;
 
@@ -11,7 +10,7 @@
 
     using HtmlAgilityPack;
 
-    using Ninject.Extensions.Logging;
+    using Pattern.Logging;
 
     public class ClassmentProvider
     {
@@ -19,7 +18,7 @@
 
         private readonly ILogger logger;
 
-        private Job job;
+        private readonly Job job;
 
         public ClassmentProvider(CompetitionCategorieRepository competitionCategorieRepository, ILogger logger, Job job)
         {
@@ -53,7 +52,7 @@
         public async Task<IList<ArcherDataProvider>> ScrapUrl(CompetitionCategory category)
         {
             const string UrlFormat = "http://classements.ffta.fr/iframe/classements/{0}.html";
-            this.logger.Info("Scrap {0} {1}", category.Year, category.CompetitionType);
+            this.logger.Info($"Scrap {category.Year} {category.CompetitionType}");
             var url = string.Format(UrlFormat, category.IdFfta);
 
             var archers = new List<ArcherDataProvider>();

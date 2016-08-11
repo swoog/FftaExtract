@@ -3,11 +3,10 @@
     using FftaExtract.DatabaseModel;
     using FftaExtract.Providers;
 
-    using Ninject.Extensions.Logging;
-
     using NSubstitute;
 
     using Xunit;
+    using Pattern.Logging;
 
     public class ScrapUrlPalmares
     {
