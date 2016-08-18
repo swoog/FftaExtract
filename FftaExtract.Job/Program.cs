@@ -12,6 +12,7 @@
 
     using Pattern.Config;
     using Pattern.Core.Ninject;
+    using Pattern.Core.Interfaces;
     using Pattern.Logging.Log4net;
 
     // To learn more about Microsoft Azure WebJobs, please see http://go.microsoft.com/fwlink/?LinkID=401557
@@ -29,7 +30,7 @@
             pattern.Bind<IRepositoryImporter>().To<DataBaseRepositoryImporter>();
             pattern.BindLog4net();
 
-            var extractor = kernel.Get<Extractor>();
+            var extractor = pattern.Get<Extractor>();
             try
             {
                 Task.WaitAll(Task.Run(() => extractor.Run()));

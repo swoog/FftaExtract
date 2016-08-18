@@ -54,7 +54,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Pattern.Logging, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Pattern.Logging.1.0.1-beta-568\lib\net45\Pattern.Logging.dll</HintPath>
+      <HintPath>..\packages\Pattern.Logging.1.0.1-beta-569\lib\net45\Pattern.Logging.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
