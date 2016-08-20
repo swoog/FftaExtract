@@ -1,5 +1,6 @@
 namespace FftaExtract.DatabaseModel
 {
+    using System.Collections;
     using System.Collections.Generic;
 
     public interface IRepository
@@ -34,5 +35,9 @@ namespace FftaExtract.DatabaseModel
         GlobalStats GetGlobalStats();
 
         IList<CompetitionStats> GetLastCompetitions();
+
+        IList<CompetitionInfo> GetCompetitionWithoutLocation();
+
+        CompetitionInfo GetCompetitionInfo(int id);
     }
 }

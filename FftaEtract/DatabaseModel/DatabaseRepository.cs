@@ -239,6 +239,30 @@ namespace FftaExtract.DatabaseModel
             }
         }
 
+        public IList<CompetitionInfo> GetCompetitionWithoutLocation()
+        {
+            using (var db = new FftaDatabase())
+            {
+                var q = from competitionInfo in db.CompetitionInfos
+                        where competitionInfo.Location == null
+                        select competitionInfo;
+
+                return q.ToList();
+            }
+        }
+
+        public CompetitionInfo GetCompetitionInfo(int id)
+        {
+            using (var db = new FftaDatabase())
+            {
+                var q = from competitionInfo in db.CompetitionInfos
+                        where competitionInfo.Id == id
+                        select competitionInfo;
+
+                return q.FirstOrDefault();
+            }
+        }
+
         private void CleanJobs(FftaDatabase db)
         {
             var d = DateTime.Now.AddDays(-2);
