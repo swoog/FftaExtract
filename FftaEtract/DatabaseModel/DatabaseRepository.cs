@@ -2,6 +2,7 @@ namespace FftaExtract.DatabaseModel
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Entity.Spatial;
     using System.Linq;
     using System.Runtime.InteropServices.ComTypes;
     using System.Security.Cryptography;
@@ -260,6 +261,21 @@ namespace FftaExtract.DatabaseModel
                         select competitionInfo;
 
                 return q.FirstOrDefault();
+            }
+        }
+
+        public void SaveCompetionInfoLocation(int id, DbGeography locationDb)
+        {
+            using (var db = new FftaDatabase())
+            {
+                var q = from competitionInfo in db.CompetitionInfos
+                        where competitionInfo.Id == id
+                        select competitionInfo;
+
+                var c = q.FirstOrDefault();
+                c.Location = locationDb;
+
+                db.SaveChanges();
             }
         }
 

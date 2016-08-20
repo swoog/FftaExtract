@@ -2,6 +2,7 @@ namespace FftaExtract.DatabaseModel
 {
     using System.Collections;
     using System.Collections.Generic;
+    using System.Data.Entity.Spatial;
 
     public interface IRepository
     {
@@ -39,5 +40,7 @@ namespace FftaExtract.DatabaseModel
         IList<CompetitionInfo> GetCompetitionWithoutLocation();
 
         CompetitionInfo GetCompetitionInfo(int id);
+
+        void SaveCompetionInfoLocation(int id, DbGeography locationDb);
     }
 }
