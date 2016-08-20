@@ -35,7 +35,7 @@ namespace FftaExtract
             var result = await client.PostAsync("http://www.evenements-sportifs.com/ffta-fr/www/calendrier/index.htm", content);
 
             HtmlDocument doc = new HtmlDocument();
-            doc.Load(await result.Content.ReadAsStreamAsync(), Encoding.UTF8);
+            doc.Load(await result.Content.ReadAsStreamAsync(), Encoding.GetEncoding("iso-8859-1"));
 
             var competitionsDiv = doc.DocumentNode.SelectNodes("//div[@class='pave_eprv']");
             var competitions = new List<CompetitionDataProviderBase>();

@@ -51,6 +51,16 @@ namespace FftaExtract.Tests
             AssertCompetition(archerDataProvider[0], "NOUMEA", CompetitionType.Salle, new DateTime(2016, 9, 18), new DateTime(2016, 9, 18), 2017);
         }
 
+        [Fact]
+        public void Should_scrap_calendrier_When_name_containe_special_character()
+        {
+            var archerDataProvider = RunScrapUrl(CompetitionType.Salle, new DateTime(2016, 11, 19), new DateTime(2016, 11, 19));
+
+            Assert.Equal(51, archerDataProvider.Count);
+            Assert.True(archerDataProvider.Any(a => a.Name == "CESSON SÉVIGNÉ"));
+            AssertCompetition(archerDataProvider.First(a => a.Name == "CESSON SÉVIGNÉ"), "CESSON SÉVIGNÉ", CompetitionType.Salle, new DateTime(2016, 11, 19), new DateTime(2016, 11, 20), 2017);
+        }
+
         private static void AssertCompetition(CompetitionDataProviderBase competitionDataProviderBase, string name, CompetitionType competitionType, DateTime beginDate, DateTime endDate, int year)
         {
             Assert.Equal(name, competitionDataProviderBase.Name);
@@ -63,7 +73,7 @@ namespace FftaExtract.Tests
         private static IList<CompetitionDataProviderBase> RunScrapUrl(CompetitionType competitionType, DateTime beginDate, DateTime endDate)
         {
             var palmares = new CalendrierProvider(null);
-            
+
             return palmares.ScrapUrl(competitionType, beginDate, endDate).Result;
         }
     }

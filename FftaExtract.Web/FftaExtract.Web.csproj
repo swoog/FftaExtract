@@ -214,6 +214,7 @@
     <Compile Include="Controllers\CalendrierController.cs" />
     <Compile Include="Controllers\ClubController.cs" />
     <Compile Include="Controllers\ClassmentController.cs" />
+    <Compile Include="Controllers\CompetitionController.cs" />
     <Compile Include="Controllers\JobController.cs" />
     <Compile Include="Controllers\PalmaresController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
