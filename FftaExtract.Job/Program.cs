@@ -1,17 +1,19 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace FftaExtract.Job
+﻿namespace FftaExtract.Job
 {
-    using System.Data.Entity;
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
 
     using FftaExtract.DatabaseModel;
-    using FftaExtract.Migrations;
 
     using log4net.Config;
 
     using Ninject;
+
+    using Pattern.Config;
+    using Pattern.Core.Ninject;
+    using Pattern.Core.Interfaces;
+    using Pattern.Logging.Log4net;
 
     // To learn more about Microsoft Azure WebJobs, please see http://go.microsoft.com/fwlink/?LinkID=401557
     class Program
@@ -22,10 +24,13 @@ namespace FftaExtract.Job
 
             var kernel = new StandardKernel();
 
-            kernel.Bind<IRepository>().To<DatabaseRepository>();
-            kernel.Bind<IRepositoryImporter>().To<DataBaseRepositoryImporter>();
+            var pattern = kernel.BindPattern();
 
-            var extractor = kernel.Get<Extractor>();
+            pattern.Bind<IRepository>().To<DatabaseRepository>();
+            pattern.Bind<IRepositoryImporter>().To<DataBaseRepositoryImporter>();
+            pattern.BindLog4net();
+
+            var extractor = pattern.Get<Extractor>();
             try
             {
                 Task.WaitAll(Task.Run(() => extractor.Run()));
