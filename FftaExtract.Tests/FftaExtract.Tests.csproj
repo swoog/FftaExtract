@@ -86,6 +86,7 @@
   <ItemGroup>
     <Compile Include="ScrapUrlCalendrier.cs" />
     <Compile Include="ScrapUrlClassment.cs" />
+    <Compile Include="ScrapCompetitionCategories.cs" />
     <Compile Include="ScrapUrlPalmares.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

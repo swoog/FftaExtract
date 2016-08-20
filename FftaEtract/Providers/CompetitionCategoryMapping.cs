@@ -36,6 +36,13 @@ namespace FftaExtract.Providers
 
         private static async Task InternalLoadYear(int year)
         {
+            var competitionCategories = await GetCompetionCategoriesForYear(year);
+
+            CompetitionCategories.AddRange(competitionCategories);
+        }
+
+        public static async Task<List<CompetitionCategory>> GetCompetionCategoriesForYear(int year)
+        {
             var client = new HttpClient();
             var content =
                 new StringContent(
@@ -47,7 +54,9 @@ namespace FftaExtract.Providers
             HtmlDocument doc = new HtmlDocument();
             doc.Load(await result.Content.ReadAsStreamAsync(), Encoding.UTF8);
 
-            var tr = doc.DocumentNode.SelectNodes("//table[@class='crh']/tbody/tr");
+            var tr = doc.DocumentNode.SelectNodes("//table[@class='orbe3 full']/tbody/tr");
+
+            var competitionCategories = new List<CompetitionCategory>();
 
             foreach (HtmlNode line in tr)
             {
@@ -58,8 +67,7 @@ namespace FftaExtract.Providers
                     continue;
                 }
 
-                var aNode = td[0].SelectNodes("a").First();
-                var aHref = aNode.Attributes["href"].Value;
+                var aHref = line.Attributes["data-href"].Value;
 
                 var m = Regex.Match(aHref, @"/([0-9]+)\.html$");
 
@@ -73,17 +81,24 @@ namespace FftaExtract.Providers
                     throw new Exception($"Error parsing on {aHref}");
                 }
 
-                var a = aNode.InnerText;
+                var a = td[0].InnerText;
 
                 a = a.Replace($" {year}", "");
 
                 var competitionType = GetDiscipline(td[1].InnerText);
                 var sex = GetSex(a);
                 var categ = GetCateg(a, sex);
-                var competitionCategory = new CompetitionCategory(competitionType, categ.Bow, Convert.ToInt32(val), year, sex, categ.Category);
+                var competitionCategory = new CompetitionCategory(
+                                              competitionType,
+                                              categ.Bow,
+                                              Convert.ToInt32(val),
+                                              year,
+                                              sex,
+                                              categ.Category);
 
-                CompetitionCategories.Add(competitionCategory);
+                competitionCategories.Add(competitionCategory);
             }
+            return competitionCategories;
         }
 
         private static BowTypeCategory GetCateg(string name, Sexe sex)
@@ -320,7 +335,7 @@ namespace FftaExtract.Providers
             "(2011|2012|2013|2014)_Campagne_C(H|F)_CO", // No compound for Cadet in campagne
         };
 
-        public static IList<CompetitionCategory> CompetitionCategories { get; } = new List<CompetitionCategory>();
+        public static List<CompetitionCategory> CompetitionCategories { get; } = new List<CompetitionCategory>();
     }
 
     public class Discipline

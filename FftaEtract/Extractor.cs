@@ -42,11 +42,6 @@
 
             this.DisplayAllCategories();
 
-            foreach (var year in CompetitionCategorieRepository.Years)
-            {
-                this.job.Push($"api/Classment/{year}");
-            }
-
             var random = new Random();
 
             while (this.azure.IsRunning)
