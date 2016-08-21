@@ -14,11 +14,17 @@ namespace FftaExtract.DatabaseModel
 
         [Index("IX_JobStatus", 1)]
         [Index("IX_Url", 1)]
+        [Index("IX_EndJob", 1)]
         public JobStatus JobStatus { get; set; }
 
         [Index("IX_JobStatus", 2)]
         public DateTime CreatedDateTime { get; set; }
 
         public string ReasonPhrase { get; set; }
+
+        [Index("IX_EndJob", 2)]
+        public DateTime? EndJob { get; set; }
+
+        public DateTime? BeginJob { get; set; }
     }
 }

@@ -35,8 +35,8 @@ namespace FftaExtract.DatabaseModel
                         where s.ArcherCode == code
                         group s by new { s.BowType, s.Competition.Type }
                             into s2
-                            select
-                                new BestScore()
+                        select
+                            new BestScore()
                             {
                                 BowType = s2.FirstOrDefault().BowType,
                                 CompetitionType = s2.FirstOrDefault().Competition.Type,
@@ -138,7 +138,15 @@ namespace FftaExtract.DatabaseModel
                         orderby j.CreatedDateTime
                         select j;
 
-                return q.FirstOrDefault();
+                var jobInfo = q.FirstOrDefault();
+
+                if (jobInfo != null)
+                {
+                    jobInfo.BeginJob = DateTime.Now;
+                    db.SaveChanges();
+                }
+
+                return jobInfo;
             }
         }
 
@@ -152,6 +160,7 @@ namespace FftaExtract.DatabaseModel
                 var j1 = q.First();
 
                 j1.JobStatus = JobStatus.Done;
+                j1.EndJob = DateTime.Now;
                 db.SaveChanges();
             }
         }
@@ -167,6 +176,7 @@ namespace FftaExtract.DatabaseModel
 
                 j1.JobStatus = JobStatus.Error;
                 j1.ReasonPhrase = reasonPhrase;
+                j1.EndJob = DateTime.Now;
                 db.SaveChanges();
             }
         }
@@ -182,7 +192,7 @@ namespace FftaExtract.DatabaseModel
                         && ac.Year == competitionScore.Competition.Year
                         group competitionScore by ac.Year
                             into score
-                            select new { score.Key, Depart = score.Count(), Podium = score.Count(s => s.Rank <= 3 && s.Rank != 0) };
+                        select new { score.Key, Depart = score.Count(), Podium = score.Count(s => s.Rank <= 3 && s.Rank != 0) };
                 var archers = q.ToList();
 
                 var yearStats = archers.Select(s => new YearStat { Year = s.Key, Depart = s.Depart, Podium = s.Podium, })
@@ -200,7 +210,7 @@ namespace FftaExtract.DatabaseModel
                             && ac.Year == year
                              group competitionScore by competitionScore.Competition.Type
                                  into score
-                                 select new { score.Key, Depart = score.Count(), Podium = score.Count(s => s.Rank <= 3 && s.Rank != 0) };
+                             select new { score.Key, Depart = score.Count(), Podium = score.Count(s => s.Rank <= 3 && s.Rank != 0) };
 
                     yearStat.Types =
                         q2.Select(s => new TypeCompetitionStat() { Depart = s.Depart, Podium = s.Podium, Type = s.Key })
@@ -230,11 +240,11 @@ namespace FftaExtract.DatabaseModel
                         group competitionsScore by competitionsScore.Competition into competitionscore2
                         orderby competitionscore2.Key.Begin descending
                         select new CompetitionStats
-                                   {
-                                       Competition = competitionscore2.Key,
-                                       CompetitionInfo = competitionscore2.Key.CompetitionInfo,
-                                       CountArchers = competitionscore2.Count(),
-                                   };
+                        {
+                            Competition = competitionscore2.Key,
+                            CompetitionInfo = competitionscore2.Key.CompetitionInfo,
+                            CountArchers = competitionscore2.Count(),
+                        };
 
                 return q.Take(20).ToList();
             }
@@ -285,7 +295,8 @@ namespace FftaExtract.DatabaseModel
 
             var jobs = from j in db.JobsInfos
                        where j.JobStatus == JobStatus.Done
-                           && j.CreatedDateTime < d
+                           && j.EndJob != null
+                           && j.EndJob < d
                        select j;
 
             db.JobsInfos.RemoveRange(jobs);
