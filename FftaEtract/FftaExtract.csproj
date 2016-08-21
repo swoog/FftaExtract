@@ -161,6 +161,10 @@
     <Compile Include="Migrations\201608201936353_AddLocationOfCompetition.Designer.cs">
       <DependentUpon>201608201936353_AddLocationOfCompetition.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201608211631338_AddIndexOnUrl.cs" />
+    <Compile Include="Migrations\201608211631338_AddIndexOnUrl.Designer.cs">
+      <DependentUpon>201608211631338_AddIndexOnUrl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ArcherDataProvider.cs" />
@@ -196,6 +200,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201608201936353_AddLocationOfCompetition.resx">
       <DependentUpon>201608201936353_AddLocationOfCompetition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608211631338_AddIndexOnUrl.resx">
+      <DependentUpon>201608211631338_AddIndexOnUrl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.config" />
     <EmbeddedResource Include="categories.csv" />

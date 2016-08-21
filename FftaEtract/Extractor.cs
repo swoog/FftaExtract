@@ -40,7 +40,7 @@
         {
             this.logger.Info("Start extracting");
 
-            this.DisplayAllCategories();
+            //this.DisplayAllCategories();
 
             var random = new Random();
 
