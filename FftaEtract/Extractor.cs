@@ -71,6 +71,7 @@
                 }
                 else
                 {
+                    this.logger.Info($"Complete {uri}");
                     this.job.Complete(job);
                 }
 
