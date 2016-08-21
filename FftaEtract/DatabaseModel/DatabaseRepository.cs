@@ -110,8 +110,6 @@ namespace FftaExtract.DatabaseModel
         {
             using (var db = new FftaDatabase())
             {
-                this.CleanJobs(db);
-
                 var q = from j in db.JobsInfos
                         where j.Url == jobInfo.Url && j.JobStatus == JobStatus.None
                         select j;
