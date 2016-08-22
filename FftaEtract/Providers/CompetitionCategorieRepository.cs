@@ -63,6 +63,7 @@ namespace FftaExtract.Providers
                                                              { CompetitionType.Federal, "Federal" },
                                                              { CompetitionType.Campagne, "Campagne" },
                                                              { CompetitionType.Parcour3D, "3D" },
+                                                             { CompetitionType.Nature, "Nature" },
                                                          };
 
         public static readonly Dictionary<CompetitionType, string> conmpetitionTypeToCode = new Dictionary<CompetitionType, string>
@@ -80,6 +81,7 @@ namespace FftaExtract.Providers
                                                                                      { CompetitionType.Federal, "E" },
                                                                                      { CompetitionType.Campagne, "C" },
                                                                                      { CompetitionType.Parcour3D, "3" },
+                                                                                     { CompetitionType.Nature, "N" },
                                                                                  };
 
         private static void InitializeCategories()
