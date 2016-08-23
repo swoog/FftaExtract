@@ -57,22 +57,30 @@
 
                 var client = new HttpClient();
                 client.Timeout = TimeSpan.FromHours(1);
-             
+
                 var uri = new Uri(new Uri(this.urlLocalHost), job.Url);
 
-                this.logger.Info($"Start {uri}");
-                var value = await client.GetStringAsync(uri);
-                var response = JsonConvert.DeserializeObject<JobResult>(value);
+                try
+                {
+                    this.logger.Info($"Start {uri}");
+                    var value = await client.GetStringAsync(uri);
+                    var response = JsonConvert.DeserializeObject<JobResult>(value);
 
-                if (response.Error)
-                {
-                    this.logger.Error($"Error job : {response.ErrorMessage}");
-                    this.job.Error(job, response.ErrorMessage);
+                    if (response.Error)
+                    {
+                        this.logger.Error($"Error job : {response.ErrorMessage}");
+                        this.job.Error(job, response.ErrorMessage);
+                    }
+                    else
+                    {
+                        this.logger.Info($"Complete {uri}");
+                        this.job.Complete(job);
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    this.logger.Info($"Complete {uri}");
-                    this.job.Complete(job);
+                    this.logger.Error($"Error job : {ex}");
+                    this.job.Error(job, ex.ToString());
                 }
 
                 Thread.Sleep(TimeSpan.FromMilliseconds(random.Next(1, 200)));
