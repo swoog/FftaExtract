@@ -75,7 +75,7 @@
                     this.job.Complete(job);
                 }
 
-                Thread.Sleep(TimeSpan.FromMilliseconds(random.Next(1, 1000)));
+                Thread.Sleep(TimeSpan.FromMilliseconds(random.Next(1, 200)));
             }
 
             this.logger.Info("Stop extractor");
