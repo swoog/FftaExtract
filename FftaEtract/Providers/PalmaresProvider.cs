@@ -161,7 +161,7 @@ namespace FftaExtract.Providers
                         {
                             var td = tr.SelectNodes("td");
 
-                            if (td.Count != 4 && td.Count != 3)
+                            if (td==null || (td.Count != 4 && td.Count != 3))
                             {
                                 continue;
                             }

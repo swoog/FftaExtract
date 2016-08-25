@@ -1,5 +1,7 @@
 ﻿namespace FftaExtract.Tests
 {
+    using System;
+
     using FftaExtract.DatabaseModel;
     using FftaExtract.Providers;
 
@@ -33,6 +35,25 @@
             var archerDataProvider = RunScrapUrl("464853", CompetitionType.Campagne, BowType.Classique, 4231, 2010, Sexe.Homme, Category.JuniorHomme);
 
             Assert.Equal(0, archerDataProvider.Competitions.Count);
+        }
+
+        [Fact]
+        public void Should_scrap_url_When_year_is_2010_and_classique_senior()
+        {
+            var archerDataProvider = RunScrapUrl("761424", CompetitionType.Fita, BowType.Classique, 4290, 2010, Sexe.Homme, Category.SeniorHomme);
+
+            Assert.Equal(4, archerDataProvider.Competitions.Count);
+            AssertCompetition(0, archerDataProvider, 566, new DateTime(2010, 9, 18));
+            AssertCompetition(1, archerDataProvider, 569, new DateTime(2010, 6, 27));
+            AssertCompetition(2, archerDataProvider, 531, new DateTime(2010, 5, 16));
+            AssertCompetition(3, archerDataProvider, 524, new DateTime(2010, 6, 13));
+        }
+
+        private static void AssertCompetition(int index, ArcherDataProvider archerDataProvider, int score, DateTime date)
+        {
+            Assert.Equal(score, archerDataProvider.Competitions[index].Score);
+            Assert.Equal(date, archerDataProvider.Competitions[index].Begin);
+            Assert.Equal(2010, archerDataProvider.Competitions[index].Year);
         }
 
         [Fact]
