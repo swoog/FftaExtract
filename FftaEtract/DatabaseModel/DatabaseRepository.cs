@@ -125,7 +125,7 @@ namespace FftaExtract.DatabaseModel
             }
         }
 
-        public JobInfo GetNextJobInfo()
+        public List<JobInfo> GetNextJobInfo(int take)
         {
             using (var db = new FftaDatabase())
             {
@@ -136,11 +136,15 @@ namespace FftaExtract.DatabaseModel
                         orderby j.CreatedDateTime
                         select j;
 
-                var jobInfo = q.FirstOrDefault();
+                var jobInfo = q.Take(take).ToList();
 
-                if (jobInfo != null)
+                if (jobInfo.Count > 0)
                 {
-                    jobInfo.BeginJob = DateTime.Now;
+                    foreach (var info in jobInfo)
+                    {
+                        info.BeginJob = DateTime.Now;
+                    }
+
                     db.SaveChanges();
                 }
 

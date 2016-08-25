@@ -1,10 +1,12 @@
 ﻿namespace FftaExtract
 {
     using System;
+    using System.Linq;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
 
+    using FftaExtract.DatabaseModel;
     using FftaExtract.Providers;
 
     using Newtonsoft.Json;
@@ -36,7 +38,7 @@
             this.azure = azure;
         }
 
-        public async Task Run()
+        public void Run()
         {
             this.logger.Info("Start extracting");
 
@@ -46,47 +48,54 @@
 
             while (this.azure.IsRunning)
             {
-                var job = this.job.GetNextJobInfo();
+                var jobs = this.job.GetNextJobInfo(2);
 
-                if (job == null)
+                if (jobs == null)
                 {
                     this.logger.Info("No job wait for a job.");
                     Thread.Sleep(TimeSpan.FromSeconds(10));
                     continue;
                 }
 
-                var client = new HttpClient();
-                client.Timeout = TimeSpan.FromHours(1);
+                var tasks = jobs.Select(j => Task.Run(async () => await this.ExecJob(j))).ToArray();
 
-                var uri = new Uri(new Uri(this.urlLocalHost), job.Url);
-
-                try
-                {
-                    this.logger.Info($"Start {uri}");
-                    var value = await client.GetStringAsync(uri);
-                    var response = JsonConvert.DeserializeObject<JobResult>(value);
-
-                    if (response.Error)
-                    {
-                        this.logger.Error($"Error job : {response.ErrorMessage}");
-                        this.job.Error(job, response.ErrorMessage);
-                    }
-                    else
-                    {
-                        this.logger.Info($"Complete {uri}");
-                        this.job.Complete(job);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    this.logger.Error($"Error job : {ex}");
-                    this.job.Error(job, ex.ToString());
-                }
+                Task.WaitAll(tasks);
 
                 Thread.Sleep(TimeSpan.FromMilliseconds(random.Next(1, 200)));
             }
 
             this.logger.Info("Stop extractor");
+        }
+
+        private async Task ExecJob(JobInfo job)
+        {
+            var client = new HttpClient();
+            client.Timeout = TimeSpan.FromHours(1);
+
+            var uri = new Uri(new Uri(this.urlLocalHost), job.Url);
+
+            try
+            {
+                this.logger.Info($"Start {uri}");
+                var value = await client.GetStringAsync(uri);
+                var response = JsonConvert.DeserializeObject<JobResult>(value);
+
+                if (response.Error)
+                {
+                    this.logger.Error($"Error job : {response.ErrorMessage}");
+                    this.job.Error(job, response.ErrorMessage);
+                }
+                else
+                {
+                    this.logger.Info($"Complete {uri}");
+                    this.job.Complete(job);
+                }
+            }
+            catch (Exception ex)
+            {
+                this.logger.Error($"Error job : {ex}");
+                this.job.Error(job, ex.ToString());
+            }
         }
 
         private void DisplayAllCategories()

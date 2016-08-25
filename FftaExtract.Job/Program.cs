@@ -33,7 +33,7 @@
             var extractor = pattern.Get<Extractor>();
             try
             {
-                Task.WaitAll(Task.Run(() => extractor.Run()));
+                extractor.Run();
             }
             catch (AggregateException ex)
             {

@@ -25,7 +25,7 @@ namespace FftaExtract.DatabaseModel
 
         void AddJobInfo(JobInfo jobInfo);
 
-        JobInfo GetNextJobInfo();
+        List<JobInfo> GetNextJobInfo(int take);
 
         void CompleteJobInfo(JobInfo job);
 

@@ -1,5 +1,7 @@
 namespace FftaExtract.Providers
 {
+    using System.Collections.Generic;
+
     using FftaExtract.DatabaseModel;
 
     using Pattern.Logging;
@@ -25,9 +27,9 @@ namespace FftaExtract.Providers
             this.repository.AddJobInfo(new JobInfo() { Url = url });
         }
 
-        public JobInfo GetNextJobInfo()
+        public List<JobInfo> GetNextJobInfo(int take)
         {
-            return this.repository.GetNextJobInfo();
+            return this.repository.GetNextJobInfo(take);
         }
 
         public void Complete(JobInfo job)
