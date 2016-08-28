@@ -133,7 +133,7 @@ namespace FftaExtract.DatabaseModel
 
                 var q = from j in db.JobsInfos
                         where j.JobStatus == JobStatus.None
-                        orderby j.CreatedDateTime
+                        orderby j.Priority, j.CreatedDateTime
                         select j;
 
                 var jobInfo = q.Take(take).ToList();

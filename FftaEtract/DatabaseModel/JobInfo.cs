@@ -17,7 +17,7 @@ namespace FftaExtract.DatabaseModel
         [Index("IX_EndJob", 1)]
         public JobStatus JobStatus { get; set; }
 
-        [Index("IX_JobStatus", 2)]
+        [Index("IX_JobStatus", 3)]
         public DateTime CreatedDateTime { get; set; }
 
         public string ReasonPhrase { get; set; }
@@ -26,5 +26,8 @@ namespace FftaExtract.DatabaseModel
         public DateTime? EndJob { get; set; }
 
         public DateTime? BeginJob { get; set; }
+
+        [Index("IX_JobStatus", 2)]
+        public int Priority { get; set; }
     }
 }

@@ -177,6 +177,10 @@
     <Compile Include="Migrations\201608230806217_IndexNameOnCompetitionInfo.Designer.cs">
       <DependentUpon>201608230806217_IndexNameOnCompetitionInfo.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201608281154243_AddPriority.cs" />
+    <Compile Include="Migrations\201608281154243_AddPriority.Designer.cs">
+      <DependentUpon>201608281154243_AddPriority.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ArcherDataProvider.cs" />
@@ -224,6 +228,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201608230806217_IndexNameOnCompetitionInfo.resx">
       <DependentUpon>201608230806217_IndexNameOnCompetitionInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608281154243_AddPriority.resx">
+      <DependentUpon>201608281154243_AddPriority.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.config" />
     <EmbeddedResource Include="categories.csv" />
